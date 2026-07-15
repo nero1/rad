@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Many African community radio streams (Shoutcast/Icecast) still run on plain HTTP.
+  This config allows cleartext traffic for ALL domains so those streams aren't blocked.
+  If you want to tighten this later, replace base-config with a domain-config listing
+  only the specific stream hosts that need HTTP.
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>

@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Malawi Radio</string>
+    <string name="now_playing">Now Playing</string>
+    <string name="stations">Stations</string>
+    <string name="favorites">Favorites</string>
+    <string name="buffering">Buffering…</string>
+    <string name="playback_error">Couldn\'t connect. Check your internet and try again.</string>
+    <string name="tap_to_play">Tap a station to start listening</string>
+    <string name="no_favorites">No favorites yet. Tap the heart on a station to save it here.</string>
+</resources>
