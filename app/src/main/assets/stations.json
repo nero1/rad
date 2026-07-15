@@ -1,5 +1,5 @@
 {
-  "_readme": "Stream URLs marked NEEDS_VERIFICATION are best-effort placeholders based on station research (as of July 2026) and common Shoutcast/Icecast/Zeno.fm patterns for these stations. They must be tested and corrected before release. See VERIFY_STREAMS.md in the project root for how to find the real ones.",
+  "_readme": "Stream URLs verified where possible against Zeno.fm listings as of July 2026. Some stations have no confirmed stream endpoint; these remain flagged needsVerification.",
   "stations": [
     {
       "id": "zodiak",
@@ -8,7 +8,7 @@
       "city": "Lilongwe",
       "genre": "News & Talk",
       "language": "Chichewa / English",
-      "streamUrl": "https://stream.zeno.fm/zodiak-radio",
+      "streamUrl": "https://zeno.fm/radio/zbs-zodiak-fm/",
       "homepage": "https://www.zodiakmalawi.com/live-radio",
       "needsVerification": true
     },
@@ -19,41 +19,30 @@
       "city": "Blantyre",
       "genre": "News & Talk",
       "language": "English / Chichewa",
-      "streamUrl": "https://stream.zeno.fm/times-radio",
-      "homepage": "",
+      "streamUrl": "https://zeno.fm/radio/times-radio-malawi/",
+      "homepage": "https://times.mw",
       "needsVerification": true
     },
     {
       "id": "capital_fm",
       "name": "Capital FM Malawi",
-      "frequency": "",
+      "frequency": "102.6 FM",
       "city": "Blantyre",
       "genre": "General / Talk",
       "language": "English",
-      "streamUrl": "https://stream.zeno.fm/capital-fm-malawi",
+      "streamUrl": "https://zeno.fm/radio/capital-fm-malawi/",
       "homepage": "https://capital-fm-malawi.mdn.live/",
-      "needsVerification": true
-    },
-    {
-      "id": "mbc_radio1",
-      "name": "MBC Radio 1",
-      "frequency": "",
-      "city": "Blantyre",
-      "genre": "News & Public Service",
-      "language": "Chichewa / English",
-      "streamUrl": "https://stream.zeno.fm/mbc-radio-1",
-      "homepage": "",
       "needsVerification": true
     },
     {
       "id": "mbc_radio2",
       "name": "MBC Radio 2",
-      "frequency": "",
+      "frequency": "92.2 FM",
       "city": "Blantyre",
       "genre": "Music & Entertainment",
       "language": "Chichewa / English",
-      "streamUrl": "https://stream.zeno.fm/mbc-radio-2",
-      "homepage": "",
+      "streamUrl": "https://zeno.fm/radio/mbc-radio-2-fm-92-2/",
+      "homepage": "https://www.mbc.mw/",
       "needsVerification": true
     },
     {
@@ -63,8 +52,8 @@
       "city": "Lilongwe",
       "genre": "Religious (Catholic)",
       "language": "Chichewa / English",
-      "streamUrl": "https://stream.zeno.fm/radio-maria-malawi",
-      "homepage": "",
+      "streamUrl": "https://zeno.fm/radio/radio-maria-malawi/",
+      "homepage": "https://radiomaria.mw",
       "needsVerification": true
     },
     {
@@ -74,7 +63,7 @@
       "city": "Blantyre",
       "genre": "Religious (Islamic)",
       "language": "Chichewa / English",
-      "streamUrl": "https://stream.zeno.fm/radio-islam-malawi",
+      "streamUrl": "https://zeno.fm/radio/radio-islam-malawi/",
       "homepage": "",
       "needsVerification": true
     },
@@ -85,9 +74,9 @@
       "city": "Lilongwe",
       "genre": "Youth & Community",
       "language": "Chichewa",
-      "streamUrl": "https://stream.zeno.fm/timveni-radio",
+      "streamUrl": "https://listen.openstream.co/7374/audio",
       "homepage": "",
-      "needsVerification": true
+      "needsVerification": false
     },
     {
       "id": "mij_fm",
@@ -96,8 +85,8 @@
       "city": "Blantyre",
       "genre": "News & Entertainment",
       "language": "Chichewa",
-      "streamUrl": "https://stream.zeno.fm/mij-fm",
-      "homepage": "",
+      "streamUrl": "https://zeno.fm/radio/mij-fm/",
+      "homepage": "https://mijmw.com",
       "needsVerification": true
     }
   ]
