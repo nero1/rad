@@ -34,8 +34,6 @@ fun FavoritesScreen(
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(20.dp)
         )
-        HorizontalBannerAd(Modifier.padding(horizontal = 16.dp, vertical = 4.dp))
-
         if (favorites.isEmpty()) {
             Column(
                 modifier = Modifier
@@ -59,9 +57,10 @@ fun FavoritesScreen(
                 )
             }
         } else {
+            HorizontalBannerAd(Modifier.padding(horizontal = 16.dp, vertical = 2.dp))
             LazyColumn(
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 6.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(favorites.size, key = { favorites[it].id }) { index ->
                     val station = favorites[index]
@@ -75,10 +74,10 @@ fun FavoritesScreen(
                         onFavoriteClick = { viewModel.toggleFavorite(station.id) }
                     )
                     if (index == 2) {
-                        HorizontalBannerAd(Modifier.padding(horizontal = 12.dp, vertical = 18.dp))
+                        HorizontalBannerAd(Modifier.padding(horizontal = 12.dp, vertical = 8.dp))
                     }
                 }
-                item { MediumRectangleAd(Modifier.padding(horizontal = 12.dp, vertical = 24.dp)) }
+                item { MediumRectangleAd(Modifier.padding(horizontal = 12.dp, vertical = 12.dp)) }
                 item { Spacer(Modifier.height(96.dp)) }
             }
         }

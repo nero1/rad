@@ -16,7 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.PanTool
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -30,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.malawi.radio.data.model.RadioStation
@@ -37,6 +38,7 @@ import com.malawi.radio.ui.ads.HorizontalBannerAd
 import com.malawi.radio.ui.ads.MediumRectangleAd
 import com.malawi.radio.ui.theme.AppThemeOption
 import kotlinx.coroutines.delay
+import kotlin.math.roundToInt
 
 @Composable
 fun StationListScreen(
@@ -44,7 +46,8 @@ fun StationListScreen(
     onStationSelected: (RadioStation) -> Unit,
     currentTheme: AppThemeOption = AppThemeOption.DARK_MODE,
     onThemeSelected: (AppThemeOption) -> Unit = {},
-    showScrollHint: Boolean = false
+    showScrollHint: Boolean = false,
+    onScrollHintShown: () -> Unit = {}
 ) {
     val state by viewModel.uiState.collectAsState()
 
@@ -58,7 +61,7 @@ fun StationListScreen(
                 AppThemeOption.entries.forEach { theme -> DropdownMenuItem(text = { Text(theme.label) }, onClick = { onThemeSelected(theme); themeMenu = false }) }
             }
         }
-        HorizontalBannerAd(Modifier.padding(horizontal = 16.dp, vertical = 4.dp))
+        HorizontalBannerAd(Modifier.padding(horizontal = 16.dp, vertical = 2.dp))
 
         if (state.isLoading) {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -70,7 +73,8 @@ fun StationListScreen(
 
             LaunchedEffect(showScrollHint) {
                 if (showScrollHint) {
-                    delay(5_000)
+                    onScrollHintShown()
+                    delay(5_500)
                     isScrollHintVisible = false
                 }
             }
@@ -82,8 +86,8 @@ fun StationListScreen(
             Box(Modifier.fillMaxSize()) {
                 LazyColumn(
                     state = listState,
-                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 6.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     items(state.stations.size, key = { state.stations[it].id }) { index ->
                         val station = state.stations[index]
@@ -97,10 +101,10 @@ fun StationListScreen(
                             onFavoriteClick = { viewModel.toggleFavorite(station.id) }
                         )
                         if (index == 2) {
-                            HorizontalBannerAd(Modifier.padding(horizontal = 12.dp, vertical = 18.dp))
+                            HorizontalBannerAd(Modifier.padding(horizontal = 12.dp, vertical = 8.dp))
                         }
                     }
-                    item { MediumRectangleAd(Modifier.padding(horizontal = 12.dp, vertical = 24.dp)) }
+                    item { MediumRectangleAd(Modifier.padding(horizontal = 12.dp, vertical = 12.dp)) }
                     item { Spacer(Modifier.height(96.dp)) } // room for mini-player bar
                 }
 
@@ -120,27 +124,38 @@ fun StationListScreen(
 private fun ScrollDownHint(modifier: Modifier = Modifier) {
     val transition = rememberInfiniteTransition(label = "scroll-hint")
     val offsetY by transition.animateFloat(
-        initialValue = 0f,
-        targetValue = 18f,
+        initialValue = 56f,
+        targetValue = -56f,
         animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 650),
-            repeatMode = RepeatMode.Reverse
+            animation = tween(durationMillis = 1400),
+            repeatMode = RepeatMode.Restart
         ),
         label = "scroll-hint-offset"
     )
+    val alpha by transition.animateFloat(
+        initialValue = 0.18f,
+        targetValue = 0.58f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 1400),
+            repeatMode = RepeatMode.Restart
+        ),
+        label = "scroll-hint-alpha"
+    )
 
-    Surface(
-        modifier = modifier.graphicsLayer { translationY = offsetY },
-        shape = CircleShape,
-        color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.92f),
-        tonalElevation = 6.dp,
-        shadowElevation = 6.dp
+    Box(
+        modifier = modifier
+            .height(136.dp)
+            .width(88.dp),
+        contentAlignment = Alignment.BottomCenter
     ) {
         Icon(
-            imageVector = Icons.Filled.KeyboardArrowDown,
-            contentDescription = "Scroll down for more stations",
-            tint = MaterialTheme.colorScheme.onPrimaryContainer,
-            modifier = Modifier.padding(12.dp).size(36.dp)
+            imageVector = Icons.Filled.PanTool,
+            contentDescription = "Slide up for more stations",
+            tint = MaterialTheme.colorScheme.onBackground.copy(alpha = alpha),
+            modifier = Modifier
+                .offset { IntOffset(x = 0, y = offsetY.roundToInt()) }
+                .graphicsLayer { rotationZ = -12f }
+                .size(52.dp)
         )
     }
 }
@@ -158,12 +173,12 @@ fun StationRow(
             .clip(RoundedCornerShape(14.dp))
             .background(MaterialTheme.colorScheme.surfaceVariant)
             .clickable { onClick() }
-            .padding(horizontal = 14.dp, vertical = 14.dp),
+            .padding(horizontal = 12.dp, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
             modifier = Modifier
-                .size(44.dp)
+                .size(40.dp)
                 .clip(CircleShape)
                 .background(MaterialTheme.colorScheme.primary),
             contentAlignment = Alignment.Center
@@ -175,7 +190,7 @@ fun StationRow(
             )
         }
 
-        Spacer(Modifier.width(14.dp))
+        Spacer(Modifier.width(12.dp))
 
         Column(modifier = Modifier.weight(1f)) {
             Text(

@@ -1,5 +1,10 @@
 package com.malawi.radio.ui.nowplaying
 
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -13,16 +18,17 @@ import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Radio
 import androidx.compose.material.icons.filled.Bedtime
 import androidx.compose.material.icons.filled.HourglassBottom
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.malawi.radio.player.PlaybackState
-import com.malawi.radio.ui.ads.HorizontalBannerAd
 import com.malawi.radio.ui.ads.MediumRectangleAd
 
 @Composable
@@ -32,6 +38,18 @@ fun NowPlayingScreen(viewModel: NowPlayingViewModel) {
     val sleepRemaining by viewModel.sleepRemaining.collectAsState()
     val isFavorite by viewModel.isCurrentFavorite.collectAsState()
     var sleepMenu by remember { mutableStateOf(false) }
+
+    if (station == null) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp, vertical = 8.dp)
+        ) {
+            EmptyNowPlayingPrompt()
+        }
+        return
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -40,22 +58,7 @@ fun NowPlayingScreen(viewModel: NowPlayingViewModel) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-        if (station == null) {
-            Icon(
-                imageVector = Icons.Filled.Radio,
-                contentDescription = null,
-                modifier = Modifier.size(64.dp),
-                tint = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-            Spacer(Modifier.height(16.dp))
-            Text(
-                text = "Tap a station to start listening",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Center
-            )
-            return@Column
-        }
+        Spacer(Modifier.height(12.dp))
 
         Box(
             modifier = Modifier
@@ -168,6 +171,51 @@ fun NowPlayingScreen(viewModel: NowPlayingViewModel) {
             }
         }
         Spacer(Modifier.height(8.dp))
-        HorizontalBannerAd(Modifier.padding(horizontal = 8.dp, vertical = 2.dp))
+    }
+}
+
+@Composable
+private fun EmptyNowPlayingPrompt() {
+    val transition = rememberInfiniteTransition(label = "stations-nav-hint")
+    val offsetY by transition.animateFloat(
+        initialValue = 0f,
+        targetValue = 18f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 800),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "stations-nav-hint-offset"
+    )
+
+    Box(Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier.align(Alignment.Center),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Icon(
+                imageVector = Icons.Filled.Radio,
+                contentDescription = null,
+                modifier = Modifier.size(64.dp),
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Spacer(Modifier.height(16.dp))
+            Text(
+                text = "Tap a station to start listening",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center
+            )
+        }
+
+        Icon(
+            imageVector = Icons.Filled.KeyboardArrowDown,
+            contentDescription = "Go to Stations",
+            tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.72f),
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .padding(start = 28.dp, bottom = 16.dp)
+                .graphicsLayer { translationY = offsetY }
+                .size(48.dp)
+        )
     }
 }

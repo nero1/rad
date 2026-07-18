@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
@@ -45,7 +46,7 @@ private const val SCROLL_HINT_PREFS = "scroll_hint_prefs"
 private const val SCROLL_HINT_VERSION_KEY = "version_code"
 private const val SCROLL_HINT_OPEN_COUNT_KEY = "open_count"
 
-private enum class Tab(val label: String) { STATIONS("Stations"), NOW_PLAYING("Now Playing"), FAVORITES("Faves"), SETTINGS("Settings") }
+private enum class Tab(val label: String) { STATIONS("Stations"), NOW_PLAYING("Player"), FAVORITES("Faves"), SETTINGS("Settings") }
 
 class MainActivity : ComponentActivity() {
     private val factory by lazy { ViewModelFactory(application as MalawiRadioApp) }
@@ -87,12 +88,12 @@ private fun MalawiRadioApp(factory: ViewModelFactory, activity: MainActivity, on
         var backArmedAt by remember { mutableLongStateOf(0L) }
         var nextInterstitialAt by remember { mutableLongStateOf(System.currentTimeMillis() + INTERSTITIAL_DELAY_MINUTES * 60_000L) }
         val playerState by nowPlayingVm.playerState.collectAsState()
-        val showStationScrollHint = remember { activity.shouldShowStationScrollHint() }
+        var showStationScrollHint by remember { mutableStateOf(activity.shouldShowStationScrollHint()) }
 
         LaunchedEffect(playerState.playbackState, settings.backgroundPlay) {
             val intent = Intent(context, RadioPlaybackService::class.java)
             if (settings.backgroundPlay && playerState.currentStation != null && playerState.playbackState != PlaybackState.IDLE) {
-                context.startService(intent)
+                ContextCompat.startForegroundService(context, intent)
             } else if (!settings.backgroundPlay || playerState.playbackState == PlaybackState.IDLE) {
                 context.stopService(intent)
             }
@@ -122,7 +123,7 @@ private fun MalawiRadioApp(factory: ViewModelFactory, activity: MainActivity, on
         Scaffold(bottomBar = { BottomArea(playerState, selectedTab, { nowPlayingVm.togglePlayPause() }, { selectTab(Tab.NOW_PLAYING) }, selectTab) }) { padding ->
             Box(Modifier.padding(padding)) {
                 when (selectedTab) {
-                    Tab.STATIONS -> StationListScreen(stationListVm, onStationSelected = { selectTab(Tab.NOW_PLAYING) }, currentTheme = settings.theme, onThemeSelected = settingsVm::setTheme, showScrollHint = showStationScrollHint)
+                    Tab.STATIONS -> StationListScreen(stationListVm, onStationSelected = { selectTab(Tab.NOW_PLAYING) }, currentTheme = settings.theme, onThemeSelected = settingsVm::setTheme, showScrollHint = showStationScrollHint, onScrollHintShown = { showStationScrollHint = false })
                     Tab.NOW_PLAYING -> NowPlayingScreen(viewModel = nowPlayingVm)
                     Tab.FAVORITES -> FavoritesScreen(favoritesVm, onStationSelected = { selectTab(Tab.NOW_PLAYING) })
                     Tab.SETTINGS -> SettingsScreen(settingsVm, appName = "Malawi Radio")
