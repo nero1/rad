@@ -41,7 +41,7 @@ fun StationListScreen(
         Row(Modifier.fillMaxWidth().padding(20.dp), verticalAlignment = Alignment.CenterVertically) {
             Text("Malawi Radio", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
             var themeMenu by rememberSaveable { mutableStateOf(false) }
-            var themeMenu by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(false) }
+
             IconButton(onClick = { themeMenu = true }) { Icon(Icons.Filled.Palette, contentDescription = "Change theme") }
             DropdownMenu(expanded = themeMenu, onDismissRequest = { themeMenu = false }) {
                 AppThemeOption.entries.forEach { theme -> DropdownMenuItem(text = { Text(theme.label) }, onClick = { onThemeSelected(theme); themeMenu = false }) }
