@@ -7,6 +7,7 @@ import com.malawi.radio.MalawiRadioApp
 import com.malawi.radio.ui.favorites.FavoritesViewModel
 import com.malawi.radio.ui.nowplaying.NowPlayingViewModel
 import com.malawi.radio.ui.stationlist.StationListViewModel
+import com.malawi.radio.ui.settings.SettingsViewModel
 
 /**
  * Simple manual DI factory. This app is small enough that pulling in Hilt would add
@@ -22,6 +23,8 @@ class ViewModelFactory(private val app: MalawiRadioApp) : ViewModelProvider.Fact
                 NowPlayingViewModel(app.playerManager, app.stationRepository) as T
             FavoritesViewModel::class.java ->
                 FavoritesViewModel(app.stationRepository, app.playerManager) as T
+            SettingsViewModel::class.java ->
+                SettingsViewModel(app.settingsStore) as T
             else -> throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
         }
     }

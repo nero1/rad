@@ -11,31 +11,42 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.malawi.radio.data.model.RadioStation
+import com.malawi.radio.ui.ads.HorizontalBannerAd
+import com.malawi.radio.ui.theme.AppThemeOption
 
 @Composable
 fun StationListScreen(
     viewModel: StationListViewModel,
-    onStationSelected: (RadioStation) -> Unit
+    onStationSelected: (RadioStation) -> Unit,
+    currentTheme: AppThemeOption = AppThemeOption.DARK_MODE,
+    onThemeSelected: (AppThemeOption) -> Unit = {}
 ) {
     val state by viewModel.uiState.collectAsState()
 
     Column(modifier = Modifier.fillMaxSize()) {
-        Text(
-            text = "Malawi Radio",
-            style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(20.dp)
-        )
+        Row(Modifier.fillMaxWidth().padding(20.dp), verticalAlignment = Alignment.CenterVertically) {
+            Text("Malawi Radio", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
+            var themeMenu by rememberSaveable { mutableStateOf(false) }
+            IconButton(onClick = { themeMenu = true }) { Icon(Icons.Filled.Palette, contentDescription = "Change theme") }
+            DropdownMenu(expanded = themeMenu, onDismissRequest = { themeMenu = false }) {
+                AppThemeOption.entries.forEach { theme -> DropdownMenuItem(text = { Text(theme.label) }, onClick = { onThemeSelected(theme); themeMenu = false }) }
+            }
+        }
+        HorizontalBannerAd(Modifier.padding(horizontal = 16.dp, vertical = 4.dp))
 
         if (state.isLoading) {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
