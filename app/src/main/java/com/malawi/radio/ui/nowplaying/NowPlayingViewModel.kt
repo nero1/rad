@@ -19,6 +19,10 @@ class NowPlayingViewModel(
         playerManager.togglePlayPause()
     }
 
+    fun stop() {
+        playerManager.stop()
+    }
+
     fun toggleFavorite() {
         val stationId = playerState.value.currentStation?.id ?: return
         viewModelScope.launch { repository.toggleFavorite(stationId) }
