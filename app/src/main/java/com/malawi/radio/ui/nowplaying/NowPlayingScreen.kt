@@ -1,6 +1,8 @@
 package com.malawi.radio.ui.nowplaying
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -33,15 +35,16 @@ fun NowPlayingScreen(viewModel: NowPlayingViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(20.dp),
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 16.dp, vertical = 8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Top
     ) {
         if (station == null) {
             Icon(
                 imageVector = Icons.Filled.Radio,
                 contentDescription = null,
-                modifier = Modifier.size(72.dp),
+                modifier = Modifier.size(64.dp),
                 tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Spacer(Modifier.height(16.dp))
@@ -56,7 +59,7 @@ fun NowPlayingScreen(viewModel: NowPlayingViewModel) {
 
         Box(
             modifier = Modifier
-                .size(160.dp)
+                .size(124.dp)
                 .clip(CircleShape)
                 .background(MaterialTheme.colorScheme.primary),
             contentAlignment = Alignment.Center
@@ -64,12 +67,12 @@ fun NowPlayingScreen(viewModel: NowPlayingViewModel) {
             Icon(
                 imageVector = Icons.Filled.Radio,
                 contentDescription = null,
-                modifier = Modifier.size(90.dp),
+                modifier = Modifier.size(68.dp),
                 tint = MaterialTheme.colorScheme.onPrimary
             )
         }
 
-        Spacer(Modifier.height(18.dp))
+        Spacer(Modifier.height(10.dp))
 
         Text(
             text = station.name,
@@ -92,9 +95,9 @@ fun NowPlayingScreen(viewModel: NowPlayingViewModel) {
             )
         }
 
-        Spacer(Modifier.height(12.dp))
-        MediumRectangleAd(Modifier.padding(horizontal = 12.dp, vertical = 10.dp))
-        Spacer(Modifier.height(10.dp))
+        Spacer(Modifier.height(6.dp))
+        MediumRectangleAd(Modifier.padding(horizontal = 8.dp, vertical = 2.dp))
+        Spacer(Modifier.height(4.dp))
 
         val statusText = when (state.playbackState) {
             PlaybackState.BUFFERING -> "Buffering…"
@@ -113,7 +116,7 @@ fun NowPlayingScreen(viewModel: NowPlayingViewModel) {
             )
         }
 
-        Spacer(Modifier.height(20.dp))
+        Spacer(Modifier.height(10.dp))
 
         Row(verticalAlignment = Alignment.CenterVertically) {
             IconButton(
@@ -131,7 +134,7 @@ fun NowPlayingScreen(viewModel: NowPlayingViewModel) {
 
             FilledIconButton(
                 onClick = { viewModel.togglePlayPause() },
-                modifier = Modifier.size(72.dp),
+                modifier = Modifier.size(64.dp),
                 colors = IconButtonDefaults.filledIconButtonColors(
                     containerColor = MaterialTheme.colorScheme.primary
                 )
@@ -141,12 +144,12 @@ fun NowPlayingScreen(viewModel: NowPlayingViewModel) {
                         Icons.Filled.Pause else Icons.Filled.PlayArrow,
                     contentDescription = "Play/Pause",
                     tint = MaterialTheme.colorScheme.onPrimary,
-                    modifier = Modifier.size(36.dp)
+                    modifier = Modifier.size(32.dp)
                 )
             }
 
             Spacer(Modifier.width(24.dp))
-            Box(Modifier.padding(bottom = 28.dp)) {
+            Box {
                 IconButton(onClick = { sleepMenu = true }, modifier = Modifier.size(48.dp)) {
                     Icon(if (sleepRemaining > 0) Icons.Filled.HourglassBottom else Icons.Filled.Bedtime, contentDescription = "Sleep timer", tint = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
@@ -164,7 +167,7 @@ fun NowPlayingScreen(viewModel: NowPlayingViewModel) {
                 }
             }
         }
-        Spacer(Modifier.height(16.dp))
-        HorizontalBannerAd(Modifier.padding(horizontal = 12.dp, vertical = 12.dp))
+        Spacer(Modifier.height(8.dp))
+        HorizontalBannerAd(Modifier.padding(horizontal = 8.dp, vertical = 2.dp))
     }
 }

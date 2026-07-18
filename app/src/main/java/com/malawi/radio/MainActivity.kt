@@ -1,5 +1,6 @@
 package com.malawi.radio
 
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -19,7 +20,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
@@ -40,6 +40,10 @@ import com.malawi.radio.ui.stationlist.StationListScreen
 import com.malawi.radio.ui.stationlist.StationListViewModel
 import com.malawi.radio.ui.theme.AppThemeOption
 import com.malawi.radio.ui.theme.MalawiRadioTheme
+
+private const val SCROLL_HINT_PREFS = "scroll_hint_prefs"
+private const val SCROLL_HINT_VERSION_KEY = "version_code"
+private const val SCROLL_HINT_OPEN_COUNT_KEY = "open_count"
 
 private enum class Tab(val label: String) { STATIONS("Stations"), NOW_PLAYING("Now Playing"), FAVORITES("Faves"), SETTINGS("Settings") }
 
@@ -83,11 +87,12 @@ private fun MalawiRadioApp(factory: ViewModelFactory, activity: MainActivity, on
         var backArmedAt by remember { mutableLongStateOf(0L) }
         var nextInterstitialAt by remember { mutableLongStateOf(System.currentTimeMillis() + INTERSTITIAL_DELAY_MINUTES * 60_000L) }
         val playerState by nowPlayingVm.playerState.collectAsState()
+        val showStationScrollHint = remember { activity.shouldShowStationScrollHint() }
 
         LaunchedEffect(playerState.playbackState, settings.backgroundPlay) {
             val intent = Intent(context, RadioPlaybackService::class.java)
             if (settings.backgroundPlay && playerState.currentStation != null && playerState.playbackState != PlaybackState.IDLE) {
-                ContextCompat.startForegroundService(context, intent)
+                context.startService(intent)
             } else if (!settings.backgroundPlay || playerState.playbackState == PlaybackState.IDLE) {
                 context.stopService(intent)
             }
@@ -117,7 +122,7 @@ private fun MalawiRadioApp(factory: ViewModelFactory, activity: MainActivity, on
         Scaffold(bottomBar = { BottomArea(playerState, selectedTab, { nowPlayingVm.togglePlayPause() }, { selectTab(Tab.NOW_PLAYING) }, selectTab) }) { padding ->
             Box(Modifier.padding(padding)) {
                 when (selectedTab) {
-                    Tab.STATIONS -> StationListScreen(stationListVm, onStationSelected = { selectTab(Tab.NOW_PLAYING) }, currentTheme = settings.theme, onThemeSelected = settingsVm::setTheme)
+                    Tab.STATIONS -> StationListScreen(stationListVm, onStationSelected = { selectTab(Tab.NOW_PLAYING) }, currentTheme = settings.theme, onThemeSelected = settingsVm::setTheme, showScrollHint = showStationScrollHint)
                     Tab.NOW_PLAYING -> NowPlayingScreen(viewModel = nowPlayingVm)
                     Tab.FAVORITES -> FavoritesScreen(favoritesVm, onStationSelected = { selectTab(Tab.NOW_PLAYING) })
                     Tab.SETTINGS -> SettingsScreen(settingsVm, appName = "Malawi Radio")
@@ -145,4 +150,28 @@ private fun MiniPlayerBar(stationName: String, isPlaying: Boolean, isBuffering: 
         Text(stationName, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.weight(1f))
         Box(Modifier.size(48.dp), contentAlignment = Alignment.Center) { if (isBuffering) CircularProgressIndicator(Modifier.size(24.dp), strokeWidth = 2.dp, color = MaterialTheme.colorScheme.primary) else IconButton(onClick = onTogglePlay) { Icon(if (isPlaying) Icons.Filled.Pause else Icons.Filled.PlayArrow, "Play/Pause", tint = MaterialTheme.colorScheme.primary) } }
     }
+}
+
+
+@Suppress("DEPRECATION")
+private fun Context.currentVersionCode(): Long = runCatching {
+    val packageInfo = packageManager.getPackageInfo(packageName, 0)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) packageInfo.longVersionCode else packageInfo.versionCode.toLong()
+}.getOrDefault(0L)
+
+private fun Context.shouldShowStationScrollHint(): Boolean {
+    val prefs = getSharedPreferences(SCROLL_HINT_PREFS, Context.MODE_PRIVATE)
+    val currentVersionCode = currentVersionCode()
+    val savedVersionCode = prefs.getLong(SCROLL_HINT_VERSION_KEY, Long.MIN_VALUE)
+    val openCount = if (savedVersionCode == currentVersionCode) prefs.getInt(SCROLL_HINT_OPEN_COUNT_KEY, 0) else 0
+    val shouldShow = openCount < 2
+
+    if (shouldShow) {
+        prefs.edit()
+            .putLong(SCROLL_HINT_VERSION_KEY, currentVersionCode)
+            .putInt(SCROLL_HINT_OPEN_COUNT_KEY, openCount + 1)
+            .apply()
+    }
+
+    return shouldShow
 }
