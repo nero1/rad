@@ -3,6 +3,7 @@ package com.malawi.radio.ui.ads
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -14,13 +15,13 @@ import com.google.android.gms.ads.AdView
 
 const val DEFAULT_BANNER_AD_UNIT_ID = "ca-app-pub-3940256099942544/6300978111"
 const val DEFAULT_INTERSTITIAL_AD_UNIT_ID = "ca-app-pub-3940256099942544/1033173712"
-const val INTERSTITIAL_DELAY_MINUTES = 10L
+const val INTERSTITIAL_DELAY_MINUTES = 2L
 
 @Composable
 fun HorizontalBannerAd(modifier: Modifier = Modifier, adUnitId: String = System.getenv("ADMOB_BANNER_ID") ?: DEFAULT_BANNER_AD_UNIT_ID) {
     val context = LocalContext.current
     AndroidView(
-        modifier = modifier.fillMaxWidth().height(50.dp),
+        modifier = modifier.fillMaxWidth().padding(vertical = 12.dp).height(50.dp),
         factory = {
             AdView(context).apply {
                 setAdSize(AdSize.BANNER)
@@ -36,7 +37,7 @@ fun HorizontalBannerAd(modifier: Modifier = Modifier, adUnitId: String = System.
 fun MediumRectangleAd(modifier: Modifier = Modifier, adUnitId: String = System.getenv("ADMOB_BANNER_ID") ?: DEFAULT_BANNER_AD_UNIT_ID) {
     val context = LocalContext.current
     AndroidView(
-        modifier = modifier.fillMaxWidth().height(250.dp),
+        modifier = modifier.fillMaxWidth().padding(vertical = 18.dp).height(250.dp),
         factory = {
             AdView(context).apply {
                 setAdSize(AdSize.MEDIUM_RECTANGLE)

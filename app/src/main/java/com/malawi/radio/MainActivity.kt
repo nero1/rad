@@ -1,5 +1,6 @@
 package com.malawi.radio
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
@@ -18,8 +19,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.malawi.radio.player.PlaybackState
+import com.malawi.radio.player.RadioPlaybackService
+import com.malawi.radio.ui.ads.DEFAULT_INTERSTITIAL_AD_UNIT_ID
+import com.malawi.radio.ui.ads.INTERSTITIAL_DELAY_MINUTES
 import com.malawi.radio.ui.ViewModelFactory
 import com.malawi.radio.ui.favorites.FavoritesScreen
 import com.malawi.radio.ui.favorites.FavoritesViewModel
@@ -32,20 +41,36 @@ import com.malawi.radio.ui.stationlist.StationListViewModel
 import com.malawi.radio.ui.theme.AppThemeOption
 import com.malawi.radio.ui.theme.MalawiRadioTheme
 
-private enum class Tab(val label: String) { STATIONS("Stations"), NOW_PLAYING("Now Playing"), FAVORITES("Favorites"), SETTINGS("Settings") }
+private enum class Tab(val label: String) { STATIONS("Stations"), NOW_PLAYING("Now Playing"), FAVORITES("Faves"), SETTINGS("Settings") }
 
 class MainActivity : ComponentActivity() {
     private val factory by lazy { ViewModelFactory(application as MalawiRadioApp) }
 
+    private var interstitialAd: InterstitialAd? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.POST_NOTIFICATIONS), 1)
-        setContent { MalawiRadioApp(factory, onExit = { finish() }) }
+        loadInterstitial()
+        setContent { MalawiRadioApp(factory, activity = this, onExit = { finish() }) }
+    }
+
+    fun showInterstitialIfLoaded() {
+        interstitialAd?.show(this)
+        interstitialAd = null
+        loadInterstitial()
+    }
+
+    private fun loadInterstitial() {
+        InterstitialAd.load(this, DEFAULT_INTERSTITIAL_AD_UNIT_ID, AdRequest.Builder().build(), object : InterstitialAdLoadCallback() {
+            override fun onAdLoaded(ad: InterstitialAd) { interstitialAd = ad }
+            override fun onAdFailedToLoad(error: LoadAdError) { interstitialAd = null }
+        })
     }
 }
 
 @Composable
-private fun MalawiRadioApp(factory: ViewModelFactory, onExit: () -> Unit) {
+private fun MalawiRadioApp(factory: ViewModelFactory, activity: MainActivity, onExit: () -> Unit) {
     val stationListVm: StationListViewModel = viewModel(factory = factory)
     val nowPlayingVm: NowPlayingViewModel = viewModel(factory = factory)
     val favoritesVm: FavoritesViewModel = viewModel(factory = factory)
@@ -56,7 +81,17 @@ private fun MalawiRadioApp(factory: ViewModelFactory, onExit: () -> Unit) {
     MalawiRadioTheme(themeOption = settings.theme) {
         var selectedTab by remember { mutableStateOf(Tab.STATIONS) }
         var backArmedAt by remember { mutableLongStateOf(0L) }
+        var nextInterstitialAt by remember { mutableLongStateOf(System.currentTimeMillis() + INTERSTITIAL_DELAY_MINUTES * 60_000L) }
         val playerState by nowPlayingVm.playerState.collectAsState()
+
+        LaunchedEffect(playerState.playbackState, settings.backgroundPlay) {
+            val intent = Intent(context, RadioPlaybackService::class.java)
+            if (settings.backgroundPlay && playerState.currentStation != null && playerState.playbackState != PlaybackState.IDLE) {
+                ContextCompat.startForegroundService(context, intent)
+            } else if (!settings.backgroundPlay || playerState.playbackState == PlaybackState.IDLE) {
+                context.stopService(intent)
+            }
+        }
 
         BackHandler {
             if (selectedTab != Tab.STATIONS) selectedTab = Tab.STATIONS else {
@@ -68,12 +103,23 @@ private fun MalawiRadioApp(factory: ViewModelFactory, onExit: () -> Unit) {
             }
         }
 
-        Scaffold(bottomBar = { BottomArea(playerState, selectedTab, { nowPlayingVm.togglePlayPause() }, { selectedTab = Tab.NOW_PLAYING }, { selectedTab = it }) }) { padding ->
+        val selectTab: (Tab) -> Unit = { tab ->
+            if (tab != selectedTab) {
+                val now = System.currentTimeMillis()
+                if (now >= nextInterstitialAt) {
+                    activity.showInterstitialIfLoaded()
+                    nextInterstitialAt = now + INTERSTITIAL_DELAY_MINUTES * 60_000L
+                }
+                selectedTab = tab
+            }
+        }
+
+        Scaffold(bottomBar = { BottomArea(playerState, selectedTab, { nowPlayingVm.togglePlayPause() }, { selectTab(Tab.NOW_PLAYING) }, selectTab) }) { padding ->
             Box(Modifier.padding(padding)) {
                 when (selectedTab) {
-                    Tab.STATIONS -> StationListScreen(stationListVm, onStationSelected = { selectedTab = Tab.NOW_PLAYING }, currentTheme = settings.theme, onThemeSelected = settingsVm::setTheme)
+                    Tab.STATIONS -> StationListScreen(stationListVm, onStationSelected = { selectTab(Tab.NOW_PLAYING) }, currentTheme = settings.theme, onThemeSelected = settingsVm::setTheme)
                     Tab.NOW_PLAYING -> NowPlayingScreen(viewModel = nowPlayingVm)
-                    Tab.FAVORITES -> FavoritesScreen(favoritesVm, onStationSelected = { selectedTab = Tab.NOW_PLAYING })
+                    Tab.FAVORITES -> FavoritesScreen(favoritesVm, onStationSelected = { selectTab(Tab.NOW_PLAYING) })
                     Tab.SETTINGS -> SettingsScreen(settingsVm, appName = "Malawi Radio")
                 }
             }
@@ -87,7 +133,7 @@ private fun BottomArea(playerState: com.malawi.radio.player.PlayerUiState, selec
         if (playerState.currentStation != null && selectedTab != Tab.NOW_PLAYING) MiniPlayerBar(playerState.currentStation!!.name, playerState.playbackState == PlaybackState.PLAYING, playerState.playbackState == PlaybackState.BUFFERING, onTogglePlay, onMiniClick)
         NavigationBar {
             listOf(Tab.STATIONS to Icons.Filled.List, Tab.NOW_PLAYING to Icons.Filled.Radio, Tab.FAVORITES to Icons.Filled.Favorite, Tab.SETTINGS to Icons.Filled.Settings).forEach { (tab, icon) ->
-                NavigationBarItem(selected = selectedTab == tab, onClick = { onTab(tab) }, icon = { Icon(icon, contentDescription = tab.label) }, label = { Text(tab.label) })
+                NavigationBarItem(selected = selectedTab == tab, onClick = { onTab(tab) }, icon = { Icon(icon, contentDescription = tab.label) }, label = { Text(tab.label, textAlign = androidx.compose.ui.text.style.TextAlign.Center) })
             }
         }
     }
@@ -97,6 +143,6 @@ private fun BottomArea(playerState: com.malawi.radio.player.PlayerUiState, selec
 private fun MiniPlayerBar(stationName: String, isPlaying: Boolean, isBuffering: Boolean, onTogglePlay: () -> Unit, onClick: () -> Unit) {
     Row(Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.surfaceVariant).clickable { onClick() }.padding(horizontal = 16.dp, vertical = 10.dp), verticalAlignment = Alignment.CenterVertically) {
         Text(stationName, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.weight(1f))
-        if (isBuffering) CircularProgressIndicator(Modifier.size(24.dp), strokeWidth = 2.dp, color = MaterialTheme.colorScheme.primary) else IconButton(onClick = onTogglePlay) { Icon(if (isPlaying) Icons.Filled.Pause else Icons.Filled.PlayArrow, "Play/Pause", tint = MaterialTheme.colorScheme.primary) }
+        Box(Modifier.size(48.dp), contentAlignment = Alignment.Center) { if (isBuffering) CircularProgressIndicator(Modifier.size(24.dp), strokeWidth = 2.dp, color = MaterialTheme.colorScheme.primary) else IconButton(onClick = onTogglePlay) { Icon(if (isPlaying) Icons.Filled.Pause else Icons.Filled.PlayArrow, "Play/Pause", tint = MaterialTheme.colorScheme.primary) } }
     }
 }
