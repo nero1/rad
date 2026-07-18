@@ -4,6 +4,8 @@ import android.app.Application
 import com.malawi.radio.data.local.FavoritesStore
 import com.malawi.radio.data.repository.StationRepository
 import com.malawi.radio.player.PlayerManager
+import com.malawi.radio.data.settings.AppSettingsStore
+import com.google.android.gms.ads.MobileAds
 
 /**
  * Holds app-wide singletons. This is a small enough app that a lightweight manual
@@ -19,9 +21,14 @@ class MalawiRadioApp : Application() {
     lateinit var stationRepository: StationRepository
         private set
 
+    lateinit var settingsStore: AppSettingsStore
+        private set
+
     override fun onCreate() {
         super.onCreate()
         playerManager = PlayerManager(this)
         stationRepository = StationRepository(this, FavoritesStore(this))
+        settingsStore = AppSettingsStore(this)
+        MobileAds.initialize(this)
     }
 }

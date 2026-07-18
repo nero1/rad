@@ -18,6 +18,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.malawi.radio.data.model.RadioStation
 import com.malawi.radio.ui.stationlist.StationRow
+import com.malawi.radio.ui.ads.HorizontalBannerAd
 
 @Composable
 fun FavoritesScreen(
@@ -33,6 +34,7 @@ fun FavoritesScreen(
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(20.dp)
         )
+        HorizontalBannerAd(Modifier.padding(horizontal = 16.dp, vertical = 4.dp))
 
         if (favorites.isEmpty()) {
             Column(
