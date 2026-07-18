@@ -10,7 +10,7 @@ import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Radio
 import androidx.compose.material.icons.filled.Bedtime
-import androidx.compose.material.icons.filled.TimerOff
+import androidx.compose.material.icons.filled.HourglassBottom
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -19,24 +19,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.malawi.radio.data.repository.StationRepository
 import com.malawi.radio.player.PlaybackState
 import com.malawi.radio.ui.ads.HorizontalBannerAd
 import com.malawi.radio.ui.ads.MediumRectangleAd
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun NowPlayingScreen(viewModel: NowPlayingViewModel) {
     val state by viewModel.playerState.collectAsState()
     val station = state.currentStation
-    var sleepRemaining by remember { mutableLongStateOf(0L) }
+    val sleepRemaining by viewModel.sleepRemaining.collectAsState()
+    val isFavorite by viewModel.isCurrentFavorite.collectAsState()
     var sleepMenu by remember { mutableStateOf(false) }
-    LaunchedEffect(sleepRemaining) {
-        if (sleepRemaining > 0) { delay(1000); sleepRemaining -= 1; if (sleepRemaining == 0L) viewModel.stop() }
-    }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -99,6 +92,8 @@ fun NowPlayingScreen(viewModel: NowPlayingViewModel) {
             )
         }
 
+        Spacer(Modifier.height(12.dp))
+        MediumRectangleAd(Modifier.padding(horizontal = 12.dp, vertical = 10.dp))
         Spacer(Modifier.height(10.dp))
 
         val statusText = when (state.playbackState) {
@@ -126,9 +121,9 @@ fun NowPlayingScreen(viewModel: NowPlayingViewModel) {
                 modifier = Modifier.size(48.dp)
             ) {
                 Icon(
-                    imageVector = Icons.Filled.FavoriteBorder,
+                    imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
                     contentDescription = "Favorite",
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    tint = if (isFavorite) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 
@@ -151,27 +146,25 @@ fun NowPlayingScreen(viewModel: NowPlayingViewModel) {
             }
 
             Spacer(Modifier.width(24.dp))
-            Box {
+            Box(Modifier.padding(bottom = 28.dp)) {
                 IconButton(onClick = { sleepMenu = true }, modifier = Modifier.size(48.dp)) {
-                    Icon(if (sleepRemaining > 0) Icons.Filled.TimerOff else Icons.Filled.Bedtime, contentDescription = "Sleep timer", tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Icon(if (sleepRemaining > 0) Icons.Filled.HourglassBottom else Icons.Filled.Bedtime, contentDescription = "Sleep timer", tint = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
                 DropdownMenu(expanded = sleepMenu, onDismissRequest = { sleepMenu = false }) {
                     DropdownMenuItem(text = { Text("Sleep Timer") }, onClick = {})
                     if (sleepRemaining > 0) {
                         DropdownMenuItem(text = { Text("%02d:%02d remaining".format(sleepRemaining / 60, sleepRemaining % 60)) }, onClick = {})
-                        DropdownMenuItem(text = { Text("+ Add 5 minutes") }, onClick = { sleepRemaining += 300 })
-                        DropdownMenuItem(text = { Text("Cancel Timer") }, onClick = { sleepRemaining = 0; sleepMenu = false })
+                        DropdownMenuItem(text = { Text("+ Add 5 minutes") }, onClick = { viewModel.addSleepTime(300); sleepMenu = false })
+                        DropdownMenuItem(text = { Text("Cancel Timer") }, onClick = { viewModel.cancelSleepTimer(); sleepMenu = false })
                     } else {
                         listOf(5L to "5 minutes", 10L to "10 minutes", 15L to "15 minutes", 30L to "30 minutes", 60L to "1 hour", 120L to "2 hours").forEach { (mins, label) ->
-                            DropdownMenuItem(text = { Text(label) }, onClick = { sleepRemaining = mins * 60; sleepMenu = false })
+                            DropdownMenuItem(text = { Text(label) }, onClick = { viewModel.setSleepTimer(mins * 60); sleepMenu = false })
                         }
                     }
                 }
             }
         }
         Spacer(Modifier.height(16.dp))
-        MediumRectangleAd(Modifier.padding(horizontal = 8.dp))
-        Spacer(Modifier.height(10.dp))
-        HorizontalBannerAd(Modifier.padding(horizontal = 8.dp))
+        HorizontalBannerAd(Modifier.padding(horizontal = 12.dp, vertical = 12.dp))
     }
 }

@@ -17,7 +17,7 @@ Edit this file first when cloning the app for another country, market, or niche.
 - `admob_app_id`: ca-app-pub-3940256099942544~3347511713
 - `admob_banner_id`: ca-app-pub-3940256099942544/6300978111
 - `admob_interstitial_id`: ca-app-pub-3940256099942544/1033173712
-- `interstitial_delay_mins`: 10
+- `interstitial_delay_mins`: 2
 
 Production IDs should be set with environment variables before release. Missing environment values fall back to the test IDs above.
 

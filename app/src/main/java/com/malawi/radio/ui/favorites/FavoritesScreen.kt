@@ -2,7 +2,6 @@ package com.malawi.radio.ui.favorites
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.MaterialTheme
@@ -19,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.malawi.radio.data.model.RadioStation
 import com.malawi.radio.ui.stationlist.StationRow
 import com.malawi.radio.ui.ads.HorizontalBannerAd
+import com.malawi.radio.ui.ads.MediumRectangleAd
 
 @Composable
 fun FavoritesScreen(
@@ -63,7 +63,8 @@ fun FavoritesScreen(
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                items(favorites, key = { it.id }) { station ->
+                items(favorites.size, key = { favorites[it].id }) { index ->
+                    val station = favorites[index]
                     StationRow(
                         station = station,
                         isFavorite = true,
@@ -73,8 +74,12 @@ fun FavoritesScreen(
                         },
                         onFavoriteClick = { viewModel.toggleFavorite(station.id) }
                     )
+                    if (index == 2) {
+                        HorizontalBannerAd(Modifier.padding(horizontal = 12.dp, vertical = 18.dp))
+                    }
                 }
-                item { Spacer(Modifier.height(80.dp)) }
+                item { MediumRectangleAd(Modifier.padding(horizontal = 12.dp, vertical = 24.dp)) }
+                item { Spacer(Modifier.height(96.dp)) }
             }
         }
     }
