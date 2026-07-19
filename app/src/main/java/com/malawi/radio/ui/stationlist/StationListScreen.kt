@@ -73,9 +73,10 @@ fun StationListScreen(
 
             LaunchedEffect(showScrollHint) {
                 if (showScrollHint) {
-                    onScrollHintShown()
+                    isScrollHintVisible = true
                     delay(5_500)
                     isScrollHintVisible = false
+                    onScrollHintShown()
                 }
             }
 

@@ -25,6 +25,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlin.system.exitProcess
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
@@ -60,7 +61,16 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.POST_NOTIFICATIONS), 1)
         loadInterstitial()
-        setContent { MalawiRadioApp(factory, activity = this, onExit = { finish() }) }
+        setContent { MalawiRadioApp(factory, activity = this, onExit = ::exitAppCompletely) }
+    }
+
+    private fun exitAppCompletely() {
+        val app = application as MalawiRadioApp
+        app.playerManager.stop()
+        app.playerManager.release()
+        stopService(Intent(this, RadioPlaybackService::class.java))
+        finishAndRemoveTask()
+        exitProcess(0)
     }
 
     fun showInterstitialIfLoaded() {
