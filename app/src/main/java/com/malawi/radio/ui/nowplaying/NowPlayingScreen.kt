@@ -178,10 +178,10 @@ fun NowPlayingScreen(viewModel: NowPlayingViewModel) {
 private fun EmptyNowPlayingPrompt() {
     val transition = rememberInfiniteTransition(label = "stations-nav-hint")
     val offsetY by transition.animateFloat(
-        initialValue = 0f,
-        targetValue = 18f,
+        initialValue = -36f,
+        targetValue = 36f,
         animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 800),
+            animation = tween(durationMillis = 400),
             repeatMode = RepeatMode.Reverse
         ),
         label = "stations-nav-hint-offset"
@@ -213,7 +213,7 @@ private fun EmptyNowPlayingPrompt() {
             tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.72f),
             modifier = Modifier
                 .align(Alignment.BottomStart)
-                .padding(start = 28.dp, bottom = 16.dp)
+                .padding(start = 20.dp, bottom = 16.dp)
                 .graphicsLayer { translationY = offsetY }
                 .size(48.dp)
         )

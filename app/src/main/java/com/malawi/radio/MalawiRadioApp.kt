@@ -1,11 +1,13 @@
 package com.malawi.radio
 
 import android.app.Application
+import android.content.ComponentCallbacks2
 import com.malawi.radio.data.local.FavoritesStore
 import com.malawi.radio.data.repository.StationRepository
 import com.malawi.radio.player.PlayerManager
 import com.malawi.radio.data.settings.AppSettingsStore
 import com.google.android.gms.ads.MobileAds
+import com.malawi.radio.util.AppStorageManager
 
 /**
  * Holds app-wide singletons. This is a small enough app that a lightweight manual
@@ -29,6 +31,14 @@ class MalawiRadioApp : Application() {
         playerManager = PlayerManager(this)
         stationRepository = StationRepository(this, FavoritesStore(this))
         settingsStore = AppSettingsStore(this)
+        AppStorageManager.trimCache(this)
         MobileAds.initialize(this)
+    }
+
+    override fun onTrimMemory(level: Int) {
+        super.onTrimMemory(level)
+        if (level >= ComponentCallbacks2.TRIM_MEMORY_RUNNING_LOW) {
+            AppStorageManager.trimCache(this)
+        }
     }
 }
