@@ -57,7 +57,7 @@ Ask for this setup when you're ready — it's a small addition on top of what's 
 
 ## Template configuration
 
-Use [`xmanifest.md`](./xmanifest.md) as the central template manifest when cloning this project for another market, country, or niche. It records the app name, package name, theme options, AdMob test IDs, interstitial delay, icon guidance, background playback default, and versioning policy.
+Use [`xmanifest.md`](./xmanifest.md) as the central template manifest when cloning this project for another market, country, or niche. It records the app name, package name, theme options, AdMob test IDs, interstitial delay, icon guidance, playback defaults, feature flags, and versioning policy.
 
 For release builds, copy [`.env.example`](./.env.example) into your own environment/secrets store and provide real values for:
 
@@ -74,7 +74,7 @@ If AdMob values are omitted, the app uses Google's test AdMob IDs from `xmanifes
 ## Current app upgrades
 
 - Targets Android API level 36.
-- Versioning now starts at `1.00` (`VERSION_CODE=100`) so future Play Store builds can increment by `0.01` / +1 code.
+- Versioning now starts from `xmanifest.md` (`version_name_start`, currently `1.01`) unless `VERSION_NAME` is supplied, while `VERSION_CODE=100` remains the default code for local builds.
 - Added a fourth bottom-nav Settings screen with theme selection, background-play toggle, About, Help/FAQs, Contact, and Privacy Policy content.
 - Added theme switching for Dark Mode, Light Mode, Rose Wind, Moonlight, Purple Hibiscus, Midnight, Blue Skies, Desert Heat, Snow, and Green Glory.
 - Added AdMob dependency and banner placements using test IDs by default, including list-page header banners and now-playing banner space.

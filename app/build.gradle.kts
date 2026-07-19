@@ -5,6 +5,24 @@ plugins {
     id("com.google.devtools.ksp")
 }
 
+
+fun xmanifestValue(key: String): String? {
+    val manifestFile = rootProject.file("xmanifest.md")
+    if (!manifestFile.isFile) return null
+    val pattern = Regex("""- `\Q$key\E`:\s*(.+)""")
+    return manifestFile.readLines()
+        .firstNotNullOfOrNull { line -> pattern.find(line)?.groupValues?.get(1)?.trim() }
+}
+
+fun xmanifestBoolean(key: String, defaultValue: Boolean): Boolean =
+    xmanifestValue(key)?.lowercase()?.let { value ->
+        when (value) {
+            "true", "yes", "on", "enabled", "1" -> true
+            "false", "no", "off", "disabled", "0" -> false
+            else -> defaultValue
+        }
+    } ?: defaultValue
+
 android {
     namespace = "com.malawi.radio"
     compileSdk = 36
@@ -14,9 +32,10 @@ android {
         minSdk = 24
         targetSdk = 36
         versionCode = (System.getenv("VERSION_CODE") ?: "100").toInt()
-        versionName = System.getenv("VERSION_NAME") ?: "1.00"
+        versionName = System.getenv("VERSION_NAME") ?: xmanifestValue("version_name_start") ?: "1.00"
 
         manifestPlaceholders["admobAppId"] = System.getenv("ADMOB_APP_ID") ?: "ca-app-pub-3940256099942544~3347511713"
+        buildConfigField("Boolean", "SCROLLING_MARQUEE_ENABLED", xmanifestBoolean("scrolling_marquee_enabled", false).toString())
     }
 
     buildTypes {
@@ -40,6 +59,7 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 
     composeOptions {

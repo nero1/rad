@@ -29,4 +29,5 @@ Recommended source files are square PNG images: 512×512 px for Play/App Store s
 
 ## Playback defaults
 - `background_play_default`: true
+- `scrolling_marquee_enabled`: false
 - `sleep_timer_options`: 5 minutes, 10 minutes, 15 minutes, 30 minutes, 1 hour, 2 hours
