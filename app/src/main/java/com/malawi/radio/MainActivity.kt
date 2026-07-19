@@ -21,6 +21,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
@@ -90,13 +93,26 @@ private fun MalawiRadioApp(factory: ViewModelFactory, activity: MainActivity, on
         val playerState by nowPlayingVm.playerState.collectAsState()
         var showStationScrollHint by remember { mutableStateOf(activity.shouldShowStationScrollHint()) }
 
+        val lifecycleOwner = LocalLifecycleOwner.current
+
         LaunchedEffect(playerState.playbackState, settings.backgroundPlay) {
             val intent = Intent(context, RadioPlaybackService::class.java)
             if (settings.backgroundPlay && playerState.currentStation != null && playerState.playbackState != PlaybackState.IDLE) {
-                ContextCompat.startForegroundService(context, intent)
+                context.startRadioPlaybackForegroundService(intent)
             } else if (!settings.backgroundPlay || playerState.playbackState == PlaybackState.IDLE) {
                 context.stopService(intent)
             }
+        }
+
+        DisposableEffect(lifecycleOwner, settings.backgroundPlay) {
+            val observer = LifecycleEventObserver { _, event ->
+                if (event == Lifecycle.Event.ON_STOP && !settings.backgroundPlay) {
+                    nowPlayingVm.stop()
+                    context.stopService(Intent(context, RadioPlaybackService::class.java))
+                }
+            }
+            lifecycleOwner.lifecycle.addObserver(observer)
+            onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
         }
 
         BackHandler {
@@ -175,4 +191,14 @@ private fun Context.shouldShowStationScrollHint(): Boolean {
     }
 
     return shouldShow
+}
+
+private fun Context.startRadioPlaybackForegroundService(intent: Intent) {
+    try {
+        ContextCompat.startForegroundService(this, intent)
+    } catch (exception: IllegalStateException) {
+        // Android 12+ can reject foreground-service starts after the app has already
+        // moved to the background. If the service was started while the app was
+        // visible, playback continues; otherwise avoid crashing the process.
+    }
 }
