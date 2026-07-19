@@ -5,9 +5,7 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.*
@@ -31,6 +29,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.malawi.radio.BuildConfig
 import com.malawi.radio.player.PlaybackState
 import com.malawi.radio.ui.ads.MediumRectangleAd
 import com.malawi.radio.ui.components.MarqueeText
@@ -176,18 +175,21 @@ fun NowPlayingScreen(viewModel: NowPlayingViewModel) {
         }
         state.currentTitle?.takeIf { it.isNotBlank() }?.let { title ->
             Spacer(Modifier.height(6.dp))
-            MarqueeSongTitle(
-                title = title,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 18.dp)
-            )
+            if (BuildConfig.SCROLLING_MARQUEE_ENABLED) {
+                MarqueeSongTitle(
+                    title = title,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 18.dp)
+                )
+            } else {
+                Spacer(Modifier.height(20.dp))
+            }
         }
         Spacer(Modifier.height(6.dp))
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun MarqueeSongTitle(title: String, modifier: Modifier = Modifier) {
     MarqueeText(
