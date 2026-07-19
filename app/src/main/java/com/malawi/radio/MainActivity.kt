@@ -8,7 +8,9 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -18,6 +20,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -162,7 +165,7 @@ private fun MalawiRadioApp(factory: ViewModelFactory, activity: MainActivity, on
 @Composable
 private fun BottomArea(playerState: com.malawi.radio.player.PlayerUiState, selectedTab: Tab, onTogglePlay: () -> Unit, onMiniClick: () -> Unit, onTab: (Tab) -> Unit) {
     Column {
-        if (playerState.currentStation != null && selectedTab != Tab.NOW_PLAYING) MiniPlayerBar(playerState.currentStation!!.name, playerState.playbackState == PlaybackState.PLAYING, playerState.playbackState == PlaybackState.BUFFERING, onTogglePlay, onMiniClick)
+        if (playerState.currentStation != null && selectedTab != Tab.NOW_PLAYING) MiniPlayerBar(playerState.currentStation!!.name, playerState.currentTitle, playerState.playbackState == PlaybackState.PLAYING, playerState.playbackState == PlaybackState.BUFFERING, onTogglePlay, onMiniClick)
         NavigationBar {
             listOf(Tab.STATIONS to Icons.Filled.List, Tab.NOW_PLAYING to Icons.Filled.Radio, Tab.FAVORITES to Icons.Filled.Favorite, Tab.SETTINGS to Icons.Filled.Settings).forEach { (tab, icon) ->
                 NavigationBarItem(selected = selectedTab == tab, onClick = { onTab(tab) }, icon = { Icon(icon, contentDescription = tab.label) }, label = { Text(tab.label, textAlign = androidx.compose.ui.text.style.TextAlign.Center) })
@@ -172,11 +175,29 @@ private fun BottomArea(playerState: com.malawi.radio.player.PlayerUiState, selec
 }
 
 @Composable
-private fun MiniPlayerBar(stationName: String, isPlaying: Boolean, isBuffering: Boolean, onTogglePlay: () -> Unit, onClick: () -> Unit) {
+private fun MiniPlayerBar(stationName: String, currentTitle: String?, isPlaying: Boolean, isBuffering: Boolean, onTogglePlay: () -> Unit, onClick: () -> Unit) {
     Row(Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.surfaceVariant).clickable { onClick() }.padding(horizontal = 16.dp, vertical = 10.dp), verticalAlignment = Alignment.CenterVertically) {
-        Text(stationName, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.weight(1f))
+        Text(stationName, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.onSurface, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(0.42f))
+        currentTitle?.takeIf { it.isNotBlank() }?.let { title ->
+            Spacer(Modifier.width(12.dp))
+            MiniPlayerSongTitle(title = title, modifier = Modifier.weight(0.58f))
+            Spacer(Modifier.width(12.dp))
+        }
         Box(Modifier.size(48.dp), contentAlignment = Alignment.Center) { if (isBuffering) CircularProgressIndicator(Modifier.size(24.dp), strokeWidth = 2.dp, color = MaterialTheme.colorScheme.primary) else IconButton(onClick = onTogglePlay) { Icon(if (isPlaying) Icons.Filled.Pause else Icons.Filled.PlayArrow, "Play/Pause", tint = MaterialTheme.colorScheme.primary) } }
     }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+private fun MiniPlayerSongTitle(title: String, modifier: Modifier = Modifier) {
+    Text(
+        text = title,
+        modifier = modifier.basicMarquee(iterations = Int.MAX_VALUE, repeatDelayMillis = 0),
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        maxLines = 1,
+        overflow = TextOverflow.Clip
+    )
 }
 
 

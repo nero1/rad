@@ -16,7 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.PanTool
+import androidx.compose.material.icons.filled.TouchApp
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -150,7 +150,7 @@ private fun ScrollDownHint(modifier: Modifier = Modifier) {
         contentAlignment = Alignment.BottomCenter
     ) {
         Icon(
-            imageVector = Icons.Filled.PanTool,
+            imageVector = Icons.Filled.TouchApp,
             contentDescription = "Slide up for more stations",
             tint = MaterialTheme.colorScheme.onBackground.copy(alpha = alpha),
             modifier = Modifier
