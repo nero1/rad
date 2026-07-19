@@ -5,7 +5,7 @@ Edit this file first when cloning the app for another country, market, or niche.
 ## Identity
 - `app_name`: Malawi Radio
 - `package_name`: com.malawi.radio
-- `version_name_start`: 1.00
+- `version_name_start`: 1.01
 - `version_increment`: 0.01 per Play Store build
 - `android_target_api`: 36
 
