@@ -190,19 +190,6 @@ fun NowPlayingScreen(viewModel: NowPlayingViewModel) {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun MarqueeSongTitle(title: String, modifier: Modifier = Modifier) {
-    Text(
-        text = title,
-        modifier = modifier.basicMarquee(iterations = Int.MAX_VALUE, repeatDelayMillis = 0),
-        style = MaterialTheme.typography.bodyMedium,
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
-        textAlign = TextAlign.Center,
-        maxLines = 1,
-        overflow = TextOverflow.Clip
-    )
-}
-
-@Composable
-private fun MarqueeSongTitle(title: String, modifier: Modifier = Modifier) {
     MarqueeText(
         text = title,
         modifier = modifier,
