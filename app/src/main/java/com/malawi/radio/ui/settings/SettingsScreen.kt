@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.malawi.radio.ui.ads.HorizontalBannerAd
-import com.malawi.radio.ui.ads.SquareBannerAd
+import com.malawi.radio.ui.ads.MediumRectangleAd
 import com.malawi.radio.ui.theme.AppThemeOption
 
 @Composable
@@ -40,7 +40,7 @@ fun SettingsScreen(viewModel: SettingsViewModel, appName: String) {
         ExpandableSettingsCard("Help / FAQs", "Choose a station to play. Favorite stations with the heart. Use the sleep timer on Now Playing to stop playback automatically.")
         ExpandableSettingsCard("Privacy Policy", "This template stores favorites and settings on your device. Audio streams and ads may be served by third parties according to their policies.")
         ExpandableSettingsCard("Contact", "For adverts, questions or feedback contact us by sending an email appachiapps@ng4n.com. Make sure you mention $appName in your email message.")
-        SquareBannerAd(Modifier.padding(horizontal = 12.dp, vertical = 12.dp))
+        MediumRectangleAd(Modifier.padding(horizontal = 12.dp, vertical = 12.dp))
         Spacer(Modifier.height(96.dp))
     }
 }

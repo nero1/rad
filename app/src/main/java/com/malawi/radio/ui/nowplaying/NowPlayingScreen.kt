@@ -30,6 +30,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.malawi.radio.player.PlaybackState
 import com.malawi.radio.ui.ads.MediumRectangleAd
+import com.malawi.radio.ui.components.MarqueeText
 
 @Composable
 fun NowPlayingScreen(viewModel: NowPlayingViewModel) {
@@ -98,9 +99,9 @@ fun NowPlayingScreen(viewModel: NowPlayingViewModel) {
             )
         }
 
-        Spacer(Modifier.height(6.dp))
-        MediumRectangleAd(Modifier.padding(horizontal = 8.dp, vertical = 2.dp))
         Spacer(Modifier.height(4.dp))
+        MediumRectangleAd(Modifier.padding(horizontal = 8.dp, vertical = 0.dp))
+        Spacer(Modifier.height(2.dp))
 
         val statusText = when (state.playbackState) {
             PlaybackState.BUFFERING -> "Buffering…"
@@ -170,8 +171,28 @@ fun NowPlayingScreen(viewModel: NowPlayingViewModel) {
                 }
             }
         }
-        Spacer(Modifier.height(8.dp))
+        state.currentTitle?.takeIf { it.isNotBlank() }?.let { title ->
+            Spacer(Modifier.height(6.dp))
+            MarqueeSongTitle(
+                title = title,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 18.dp)
+            )
+        }
+        Spacer(Modifier.height(6.dp))
     }
+}
+
+@Composable
+private fun MarqueeSongTitle(title: String, modifier: Modifier = Modifier) {
+    MarqueeText(
+        text = title,
+        modifier = modifier,
+        style = MaterialTheme.typography.bodyMedium,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        staticAlignment = Alignment.Center
+    )
 }
 
 @Composable
