@@ -1,8 +1,19 @@
 package com.malawi.radio.player
 
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Intent
+import android.os.Build
+import androidx.core.app.NotificationCompat
 import androidx.media3.session.MediaSession
 import androidx.media3.session.MediaSessionService
+import com.malawi.radio.MainActivity
 import com.malawi.radio.MalawiRadioApp
+
+private const val PLAYBACK_NOTIFICATION_CHANNEL_ID = "radio_playback"
+private const val PLAYBACK_NOTIFICATION_ID = 1001
 
 /**
  * Foreground service that keeps the radio stream alive in the background and
@@ -19,8 +30,16 @@ class RadioPlaybackService : MediaSessionService() {
 
     override fun onCreate() {
         super.onCreate()
+        createNotificationChannel()
+        startForeground(PLAYBACK_NOTIFICATION_ID, buildNotification())
         val playerManager = (application as MalawiRadioApp).playerManager
         mediaSession = MediaSession.Builder(this, playerManager.exoPlayer).build()
+    }
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        val result = super.onStartCommand(intent, flags, startId)
+        startForeground(PLAYBACK_NOTIFICATION_ID, buildNotification())
+        return result
     }
 
     override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaSession? = mediaSession
@@ -31,5 +50,40 @@ class RadioPlaybackService : MediaSessionService() {
             mediaSession = null
         }
         super.onDestroy()
+    }
+
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
+        val channel = NotificationChannel(
+            PLAYBACK_NOTIFICATION_CHANNEL_ID,
+            "Radio playback",
+            NotificationManager.IMPORTANCE_LOW
+        ).apply {
+            description = "Shows when Malawi Radio is playing in the background"
+        }
+        getSystemService(NotificationManager::class.java).createNotificationChannel(channel)
+    }
+
+    private fun buildNotification(): Notification {
+        val stationName = (application as MalawiRadioApp).playerManager.uiState.value.currentStation?.name
+            ?: "Malawi Radio"
+        val launchIntent = Intent(this, MainActivity::class.java)
+        val pendingIntent = PendingIntent.getActivity(
+            this,
+            0,
+            launchIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        return NotificationCompat.Builder(this, PLAYBACK_NOTIFICATION_CHANNEL_ID)
+            .setSmallIcon(android.R.drawable.ic_media_play)
+            .setContentTitle(stationName)
+            .setContentText("Playing live radio")
+            .setContentIntent(pendingIntent)
+            .setOngoing(true)
+            .setOnlyAlertOnce(true)
+            .setCategory(NotificationCompat.CATEGORY_SERVICE)
+            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .build()
     }
 }
