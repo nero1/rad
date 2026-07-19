@@ -33,6 +33,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.malawi.radio.player.PlaybackState
 import com.malawi.radio.ui.ads.MediumRectangleAd
+import com.malawi.radio.ui.components.MarqueeText
 
 @Composable
 fun NowPlayingScreen(viewModel: NowPlayingViewModel) {
@@ -197,6 +198,17 @@ private fun MarqueeSongTitle(title: String, modifier: Modifier = Modifier) {
         textAlign = TextAlign.Center,
         maxLines = 1,
         overflow = TextOverflow.Clip
+    )
+}
+
+@Composable
+private fun MarqueeSongTitle(title: String, modifier: Modifier = Modifier) {
+    MarqueeText(
+        text = title,
+        modifier = modifier,
+        style = MaterialTheme.typography.bodyMedium,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        staticAlignment = Alignment.Center
     )
 }
 

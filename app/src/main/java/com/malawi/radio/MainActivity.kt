@@ -37,6 +37,7 @@ import com.malawi.radio.player.PlaybackState
 import com.malawi.radio.player.RadioPlaybackService
 import com.malawi.radio.ui.ads.DEFAULT_INTERSTITIAL_AD_UNIT_ID
 import com.malawi.radio.ui.ads.INTERSTITIAL_DELAY_MINUTES
+import com.malawi.radio.ui.components.MarqueeText
 import com.malawi.radio.ui.ViewModelFactory
 import com.malawi.radio.ui.favorites.FavoritesScreen
 import com.malawi.radio.ui.favorites.FavoritesViewModel
@@ -187,16 +188,13 @@ private fun MiniPlayerBar(stationName: String, currentTitle: String?, isPlaying:
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun MiniPlayerSongTitle(title: String, modifier: Modifier = Modifier) {
-    Text(
+    MarqueeText(
         text = title,
-        modifier = modifier.basicMarquee(iterations = Int.MAX_VALUE, repeatDelayMillis = 0),
+        modifier = modifier,
         style = MaterialTheme.typography.bodySmall,
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
-        maxLines = 1,
-        overflow = TextOverflow.Clip
+        color = MaterialTheme.colorScheme.onSurfaceVariant
     )
 }
 
