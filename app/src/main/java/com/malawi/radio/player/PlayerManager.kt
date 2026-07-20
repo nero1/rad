@@ -1,7 +1,9 @@
 package com.malawi.radio.player
 
 import android.content.Context
+import androidx.media3.common.C
 import androidx.media3.common.MediaItem
+import androidx.media3.common.MediaMetadata
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
@@ -11,6 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 enum class PlaybackState { IDLE, BUFFERING, PLAYING, PAUSED, ERROR }
@@ -18,7 +21,8 @@ enum class PlaybackState { IDLE, BUFFERING, PLAYING, PAUSED, ERROR }
 data class PlayerUiState(
     val currentStation: RadioStation? = null,
     val playbackState: PlaybackState = PlaybackState.IDLE,
-    val errorMessage: String? = null
+    val errorMessage: String? = null,
+    val currentTitle: String? = null
 )
 
 /**
@@ -32,9 +36,12 @@ class PlayerManager(private val context: Context) {
     private val scope = CoroutineScope(Dispatchers.Main)
     private var reconnectAttempts = 0
     private val maxReconnectAttempts = 5
+    private var reconnectJob: Job? = null
+    private var playGeneration = 0
 
     val exoPlayer: ExoPlayer by lazy {
         ExoPlayer.Builder(context).build().apply {
+            setWakeMode(C.WAKE_MODE_NETWORK)
             addListener(playerListener)
         }
     }
@@ -62,6 +69,15 @@ class PlayerManager(private val context: Context) {
         override fun onPlayerError(error: PlaybackException) {
             attemptReconnect()
         }
+
+        override fun onMediaMetadataChanged(mediaMetadata: MediaMetadata) {
+            val title = listOf(
+                mediaMetadata.title,
+                mediaMetadata.displayTitle,
+                mediaMetadata.subtitle
+            ).firstOrNull { !it.isNullOrBlank() }?.toString()?.trim()
+            _uiState.value = _uiState.value.copy(currentTitle = title)
+        }
     }
 
     private fun updateState(state: PlaybackState, error: String? = null) {
@@ -79,15 +95,23 @@ class PlayerManager(private val context: Context) {
         }
         reconnectAttempts++
         updateState(PlaybackState.BUFFERING)
-        scope.launch {
+        val generation = playGeneration
+        reconnectJob?.cancel()
+        reconnectJob = scope.launch {
             delay(1500L * reconnectAttempts) // simple backoff
-            playStation(station, isReconnect = true)
+            if (generation == playGeneration && _uiState.value.currentStation?.id == station.id) playStation(station, isReconnect = true)
         }
     }
 
     fun playStation(station: RadioStation, isReconnect: Boolean = false) {
-        if (!isReconnect) reconnectAttempts = 0
-        _uiState.value = _uiState.value.copy(currentStation = station, errorMessage = null)
+        if (!isReconnect) {
+            reconnectAttempts = 0
+            playGeneration++
+            reconnectJob?.cancel()
+            exoPlayer.stop()
+            exoPlayer.clearMediaItems()
+        }
+        _uiState.value = _uiState.value.copy(currentStation = station, errorMessage = null, currentTitle = null)
         val mediaItem = MediaItem.fromUri(station.streamUrl)
         exoPlayer.setMediaItem(mediaItem)
         exoPlayer.prepare()
@@ -105,8 +129,10 @@ class PlayerManager(private val context: Context) {
     }
 
     fun stop() {
+        playGeneration++
+        reconnectJob?.cancel()
         exoPlayer.stop()
-        updateState(PlaybackState.IDLE)
+        _uiState.value = _uiState.value.copy(playbackState = PlaybackState.IDLE, errorMessage = null, currentTitle = null)
     }
 
     fun release() {

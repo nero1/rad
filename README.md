@@ -54,3 +54,34 @@ Ask for this setup when you're ready — it's a small addition on top of what's 
   editor in the browser — works on mobile browsers
 - Or the **GitHub mobile app** for quick single-file edits
 - Commits to `main` auto-trigger the build workflow above
+
+## Template configuration
+
+Use [`xmanifest.md`](./xmanifest.md) as the central template manifest when cloning this project for another market, country, or niche. It records the app name, package name, theme options, AdMob test IDs, interstitial delay, icon guidance, playback defaults, feature flags, and versioning policy.
+
+For release builds, copy [`.env.example`](./.env.example) into your own environment/secrets store and provide real values for:
+
+- `ADMOB_APP_ID`
+- `ADMOB_BANNER_ID`
+- `ADMOB_INTERSTITIAL_ID`
+- `APP_NAME`
+- `APPLICATION_ID`
+- `VERSION_CODE`
+- `VERSION_NAME`
+
+If AdMob values are omitted, the app uses Google's test AdMob IDs from `xmanifest.md` so debug builds are safe.
+
+## Current app upgrades
+
+- Targets Android API level 36.
+- Versioning now starts from `xmanifest.md` (`version_name_start`, currently `1.01`) unless `VERSION_NAME` is supplied, while `VERSION_CODE=100` remains the default code for local builds.
+- Added a fourth bottom-nav Settings screen with theme selection, background-play toggle, About, Help/FAQs, Contact, and Privacy Policy content.
+- Added theme switching for Dark Mode, Light Mode, Rose Wind, Moonlight, Purple Hibiscus, Midnight, Blue Skies, Desert Heat, Snow, and Green Glory.
+- Added AdMob dependency and banner placements using test IDs by default, including list-page header banners and now-playing banner space.
+- Added back-button protection: non-home tabs return to Stations first; pressing back on Stations asks users to tap again before exiting.
+- Added a sleep timer on Now Playing with 5, 10, 15, 30, 60, and 120 minute options, countdown display, +5 minutes, and cancel.
+- Improved bad-stream handling by canceling stale reconnect attempts when the user selects another station.
+
+## Battery, memory, cache, and bandwidth notes
+
+The app keeps one shared ExoPlayer instance for the UI, notification, and background service rather than creating multiple players. Reconnect attempts are capped and canceled when the user switches stations, preventing old broken streams from continuing to buffer in the background. Station data remains bundled locally and favorites/settings use lightweight DataStore preferences, so normal app network usage is limited to audio streams and ads.

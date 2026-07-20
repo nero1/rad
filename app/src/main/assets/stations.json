@@ -79,14 +79,14 @@
       "needsVerification": false
     },
     {
-      "id": "mij_fm",
-      "name": "MIJ FM",
-      "frequency": "",
-      "city": "Blantyre",
-      "genre": "News & Entertainment",
-      "language": "Chichewa",
-      "streamUrl": "https://zeno.fm/radio/mij-fm/",
-      "homepage": "https://mijmw.com",
+      "id": "kiis_fm",
+      "name": "Kiis FM",
+      "frequency": "102.3m",
+      "city": "LA, California, USA",
+      "genre": "Muic",
+      "language": "English",
+      "streamUrl": "https://stream.revma.ihrhls.com/zc185",
+      "homepage": "https://kiisfm.iheart.com/",
       "needsVerification": true
     }
   ]

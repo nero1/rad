@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">Malawi Radio</string>
     <string name="now_playing">Now Playing</string>
     <string name="stations">Stations</string>
     <string name="favorites">Favorites</string>
