@@ -234,15 +234,21 @@ private fun EmptyNowPlayingPrompt() {
             )
         }
 
-        Icon(
-            imageVector = Icons.Filled.KeyboardArrowDown,
-            contentDescription = "Go to Stations",
-            tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.72f),
+        Box(
             modifier = Modifier
                 .align(Alignment.BottomStart)
-                .padding(start = 20.dp, bottom = 16.dp)
-                .graphicsLayer { translationY = offsetY }
-                .size(48.dp)
-        )
+                .fillMaxWidth(0.25f)
+                .padding(bottom = 16.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = Icons.Filled.KeyboardArrowDown,
+                contentDescription = "Go to Stations",
+                tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.72f),
+                modifier = Modifier
+                    .graphicsLayer { translationY = offsetY }
+                    .size(48.dp)
+            )
+        }
     }
 }

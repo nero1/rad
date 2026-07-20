@@ -33,10 +33,12 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.malawi.radio.BuildConfig
 import com.malawi.radio.data.model.RadioStation
 import com.malawi.radio.ui.ads.HorizontalBannerAd
 import com.malawi.radio.ui.ads.MediumRectangleAd
 import com.malawi.radio.ui.theme.AppThemeOption
+import com.malawi.radio.ui.theme.DefaultAppThemeOption
 import kotlinx.coroutines.delay
 import kotlin.math.roundToInt
 
@@ -44,7 +46,7 @@ import kotlin.math.roundToInt
 fun StationListScreen(
     viewModel: StationListViewModel,
     onStationSelected: (RadioStation) -> Unit,
-    currentTheme: AppThemeOption = AppThemeOption.DARK_MODE,
+    currentTheme: AppThemeOption = DefaultAppThemeOption,
     onThemeSelected: (AppThemeOption) -> Unit = {},
     showScrollHint: Boolean = false,
     onScrollHintShown: () -> Unit = {}
@@ -53,7 +55,7 @@ fun StationListScreen(
 
     Column(modifier = Modifier.fillMaxSize()) {
         Row(Modifier.fillMaxWidth().padding(20.dp), verticalAlignment = Alignment.CenterVertically) {
-            Text("Malawi Radio", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
+            Text(BuildConfig.APP_NAME, style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
             var themeMenu by rememberSaveable { mutableStateOf(false) }
 
             IconButton(onClick = { themeMenu = true }) { Icon(Icons.Filled.Palette, contentDescription = "Change theme") }
@@ -102,7 +104,7 @@ fun StationListScreen(
                             onFavoriteClick = { viewModel.toggleFavorite(station.id) }
                         )
                         if (index == 2) {
-                            HorizontalBannerAd(Modifier.padding(horizontal = 12.dp, vertical = 8.dp))
+                            HorizontalBannerAd(Modifier.padding(vertical = 8.dp))
                         }
                     }
                     item { MediumRectangleAd(Modifier.padding(horizontal = 12.dp, vertical = 12.dp)) }

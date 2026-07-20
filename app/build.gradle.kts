@@ -23,18 +23,34 @@ fun xmanifestBoolean(key: String, defaultValue: Boolean): Boolean =
         }
     } ?: defaultValue
 
+fun quotedBuildConfigString(value: String): String = "\"${value.replace("\\", "\\\\").replace("\"", "\\\"")}\""
+
 android {
     namespace = "com.malawi.radio"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = System.getenv("APPLICATION_ID") ?: "com.malawi.radio"
+        val configuredAppName = System.getenv("APP_NAME") ?: xmanifestValue("app_name") ?: "Malawi Radio"
+        val configuredApplicationId = System.getenv("APPLICATION_ID") ?: xmanifestValue("package_name") ?: "com.malawi.radio"
+        val configuredAdMobAppId = System.getenv("ADMOB_APP_ID") ?: xmanifestValue("admob_app_id") ?: "ca-app-pub-3940256099942544~3347511713"
+        val configuredBannerAdId = System.getenv("ADMOB_BANNER_ID") ?: xmanifestValue("admob_banner_id") ?: "ca-app-pub-3940256099942544/6300978111"
+        val configuredInterstitialAdId = System.getenv("ADMOB_INTERSTITIAL_ID") ?: xmanifestValue("admob_interstitial_id") ?: "ca-app-pub-3940256099942544/1033173712"
+        val configuredInterstitialDelay = System.getenv("INTERSTITIAL_DELAY_MINS") ?: xmanifestValue("interstitial_delay_mins") ?: "7"
+
+        applicationId = configuredApplicationId
         minSdk = 24
-        targetSdk = 36
+        targetSdk = (System.getenv("ANDROID_TARGET_API") ?: xmanifestValue("android_target_api") ?: "36").toInt()
         versionCode = (System.getenv("VERSION_CODE") ?: "100").toInt()
         versionName = System.getenv("VERSION_NAME") ?: xmanifestValue("version_name_start") ?: "1.00"
 
-        manifestPlaceholders["admobAppId"] = System.getenv("ADMOB_APP_ID") ?: "ca-app-pub-3940256099942544~3347511713"
+        resValue("string", "app_name", configuredAppName)
+        manifestPlaceholders["admobAppId"] = configuredAdMobAppId
+        buildConfigField("String", "APP_NAME", quotedBuildConfigString(configuredAppName))
+        buildConfigField("String", "DEFAULT_THEME", quotedBuildConfigString(xmanifestValue("default_theme") ?: "dark_mode"))
+        buildConfigField("String", "ADMOB_BANNER_ID", quotedBuildConfigString(configuredBannerAdId))
+        buildConfigField("String", "ADMOB_INTERSTITIAL_ID", quotedBuildConfigString(configuredInterstitialAdId))
+        buildConfigField("Long", "INTERSTITIAL_DELAY_MINUTES", "${configuredInterstitialDelay.toLong()}L")
+        buildConfigField("Boolean", "BACKGROUND_PLAY_DEFAULT", xmanifestBoolean("background_play_default", true).toString())
         buildConfigField("Boolean", "SCROLLING_MARQUEE_ENABLED", xmanifestBoolean("scrolling_marquee_enabled", false).toString())
     }
 

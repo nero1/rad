@@ -31,6 +31,7 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import com.malawi.radio.data.settings.AppSettings
 import com.malawi.radio.player.PlaybackState
 import com.malawi.radio.player.RadioPlaybackService
 import com.malawi.radio.ui.ads.DEFAULT_INTERSTITIAL_AD_UNIT_ID
@@ -52,7 +53,7 @@ private const val SCROLL_HINT_PREFS = "scroll_hint_prefs"
 private const val SCROLL_HINT_VERSION_KEY = "version_code"
 private const val SCROLL_HINT_OPEN_COUNT_KEY = "open_count"
 
-private enum class Tab(val label: String) { STATIONS("Stations"), NOW_PLAYING("Player"), FAVORITES("Faves"), SETTINGS("Settings") }
+private enum class Tab(val label: String) { STATIONS("Stations"), NOW_PLAYING("Player"), FAVORITES("Favorites"), SETTINGS("Settings") }
 
 class MainActivity : ComponentActivity() {
     private val factory by lazy { ViewModelFactory(application as MalawiRadioApp) }
@@ -95,7 +96,7 @@ private fun MalawiRadioApp(factory: ViewModelFactory, activity: MainActivity, on
     val nowPlayingVm: NowPlayingViewModel = viewModel(factory = factory)
     val favoritesVm: FavoritesViewModel = viewModel(factory = factory)
     val settingsVm: SettingsViewModel = viewModel(factory = factory)
-    val settings by settingsVm.settings.collectAsState(initial = com.malawi.radio.data.settings.AppSettings())
+    val settings by settingsVm.settings.collectAsState(initial = AppSettings())
     val context = androidx.compose.ui.platform.LocalContext.current
 
     MalawiRadioTheme(themeOption = settings.theme) {
@@ -154,7 +155,7 @@ private fun MalawiRadioApp(factory: ViewModelFactory, activity: MainActivity, on
                     Tab.STATIONS -> StationListScreen(stationListVm, onStationSelected = { selectTab(Tab.NOW_PLAYING) }, currentTheme = settings.theme, onThemeSelected = settingsVm::setTheme, showScrollHint = showStationScrollHint, onScrollHintShown = { showStationScrollHint = false })
                     Tab.NOW_PLAYING -> NowPlayingScreen(viewModel = nowPlayingVm)
                     Tab.FAVORITES -> FavoritesScreen(favoritesVm, onStationSelected = { selectTab(Tab.NOW_PLAYING) })
-                    Tab.SETTINGS -> SettingsScreen(settingsVm, appName = "Malawi Radio")
+                    Tab.SETTINGS -> SettingsScreen(settingsVm, appName = BuildConfig.APP_NAME)
                 }
             }
         }

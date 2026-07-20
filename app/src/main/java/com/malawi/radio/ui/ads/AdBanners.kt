@@ -15,13 +15,14 @@ import androidx.compose.ui.viewinterop.AndroidView
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
+import com.malawi.radio.BuildConfig
 
-const val DEFAULT_BANNER_AD_UNIT_ID = "ca-app-pub-3940256099942544/6300978111"
-const val DEFAULT_INTERSTITIAL_AD_UNIT_ID = "ca-app-pub-3940256099942544/1033173712"
-const val INTERSTITIAL_DELAY_MINUTES = 7L
+val DEFAULT_BANNER_AD_UNIT_ID: String = BuildConfig.ADMOB_BANNER_ID
+val DEFAULT_INTERSTITIAL_AD_UNIT_ID: String = BuildConfig.ADMOB_INTERSTITIAL_ID
+val INTERSTITIAL_DELAY_MINUTES: Long = BuildConfig.INTERSTITIAL_DELAY_MINUTES
 
 @Composable
-fun HorizontalBannerAd(modifier: Modifier = Modifier, adUnitId: String = System.getenv("ADMOB_BANNER_ID") ?: DEFAULT_BANNER_AD_UNIT_ID) {
+fun HorizontalBannerAd(modifier: Modifier = Modifier, adUnitId: String = DEFAULT_BANNER_AD_UNIT_ID) {
     val context = LocalContext.current
     AndroidView(
         modifier = modifier.fillMaxWidth().padding(vertical = 12.dp).height(50.dp),
@@ -29,7 +30,7 @@ fun HorizontalBannerAd(modifier: Modifier = Modifier, adUnitId: String = System.
             AdView(context).apply {
                 setAdSize(AdSize.BANNER)
                 this.adUnitId = adUnitId
-                layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+                layoutParams = ViewGroup.LayoutParams(AdSize.BANNER.getWidthInPixels(context), ViewGroup.LayoutParams.WRAP_CONTENT)
                 loadAd(AdRequest.Builder().build())
             }
         }
@@ -37,7 +38,7 @@ fun HorizontalBannerAd(modifier: Modifier = Modifier, adUnitId: String = System.
 }
 
 @Composable
-fun MediumRectangleAd(modifier: Modifier = Modifier, adUnitId: String = System.getenv("ADMOB_BANNER_ID") ?: DEFAULT_BANNER_AD_UNIT_ID) {
+fun MediumRectangleAd(modifier: Modifier = Modifier, adUnitId: String = DEFAULT_BANNER_AD_UNIT_ID) {
     val context = LocalContext.current
     AndroidView(
         modifier = modifier.fillMaxWidth().padding(vertical = 18.dp).height(250.dp),
@@ -53,7 +54,7 @@ fun MediumRectangleAd(modifier: Modifier = Modifier, adUnitId: String = System.g
 
 
 @Composable
-fun SquareBannerAd(modifier: Modifier = Modifier, adUnitId: String = System.getenv("ADMOB_BANNER_ID") ?: DEFAULT_BANNER_AD_UNIT_ID) {
+fun SquareBannerAd(modifier: Modifier = Modifier, adUnitId: String = DEFAULT_BANNER_AD_UNIT_ID) {
     val context = LocalContext.current
     Box(modifier = modifier.fillMaxWidth().padding(vertical = 18.dp), contentAlignment = Alignment.Center) {
         AndroidView(

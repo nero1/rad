@@ -36,12 +36,13 @@ class StationRepository(
 
     suspend fun toggleFavorite(stationId: String) = favoritesStore.toggleFavorite(stationId)
 
-    /** Emits the full station list combined with which ones are currently favorited. */
+    /** Emits favorites from most recently favorited to least recently favorited. */
     fun favoriteStations(): Flow<List<RadioStation>> {
-        return favoritesStore.favoriteIds.combine(
+        return favoritesStore.favoriteIdsByRecency.combine(
             kotlinx.coroutines.flow.flow { emit(getAllStations()) }
-        ) { favIds, all ->
-            all.filter { it.id in favIds }
+        ) { favoriteIdsByRecency, all ->
+            val stationsById = all.associateBy { it.id }
+            favoriteIdsByRecency.mapNotNull { stationsById[it] }
         }
     }
 }
