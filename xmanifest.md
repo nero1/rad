@@ -11,7 +11,7 @@ Edit this file first when cloning the app for another country, market, or niche.
 
 ## Theme
 - `default_theme`: dark_mode
-- Available themes: `dark_mode`, `light_mode`, `rose_wind`, `moonlight`, `purple_hibiscus`, `midnight`, `blue_skies`, `desert_heat`, `snow`, `green_glory`.
+- Available themes: `dark_mode`, `light_mode`, `rose_wind`, `moonlight`, `purple_hibiscus`, `high_contrast`, `blue_skies`, `desert_heat`, `snow`, `green_glory`.
 
 ## Ads
 - `admob_app_id`: ca-app-pub-3940256099942544~3347511713
@@ -31,3 +31,5 @@ Recommended source files are square PNG images: 512×512 px for Play/App Store s
 - `background_play_default`: true
 - `scrolling_marquee_enabled`: false
 - `sleep_timer_options`: 5 minutes, 10 minutes, 15 minutes, 30 minutes, 1 hour, 2 hours
+
+Note: `package_name` configures the Gradle `applicationId` used to identify each generated app on-device and in app stores. The Kotlin source namespace remains the template implementation namespace and does not need to match per-app package names.

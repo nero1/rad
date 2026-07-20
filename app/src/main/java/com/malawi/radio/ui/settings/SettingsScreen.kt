@@ -14,13 +14,14 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.malawi.radio.data.settings.AppSettings
 import com.malawi.radio.ui.ads.HorizontalBannerAd
 import com.malawi.radio.ui.ads.MediumRectangleAd
 import com.malawi.radio.ui.theme.AppThemeOption
 
 @Composable
 fun SettingsScreen(viewModel: SettingsViewModel, appName: String) {
-    val settings by viewModel.settings.collectAsState(initial = com.malawi.radio.data.settings.AppSettings())
+    val settings by viewModel.settings.collectAsState(initial = AppSettings())
     Column(
         Modifier
             .fillMaxSize()
@@ -32,7 +33,7 @@ fun SettingsScreen(viewModel: SettingsViewModel, appName: String) {
         HorizontalBannerAd(Modifier.padding(vertical = 8.dp))
         ThemeSelector(settings.theme, viewModel::setTheme)
         ListItem(
-            headlineContent = { Text("Background play") },
+            headlineContent = { Text("Background Play", fontWeight = FontWeight.Bold) },
             supportingContent = { Text("Keep playing when the screen turns off or you leave the app.") },
             trailingContent = { Switch(settings.backgroundPlay, viewModel::setBackgroundPlay) }
         )
@@ -50,7 +51,7 @@ fun ThemeSelector(selected: AppThemeOption, onSelected: (AppThemeOption) -> Unit
     var expanded by remember { mutableStateOf(false) }
     Box(Modifier.fillMaxWidth().padding(bottom = 28.dp)) {
         ListItem(
-            headlineContent = { Text("Theme") },
+            headlineContent = { Text("Theme", fontWeight = FontWeight.Bold) },
             supportingContent = { Text(selected.label) },
             trailingContent = { Button(onClick = { expanded = true }) { Text("Change") } }
         )

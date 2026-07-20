@@ -74,7 +74,7 @@ fun FavoritesScreen(
                         onFavoriteClick = { viewModel.toggleFavorite(station.id) }
                     )
                     if (index == 2) {
-                        HorizontalBannerAd(Modifier.padding(horizontal = 12.dp, vertical = 8.dp))
+                        HorizontalBannerAd(Modifier.padding(vertical = 8.dp))
                     }
                 }
                 item { MediumRectangleAd(Modifier.padding(horizontal = 12.dp, vertical = 12.dp)) }

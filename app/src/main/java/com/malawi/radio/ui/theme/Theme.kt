@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 
 @Composable
 fun MalawiRadioTheme(
-    themeOption: AppThemeOption = AppThemeOption.DARK_MODE,
+    themeOption: AppThemeOption = DefaultAppThemeOption,
     content: @Composable () -> Unit
 ) {
     MaterialTheme(

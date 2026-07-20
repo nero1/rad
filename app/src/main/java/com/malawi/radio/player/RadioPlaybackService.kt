@@ -10,6 +10,7 @@ import androidx.core.app.NotificationCompat
 import androidx.media3.session.MediaSession
 import androidx.media3.session.MediaSessionService
 import com.malawi.radio.MainActivity
+import com.malawi.radio.BuildConfig
 import com.malawi.radio.MalawiRadioApp
 
 private const val PLAYBACK_NOTIFICATION_CHANNEL_ID = "radio_playback"
@@ -65,14 +66,14 @@ class RadioPlaybackService : MediaSessionService() {
             "Radio playback",
             NotificationManager.IMPORTANCE_LOW
         ).apply {
-            description = "Shows when Malawi Radio is playing in the background"
+            description = "Shows when ${BuildConfig.APP_NAME} is playing in the background"
         }
         getSystemService(NotificationManager::class.java).createNotificationChannel(channel)
     }
 
     private fun buildNotification(): Notification {
         val stationName = (application as MalawiRadioApp).playerManager.uiState.value.currentStation?.name
-            ?: "Malawi Radio"
+            ?: BuildConfig.APP_NAME
         val launchIntent = Intent(this, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(
             this,
