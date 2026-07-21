@@ -78,7 +78,7 @@ fun FavoritesScreen(
                     }
                 }
                 item { MediumRectangleAd(Modifier.padding(horizontal = 12.dp, vertical = 12.dp)) }
-                item { Spacer(Modifier.height(96.dp)) }
+                item { Spacer(Modifier.height(48.dp)) }
             }
         }
     }
