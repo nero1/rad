@@ -108,7 +108,7 @@ fun StationListScreen(
                         }
                     }
                     item { MediumRectangleAd(Modifier.padding(horizontal = 12.dp, vertical = 12.dp)) }
-                    item { Spacer(Modifier.height(96.dp)) } // room for mini-player bar
+                    item { Spacer(Modifier.height(48.dp)) } // room for mini-player bar
                 }
 
                 if (isScrollHintVisible) {
