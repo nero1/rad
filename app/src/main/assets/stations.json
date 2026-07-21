@@ -63,7 +63,7 @@
       "city": "Brisbane",
       "genre": "",
       "language": "Chichewa / English",
-      "streamUrl": "https://mediaserviceslive.akamaized.net/hls/live/2038304/localbrisbane/masterhq.m3u8/",
+      "streamUrl": "https://mediaserviceslive.akamaized.net/hls/live/2038304/localbrisbane/masterhq.m3u8",
       "homepage": "",
       "needsVerification": true
     },
