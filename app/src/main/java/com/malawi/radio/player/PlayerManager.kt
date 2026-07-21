@@ -86,11 +86,11 @@ class PlayerManager(private val context: Context) {
 
     private fun attemptReconnect() {
         val station = _uiState.value.currentStation ?: run {
-            updateState(PlaybackState.ERROR, "No station selected")
+            updateState(PlaybackState.ERROR)
             return
         }
         if (reconnectAttempts >= maxReconnectAttempts) {
-            updateState(PlaybackState.ERROR, "Couldn't connect. Check your internet and try again.")
+            updateState(PlaybackState.ERROR)
             return
         }
         reconnectAttempts++

@@ -64,7 +64,7 @@ fun StationListScreen(
 
             IconButton(onClick = { themeMenu = true }) { Icon(Icons.Filled.Palette, contentDescription = strings.changeTheme) }
             DropdownMenu(expanded = themeMenu, onDismissRequest = { themeMenu = false }) {
-                AppThemeOption.entries.forEach { theme -> DropdownMenuItem(text = { Text(theme.label) }, onClick = { onThemeSelected(theme); themeMenu = false }) }
+                AppThemeOption.entries.forEach { theme -> DropdownMenuItem(text = { Text(strings.themeLabels[theme.name] ?: theme.label) }, onClick = { onThemeSelected(theme); themeMenu = false }) }
             }
         }
         HorizontalBannerAd(Modifier.padding(horizontal = 16.dp, vertical = 2.dp))
@@ -105,7 +105,8 @@ fun StationListScreen(
                                 viewModel.playStation(station)
                                 onStationSelected(station)
                             },
-                            onFavoriteClick = { viewModel.toggleFavorite(station.id) }
+                            onFavoriteClick = { viewModel.toggleFavorite(station.id) },
+                            strings = strings
                         )
                         if (index == 2) {
                             HorizontalBannerAd(Modifier.padding(vertical = 8.dp))
@@ -117,6 +118,7 @@ fun StationListScreen(
 
                 if (isScrollHintVisible) {
                     ScrollDownHint(
+                        contentDescription = strings.slideUpForMoreStations,
                         modifier = Modifier
                             .align(Alignment.Center)
                             .padding(bottom = 72.dp)
@@ -128,7 +130,7 @@ fun StationListScreen(
 }
 
 @Composable
-private fun ScrollDownHint(modifier: Modifier = Modifier) {
+private fun ScrollDownHint(contentDescription: String, modifier: Modifier = Modifier) {
     val transition = rememberInfiniteTransition(label = "scroll-hint")
     val offsetY by transition.animateFloat(
         initialValue = 56f,
@@ -157,7 +159,7 @@ private fun ScrollDownHint(modifier: Modifier = Modifier) {
     ) {
         Icon(
             imageVector = Icons.Filled.TouchApp,
-            contentDescription = I18n.strings(AppLanguage.from(null)).slideUpForMoreStations,
+            contentDescription = contentDescription,
             tint = MaterialTheme.colorScheme.onBackground.copy(alpha = alpha),
             modifier = Modifier
                 .offset { IntOffset(x = 0, y = offsetY.roundToInt()) }
@@ -172,7 +174,8 @@ fun StationRow(
     station: RadioStation,
     isFavorite: Boolean,
     onClick: () -> Unit,
-    onFavoriteClick: () -> Unit
+    onFavoriteClick: () -> Unit,
+    strings: com.malawi.radio.i18n.Strings
 ) {
     Row(
         modifier = Modifier
@@ -221,7 +224,7 @@ fun StationRow(
         IconButton(onClick = onFavoriteClick) {
             Icon(
                 imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-                contentDescription = I18n.strings(AppLanguage.from(null)).favorite,
+                contentDescription = strings.favorite,
                 tint = if (isFavorite) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
