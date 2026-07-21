@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import com.malawi.radio.BuildConfig
 import com.malawi.radio.i18n.AppLanguage
 import com.malawi.radio.i18n.I18n
+import com.malawi.radio.i18n.Strings
 import com.malawi.radio.player.PlaybackState
 import com.malawi.radio.ui.ads.MediumRectangleAd
 import com.malawi.radio.ui.components.MarqueeText
@@ -205,7 +206,7 @@ private fun MarqueeSongTitle(title: String, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun EmptyNowPlayingPrompt(strings: I18n.Strings) {
+private fun EmptyNowPlayingPrompt(strings: Strings) {
     val transition = rememberInfiniteTransition(label = "stations-nav-hint")
     val offsetY by transition.animateFloat(
         initialValue = -36f,
