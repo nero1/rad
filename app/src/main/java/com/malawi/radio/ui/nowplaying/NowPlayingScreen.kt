@@ -30,17 +30,20 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.malawi.radio.BuildConfig
+import com.malawi.radio.i18n.AppLanguage
+import com.malawi.radio.i18n.I18n
 import com.malawi.radio.player.PlaybackState
 import com.malawi.radio.ui.ads.MediumRectangleAd
 import com.malawi.radio.ui.components.MarqueeText
 
 @Composable
-fun NowPlayingScreen(viewModel: NowPlayingViewModel) {
+fun NowPlayingScreen(viewModel: NowPlayingViewModel, language: AppLanguage) {
     val state by viewModel.playerState.collectAsState()
     val station = state.currentStation
     val sleepRemaining by viewModel.sleepRemaining.collectAsState()
     val isFavorite by viewModel.isCurrentFavorite.collectAsState()
     var sleepMenu by remember { mutableStateOf(false) }
+    val strings = I18n.strings(language)
 
     if (station == null) {
         Box(
@@ -48,7 +51,7 @@ fun NowPlayingScreen(viewModel: NowPlayingViewModel) {
                 .fillMaxSize()
                 .padding(horizontal = 16.dp, vertical = 8.dp)
         ) {
-            EmptyNowPlayingPrompt()
+            EmptyNowPlayingPrompt(strings)
         }
         return
     }
@@ -106,10 +109,10 @@ fun NowPlayingScreen(viewModel: NowPlayingViewModel) {
         Spacer(Modifier.height(2.dp))
 
         val statusText = when (state.playbackState) {
-            PlaybackState.BUFFERING -> "Buffering…"
-            PlaybackState.PLAYING -> "On air"
-            PlaybackState.PAUSED -> "Paused"
-            PlaybackState.ERROR -> state.errorMessage ?: "Playback error"
+            PlaybackState.BUFFERING -> strings.buffering
+            PlaybackState.PLAYING -> strings.onAir
+            PlaybackState.PAUSED -> strings.paused
+            PlaybackState.ERROR -> state.errorMessage ?: strings.playbackError
             PlaybackState.IDLE -> ""
         }
         if (statusText.isNotBlank()) {
@@ -131,7 +134,7 @@ fun NowPlayingScreen(viewModel: NowPlayingViewModel) {
             ) {
                 Icon(
                     imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-                    contentDescription = "Favorite",
+                    contentDescription = strings.favorite,
                     tint = if (isFavorite) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
@@ -148,7 +151,7 @@ fun NowPlayingScreen(viewModel: NowPlayingViewModel) {
                 Icon(
                     imageVector = if (state.playbackState == PlaybackState.PLAYING)
                         Icons.Filled.Pause else Icons.Filled.PlayArrow,
-                    contentDescription = "Play/Pause",
+                    contentDescription = strings.playPause,
                     tint = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier.size(32.dp)
                 )
@@ -157,16 +160,16 @@ fun NowPlayingScreen(viewModel: NowPlayingViewModel) {
             Spacer(Modifier.width(24.dp))
             Box {
                 IconButton(onClick = { sleepMenu = true }, modifier = Modifier.size(48.dp)) {
-                    Icon(if (sleepRemaining > 0) Icons.Filled.HourglassBottom else Icons.Filled.Bedtime, contentDescription = "Sleep timer", tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Icon(if (sleepRemaining > 0) Icons.Filled.HourglassBottom else Icons.Filled.Bedtime, contentDescription = strings.sleepTimer, tint = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
                 DropdownMenu(expanded = sleepMenu, onDismissRequest = { sleepMenu = false }) {
-                    DropdownMenuItem(text = { Text("Sleep Timer") }, onClick = {})
+                    DropdownMenuItem(text = { Text(strings.sleepTimer) }, onClick = {})
                     if (sleepRemaining > 0) {
-                        DropdownMenuItem(text = { Text("%02d:%02d remaining".format(sleepRemaining / 60, sleepRemaining % 60)) }, onClick = {})
-                        DropdownMenuItem(text = { Text("+ Add 5 minutes") }, onClick = { viewModel.addSleepTime(300); sleepMenu = false })
-                        DropdownMenuItem(text = { Text("Cancel Timer") }, onClick = { viewModel.cancelSleepTimer(); sleepMenu = false })
+                        DropdownMenuItem(text = { Text(strings.remaining.format(sleepRemaining / 60, sleepRemaining % 60)) }, onClick = {})
+                        DropdownMenuItem(text = { Text(strings.add5Minutes) }, onClick = { viewModel.addSleepTime(300); sleepMenu = false })
+                        DropdownMenuItem(text = { Text(strings.cancelTimer) }, onClick = { viewModel.cancelSleepTimer(); sleepMenu = false })
                     } else {
-                        listOf(5L to "5 minutes", 10L to "10 minutes", 15L to "15 minutes", 30L to "30 minutes", 60L to "1 hour", 120L to "2 hours").forEach { (mins, label) ->
+                        listOf(5L to strings.minutes5, 10L to strings.minutes10, 15L to strings.minutes15, 30L to strings.minutes30, 60L to strings.hour1, 120L to strings.hours2).forEach { (mins, label) ->
                             DropdownMenuItem(text = { Text(label) }, onClick = { viewModel.setSleepTimer(mins * 60); sleepMenu = false })
                         }
                     }
@@ -202,7 +205,7 @@ private fun MarqueeSongTitle(title: String, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun EmptyNowPlayingPrompt() {
+private fun EmptyNowPlayingPrompt(strings) {
     val transition = rememberInfiniteTransition(label = "stations-nav-hint")
     val offsetY by transition.animateFloat(
         initialValue = -36f,
@@ -227,7 +230,7 @@ private fun EmptyNowPlayingPrompt() {
             )
             Spacer(Modifier.height(16.dp))
             Text(
-                text = "Tap a station to start listening",
+                text = strings.tapStationStart,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center
@@ -237,13 +240,14 @@ private fun EmptyNowPlayingPrompt() {
         Box(
             modifier = Modifier
                 .align(Alignment.BottomStart)
+                .offset(x = (-10).dp)
                 .fillMaxWidth(0.25f)
                 .padding(bottom = 16.dp),
             contentAlignment = Alignment.Center
         ) {
             Icon(
                 imageVector = Icons.Filled.KeyboardArrowDown,
-                contentDescription = "Go to Stations",
+                contentDescription = strings.goToStations,
                 tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.72f),
                 modifier = Modifier
                     .graphicsLayer { translationY = offsetY }

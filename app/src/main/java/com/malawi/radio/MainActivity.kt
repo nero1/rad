@@ -32,6 +32,8 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.malawi.radio.data.settings.AppSettings
+import com.malawi.radio.i18n.I18n
+import com.malawi.radio.i18n.Strings
 import com.malawi.radio.player.PlaybackState
 import com.malawi.radio.player.RadioPlaybackService
 import com.malawi.radio.ui.ads.DEFAULT_INTERSTITIAL_AD_UNIT_ID
@@ -53,7 +55,7 @@ private const val SCROLL_HINT_PREFS = "scroll_hint_prefs"
 private const val SCROLL_HINT_VERSION_KEY = "version_code"
 private const val SCROLL_HINT_OPEN_COUNT_KEY = "open_count"
 
-private enum class Tab(val label: String) { STATIONS("Stations"), NOW_PLAYING("Player"), FAVORITES("Favorites"), SETTINGS("Settings") }
+private enum class Tab { STATIONS, NOW_PLAYING, FAVORITES, SETTINGS }
 
 class MainActivity : ComponentActivity() {
     private val factory by lazy { ViewModelFactory(application as MalawiRadioApp) }
@@ -133,7 +135,7 @@ private fun MalawiRadioApp(factory: ViewModelFactory, activity: MainActivity, on
                 val now = System.currentTimeMillis()
                 if (now - backArmedAt < 2000) onExit() else {
                     backArmedAt = now
-                    Toast.makeText(context, "Tap back again to exit", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, I18n.strings(settings.language).tapBackAgainToExit, Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -149,12 +151,12 @@ private fun MalawiRadioApp(factory: ViewModelFactory, activity: MainActivity, on
             }
         }
 
-        Scaffold(bottomBar = { BottomArea(playerState, selectedTab, { nowPlayingVm.togglePlayPause() }, { selectTab(Tab.NOW_PLAYING) }, selectTab) }) { padding ->
+        Scaffold(bottomBar = { BottomArea(playerState, selectedTab, I18n.strings(settings.language), { nowPlayingVm.togglePlayPause() }, { selectTab(Tab.NOW_PLAYING) }, selectTab) }) { padding ->
             Box(Modifier.padding(padding)) {
                 when (selectedTab) {
-                    Tab.STATIONS -> StationListScreen(stationListVm, onStationSelected = { selectTab(Tab.NOW_PLAYING) }, currentTheme = settings.theme, onThemeSelected = settingsVm::setTheme, showScrollHint = showStationScrollHint, onScrollHintShown = { showStationScrollHint = false })
-                    Tab.NOW_PLAYING -> NowPlayingScreen(viewModel = nowPlayingVm)
-                    Tab.FAVORITES -> FavoritesScreen(favoritesVm, onStationSelected = { selectTab(Tab.NOW_PLAYING) })
+                    Tab.STATIONS -> StationListScreen(stationListVm, onStationSelected = { selectTab(Tab.NOW_PLAYING) }, language = settings.language, currentTheme = settings.theme, onThemeSelected = settingsVm::setTheme, showScrollHint = showStationScrollHint, onScrollHintShown = { showStationScrollHint = false })
+                    Tab.NOW_PLAYING -> NowPlayingScreen(viewModel = nowPlayingVm, language = settings.language)
+                    Tab.FAVORITES -> FavoritesScreen(favoritesVm, onStationSelected = { selectTab(Tab.NOW_PLAYING) }, language = settings.language)
                     Tab.SETTINGS -> SettingsScreen(settingsVm, appName = BuildConfig.APP_NAME)
                 }
             }
@@ -163,19 +165,19 @@ private fun MalawiRadioApp(factory: ViewModelFactory, activity: MainActivity, on
 }
 
 @Composable
-private fun BottomArea(playerState: com.malawi.radio.player.PlayerUiState, selectedTab: Tab, onTogglePlay: () -> Unit, onMiniClick: () -> Unit, onTab: (Tab) -> Unit) {
+private fun BottomArea(playerState: com.malawi.radio.player.PlayerUiState, selectedTab: Tab, strings: Strings, onTogglePlay: () -> Unit, onMiniClick: () -> Unit, onTab: (Tab) -> Unit) {
     Column {
-        if (playerState.currentStation != null && selectedTab != Tab.NOW_PLAYING) MiniPlayerBar(playerState.currentStation!!.name, playerState.currentTitle, playerState.playbackState == PlaybackState.PLAYING, playerState.playbackState == PlaybackState.BUFFERING, BuildConfig.SCROLLING_MARQUEE_ENABLED, onTogglePlay, onMiniClick)
+        if (playerState.currentStation != null && selectedTab != Tab.NOW_PLAYING) MiniPlayerBar(playerState.currentStation!!.name, playerState.currentTitle, playerState.playbackState == PlaybackState.PLAYING, playerState.playbackState == PlaybackState.BUFFERING, BuildConfig.SCROLLING_MARQUEE_ENABLED, onTogglePlay, onMiniClick, strings)
         NavigationBar {
             listOf(Tab.STATIONS to Icons.Filled.List, Tab.NOW_PLAYING to Icons.Filled.Radio, Tab.FAVORITES to Icons.Filled.Favorite, Tab.SETTINGS to Icons.Filled.Settings).forEach { (tab, icon) ->
-                NavigationBarItem(selected = selectedTab == tab, onClick = { onTab(tab) }, icon = { Icon(icon, contentDescription = tab.label) }, label = { Text(tab.label, textAlign = androidx.compose.ui.text.style.TextAlign.Center) })
+                NavigationBarItem(selected = selectedTab == tab, onClick = { onTab(tab) }, icon = { Icon(icon, contentDescription = tab.localizedLabel(strings)) }, label = { Text(tab.localizedLabel(strings), textAlign = androidx.compose.ui.text.style.TextAlign.Center) })
             }
         }
     }
 }
 
 @Composable
-private fun MiniPlayerBar(stationName: String, currentTitle: String?, isPlaying: Boolean, isBuffering: Boolean, scrollingMarqueeEnabled: Boolean, onTogglePlay: () -> Unit, onClick: () -> Unit) {
+private fun MiniPlayerBar(stationName: String, currentTitle: String?, isPlaying: Boolean, isBuffering: Boolean, scrollingMarqueeEnabled: Boolean, onTogglePlay: () -> Unit, onClick: () -> Unit, strings: Strings) {
     Row(Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.surfaceVariant).clickable { onClick() }.padding(horizontal = 16.dp, vertical = 10.dp), verticalAlignment = Alignment.CenterVertically) {
         Text(stationName, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.onSurface, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(0.42f))
         currentTitle?.takeIf { it.isNotBlank() }?.let { title ->
@@ -187,7 +189,7 @@ private fun MiniPlayerBar(stationName: String, currentTitle: String?, isPlaying:
             }
             Spacer(Modifier.width(12.dp))
         }
-        Box(Modifier.size(48.dp), contentAlignment = Alignment.Center) { if (isBuffering) CircularProgressIndicator(Modifier.size(24.dp), strokeWidth = 2.dp, color = MaterialTheme.colorScheme.primary) else IconButton(onClick = onTogglePlay) { Icon(if (isPlaying) Icons.Filled.Pause else Icons.Filled.PlayArrow, "Play/Pause", tint = MaterialTheme.colorScheme.primary) } }
+        Box(Modifier.size(48.dp), contentAlignment = Alignment.Center) { if (isBuffering) CircularProgressIndicator(Modifier.size(24.dp), strokeWidth = 2.dp, color = MaterialTheme.colorScheme.primary) else IconButton(onClick = onTogglePlay) { Icon(if (isPlaying) Icons.Filled.Pause else Icons.Filled.PlayArrow, strings.playPause, tint = MaterialTheme.colorScheme.primary) } }
     }
 }
 
@@ -233,4 +235,11 @@ private fun Context.startRadioPlaybackForegroundService(intent: Intent) {
         // moved to the background. If the service was started while the app was
         // visible, playback continues; otherwise avoid crashing the process.
     }
+}
+
+private fun Tab.localizedLabel(strings: Strings): String = when (this) {
+    Tab.STATIONS -> strings.stations
+    Tab.NOW_PLAYING -> strings.player
+    Tab.FAVORITES -> strings.favorites
+    Tab.SETTINGS -> strings.settings
 }

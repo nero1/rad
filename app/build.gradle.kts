@@ -47,6 +47,7 @@ android {
         manifestPlaceholders["admobAppId"] = configuredAdMobAppId
         buildConfigField("String", "APP_NAME", quotedBuildConfigString(configuredAppName))
         buildConfigField("String", "DEFAULT_THEME", quotedBuildConfigString(xmanifestValue("default_theme") ?: "dark_mode"))
+        buildConfigField("String", "DEFAULT_LANGUAGE", quotedBuildConfigString(xmanifestValue("default_language") ?: "en"))
         buildConfigField("String", "ADMOB_BANNER_ID", quotedBuildConfigString(configuredBannerAdId))
         buildConfigField("String", "ADMOB_INTERSTITIAL_ID", quotedBuildConfigString(configuredInterstitialAdId))
         buildConfigField("Long", "INTERSTITIAL_DELAY_MINUTES", "${configuredInterstitialDelay.toLong()}L")
