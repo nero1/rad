@@ -237,7 +237,7 @@ private fun EmptyNowPlayingPrompt() {
         Box(
             modifier = Modifier
                 .align(Alignment.BottomStart)
-                .fillMaxWidth(0.25f)
+                .fillMaxWidth(0.15f)
                 .padding(bottom = 16.dp),
             contentAlignment = Alignment.Center
         ) {
