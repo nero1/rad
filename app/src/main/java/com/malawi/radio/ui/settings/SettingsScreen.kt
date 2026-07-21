@@ -63,12 +63,12 @@ fun ThemeSelector(selected: AppThemeOption, onSelected: (AppThemeOption) -> Unit
     Box(Modifier.fillMaxWidth().padding(bottom = 8.dp)) {
         ListItem(
             headlineContent = { Text(strings.theme, fontWeight = FontWeight.Bold) },
-            supportingContent = { Text(strings.themeLabels[selected.name] ?: selected.label) },
+            supportingContent = { Text(selected.label) },
             trailingContent = { Button(onClick = { expanded = true }) { Text(strings.change) } }
         )
         DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
             AppThemeOption.entries.forEach { theme ->
-                DropdownMenuItem(text = { Text(strings.themeLabels[theme.name] ?: theme.label) }, onClick = { onSelected(theme); expanded = false })
+                DropdownMenuItem(text = { Text(theme.label) }, onClick = { onSelected(theme); expanded = false })
             }
         }
     }
@@ -168,8 +168,7 @@ private fun BulletWithBoldLead(lead: String, text: String) {
         Text(
             buildAnnotatedString {
                 withStyle(SpanStyle(fontWeight = FontWeight.Bold)) { append(lead) }
-                append(": ")
-                append(text)
+                append(": $text")
             },
             style = MaterialTheme.typography.bodyMedium,
             modifier = Modifier.weight(1f)

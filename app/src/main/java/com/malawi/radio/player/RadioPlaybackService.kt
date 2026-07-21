@@ -12,9 +12,6 @@ import androidx.media3.session.MediaSessionService
 import com.malawi.radio.MainActivity
 import com.malawi.radio.BuildConfig
 import com.malawi.radio.MalawiRadioApp
-import com.malawi.radio.i18n.I18n
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
 
 private const val PLAYBACK_NOTIFICATION_CHANNEL_ID = "radio_playback"
 private const val PLAYBACK_NOTIFICATION_ID = 1001
@@ -66,15 +63,13 @@ class RadioPlaybackService : MediaSessionService() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
         val channel = NotificationChannel(
             PLAYBACK_NOTIFICATION_CHANNEL_ID,
-            serviceStrings().notificationChannelName,
+            "Radio playback",
             NotificationManager.IMPORTANCE_LOW
         ).apply {
-            description = serviceStrings().notificationChannelDescription.format(BuildConfig.APP_NAME)
+            description = "Shows when ${BuildConfig.APP_NAME} is playing in the background"
         }
         getSystemService(NotificationManager::class.java).createNotificationChannel(channel)
     }
-
-    private fun serviceStrings() = I18n.strings(runBlocking { (application as MalawiRadioApp).settingsStore.settings.first().language })
 
     private fun buildNotification(): Notification {
         val stationName = (application as MalawiRadioApp).playerManager.uiState.value.currentStation?.name
@@ -90,7 +85,7 @@ class RadioPlaybackService : MediaSessionService() {
         return NotificationCompat.Builder(this, PLAYBACK_NOTIFICATION_CHANNEL_ID)
             .setSmallIcon(android.R.drawable.ic_media_play)
             .setContentTitle(stationName)
-            .setContentText(serviceStrings().notificationPlayingLiveRadio)
+            .setContentText("Playing live radio")
             .setContentIntent(pendingIntent)
             .setOngoing(true)
             .setOnlyAlertOnce(true)
