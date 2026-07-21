@@ -205,7 +205,7 @@ private fun MarqueeSongTitle(title: String, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun EmptyNowPlayingPrompt(strings) {
+private fun EmptyNowPlayingPrompt(strings: I18n.Strings) {
     val transition = rememberInfiniteTransition(label = "stations-nav-hint")
     val offsetY by transition.animateFloat(
         initialValue = -36f,
