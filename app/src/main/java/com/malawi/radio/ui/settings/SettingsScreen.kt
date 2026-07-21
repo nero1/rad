@@ -47,7 +47,7 @@ fun SettingsScreen(viewModel: SettingsViewModel, appName: String) {
         ExpandableSettingsCard("Advertize") { AdvertizeContent(appName) }
         ExpandableSettingsCard("Privacy Policy") { PrivacyPolicyContent(appName) }
         MediumRectangleAd(Modifier.padding(horizontal = 12.dp, vertical = 12.dp))
-        Spacer(Modifier.height(96.dp))
+        Spacer(Modifier.height(48.dp))
     }
 }
 
