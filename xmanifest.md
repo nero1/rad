@@ -11,6 +11,7 @@ Edit this file first when cloning the app for another country, market, or niche.
 
 ## Theme
 - `default_theme`: dark_mode
+- `default_language`: en
 - Available themes: `dark_mode`, `light_mode`, `rose_wind`, `moonlight`, `purple_hibiscus`, `high_contrast`, `blue_skies`, `desert_heat`, `snow`, `green_glory`.
 
 ## Ads

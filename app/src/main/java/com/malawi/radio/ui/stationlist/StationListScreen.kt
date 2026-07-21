@@ -35,6 +35,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.malawi.radio.BuildConfig
 import com.malawi.radio.data.model.RadioStation
+import com.malawi.radio.i18n.AppLanguage
+import com.malawi.radio.i18n.I18n
 import com.malawi.radio.ui.ads.HorizontalBannerAd
 import com.malawi.radio.ui.ads.MediumRectangleAd
 import com.malawi.radio.ui.theme.AppThemeOption
@@ -46,19 +48,21 @@ import kotlin.math.roundToInt
 fun StationListScreen(
     viewModel: StationListViewModel,
     onStationSelected: (RadioStation) -> Unit,
+    language: AppLanguage,
     currentTheme: AppThemeOption = DefaultAppThemeOption,
     onThemeSelected: (AppThemeOption) -> Unit = {},
     showScrollHint: Boolean = false,
     onScrollHintShown: () -> Unit = {}
 ) {
     val state by viewModel.uiState.collectAsState()
+    val strings = I18n.strings(language)
 
     Column(modifier = Modifier.fillMaxSize()) {
         Row(Modifier.fillMaxWidth().padding(20.dp), verticalAlignment = Alignment.CenterVertically) {
             Text(BuildConfig.APP_NAME, style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
             var themeMenu by rememberSaveable { mutableStateOf(false) }
 
-            IconButton(onClick = { themeMenu = true }) { Icon(Icons.Filled.Palette, contentDescription = "Change theme") }
+            IconButton(onClick = { themeMenu = true }) { Icon(Icons.Filled.Palette, contentDescription = strings.changeTheme) }
             DropdownMenu(expanded = themeMenu, onDismissRequest = { themeMenu = false }) {
                 AppThemeOption.entries.forEach { theme -> DropdownMenuItem(text = { Text(theme.label) }, onClick = { onThemeSelected(theme); themeMenu = false }) }
             }
@@ -114,8 +118,8 @@ fun StationListScreen(
                 if (isScrollHintVisible) {
                     ScrollDownHint(
                         modifier = Modifier
-                            .align(Alignment.BottomCenter)
-                            .padding(bottom = 18.dp)
+                            .align(Alignment.Center)
+                            .padding(bottom = 72.dp)
                     )
                 }
             }
@@ -147,18 +151,18 @@ private fun ScrollDownHint(modifier: Modifier = Modifier) {
 
     Box(
         modifier = modifier
-            .height(136.dp)
-            .width(88.dp),
+            .height(272.dp)
+            .width(176.dp),
         contentAlignment = Alignment.BottomCenter
     ) {
         Icon(
             imageVector = Icons.Filled.TouchApp,
-            contentDescription = "Slide up for more stations",
+            contentDescription = I18n.strings(AppLanguage.from(null)).slideUpForMoreStations,
             tint = MaterialTheme.colorScheme.onBackground.copy(alpha = alpha),
             modifier = Modifier
                 .offset { IntOffset(x = 0, y = offsetY.roundToInt()) }
                 .graphicsLayer { rotationZ = -12f }
-                .size(52.dp)
+                .size(104.dp)
         )
     }
 }
@@ -217,7 +221,7 @@ fun StationRow(
         IconButton(onClick = onFavoriteClick) {
             Icon(
                 imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-                contentDescription = "Favorite",
+                contentDescription = I18n.strings(AppLanguage.from(null)).favorite,
                 tint = if (isFavorite) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.onSurfaceVariant
             )
         }

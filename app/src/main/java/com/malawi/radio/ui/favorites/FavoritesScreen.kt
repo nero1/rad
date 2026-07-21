@@ -18,18 +18,22 @@ import androidx.compose.ui.unit.dp
 import com.malawi.radio.data.model.RadioStation
 import com.malawi.radio.ui.stationlist.StationRow
 import com.malawi.radio.ui.ads.HorizontalBannerAd
+import com.malawi.radio.i18n.AppLanguage
+import com.malawi.radio.i18n.I18n
 import com.malawi.radio.ui.ads.MediumRectangleAd
 
 @Composable
 fun FavoritesScreen(
     viewModel: FavoritesViewModel,
-    onStationSelected: (RadioStation) -> Unit
+    onStationSelected: (RadioStation) -> Unit,
+    language: AppLanguage
 ) {
     val favorites by viewModel.favorites.collectAsState()
+    val strings = I18n.strings(language)
 
     Column(modifier = Modifier.fillMaxSize()) {
         Text(
-            text = "Favorites",
+            text = strings.favorites,
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(20.dp)
@@ -50,7 +54,7 @@ fun FavoritesScreen(
                 )
                 Spacer(Modifier.height(12.dp))
                 Text(
-                    text = "No favorites yet. Tap the heart on a station to save it here.",
+                    text = strings.noFavorites,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center

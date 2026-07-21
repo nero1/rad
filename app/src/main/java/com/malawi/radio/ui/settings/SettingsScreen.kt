@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
@@ -18,6 +19,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.malawi.radio.data.settings.AppSettings
+import com.malawi.radio.i18n.AppLanguage
+import com.malawi.radio.i18n.I18n
+import com.malawi.radio.i18n.Strings
 import com.malawi.radio.ui.ads.HorizontalBannerAd
 import com.malawi.radio.ui.ads.MediumRectangleAd
 import com.malawi.radio.ui.theme.AppThemeOption
@@ -27,6 +31,7 @@ private const val SUPPORT_EMAIL = "appachi@ng4n.com"
 @Composable
 fun SettingsScreen(viewModel: SettingsViewModel, appName: String) {
     val settings by viewModel.settings.collectAsState(initial = AppSettings())
+    val strings = I18n.strings(settings.language)
     Column(
         Modifier
             .fillMaxSize()
@@ -34,35 +39,55 @@ fun SettingsScreen(viewModel: SettingsViewModel, appName: String) {
             .padding(horizontal = 20.dp, vertical = 20.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Text("Settings", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
+        Text(strings.settings, style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
         HorizontalBannerAd(Modifier.padding(vertical = 8.dp))
-        ThemeSelector(settings.theme, viewModel::setTheme)
+        ThemeSelector(settings.theme, viewModel::setTheme, strings)
         ListItem(
-            headlineContent = { Text("Background Play", fontWeight = FontWeight.Bold) },
-            supportingContent = { Text("Keep playing when the screen turns off or you leave the app.") },
+            headlineContent = { Text(strings.backgroundPlay, fontWeight = FontWeight.Bold) },
+            supportingContent = { Text(if (settings.backgroundPlay) strings.on else strings.off) },
             trailingContent = { Switch(settings.backgroundPlay, viewModel::setBackgroundPlay) }
         )
-        ExpandableSettingsCard("Contact Us") { ContactContent(appName) }
-        ExpandableSettingsCard("Help / FAQs") { HelpContent(appName) }
-        ExpandableSettingsCard("Advertize") { AdvertizeContent(appName) }
-        ExpandableSettingsCard("Privacy Policy") { PrivacyPolicyContent(appName) }
+        LanguageSelector(settings.language, viewModel::setLanguage, strings)
+        ExpandableSettingsCard(strings.contactUs) { ContactContent(appName, strings) }
+        ExpandableSettingsCard(strings.helpFaqs) { HelpContent(appName, strings) }
+        ExpandableSettingsCard(strings.advertize) { AdvertizeContent(appName, strings) }
+        ExpandableSettingsCard(strings.privacyPolicy) { PrivacyPolicyContent(appName, strings) }
         MediumRectangleAd(Modifier.padding(horizontal = 12.dp, vertical = 12.dp))
         Spacer(Modifier.height(96.dp))
     }
 }
 
 @Composable
-fun ThemeSelector(selected: AppThemeOption, onSelected: (AppThemeOption) -> Unit) {
+fun ThemeSelector(selected: AppThemeOption, onSelected: (AppThemeOption) -> Unit, strings: Strings) {
     var expanded by remember { mutableStateOf(false) }
-    Box(Modifier.fillMaxWidth().padding(bottom = 28.dp)) {
+    Box(Modifier.fillMaxWidth().padding(bottom = 8.dp)) {
         ListItem(
-            headlineContent = { Text("Theme", fontWeight = FontWeight.Bold) },
+            headlineContent = { Text(strings.theme, fontWeight = FontWeight.Bold) },
             supportingContent = { Text(selected.label) },
-            trailingContent = { Button(onClick = { expanded = true }) { Text("Change") } }
+            trailingContent = { Button(onClick = { expanded = true }) { Text(strings.change) } }
         )
         DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
             AppThemeOption.entries.forEach { theme ->
                 DropdownMenuItem(text = { Text(theme.label) }, onClick = { onSelected(theme); expanded = false })
+            }
+        }
+    }
+}
+
+@Composable
+fun LanguageSelector(selected: AppLanguage, onSelected: (AppLanguage) -> Unit, strings: Strings) {
+    var expanded by remember { mutableStateOf(false) }
+    Box(Modifier.fillMaxWidth().padding(bottom = 8.dp)) {
+        ListItem(
+            headlineContent = { Text(strings.language, fontWeight = FontWeight.Bold) },
+            supportingContent = { Text(selected.displayName) },
+            trailingContent = { Button(onClick = { expanded = true }) { Text(strings.change) } }
+        )
+        DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+            Column(Modifier.heightIn(max = 320.dp).verticalScroll(rememberScrollState())) {
+                AppLanguage.selectorOptions.forEach { language ->
+                    DropdownMenuItem(text = { Text(language.displayName) }, onClick = { onSelected(language); expanded = false })
+                }
             }
         }
     }
@@ -87,52 +112,35 @@ private fun ExpandableSettingsCard(title: String, content: @Composable ColumnSco
 }
 
 @Composable
-private fun ContactContent(appName: String) {
-    Paragraph("For adverts, questions or feedback contact us by sending an email to $SUPPORT_EMAIL.")
-    Paragraph("Make sure you mention $appName in your email message.")
+private fun ContactContent(appName: String, strings: Strings) {
+    Paragraph(strings.contactText.format(SUPPORT_EMAIL))
+    Paragraph(strings.mentionAppText.format(appName))
 }
 
 @Composable
-private fun HelpContent(appName: String) {
-    SectionTitle("Quick Start")
-    Bullet("Click any station in the stations list to connect to it and start playing.")
-    Bullet("Tap the play button (▶︎) in the Player page to pause playing and tap it again to continue.")
-    Bullet("Tap the heart icon (❤️) to add a station to your favorites.")
-    Bullet("Change the color theme of the app from the Settings page or by tapping on the palette icon (🎨) on the top right of the Stations list page.")
-    Bullet("Set a sleep timer to automatically turn off the radio after a specific time by clicking the moon icon (🌙) on the Player page. When a sleep timer is set, the moon icon changes to an hourglass (⌛). Tap the hourglass for options to cancel or extend the timer.")
-    Bullet("Background play enables the radio to keep playing even if you leave the app or when the phone screen is turned off. You can turn this option on or off from the Settings page.")
+private fun HelpContent(appName: String, strings: Strings) {
+    SectionTitle(strings.quickStart)
+    strings.quickStartBullets.forEach { Bullet(it) }
 
     Spacer(Modifier.height(6.dp))
-    SectionTitle("Troubleshooting")
-    BulletWithBoldLead("No station playing", "If none of the stations in the list are playing, make sure your network is connected and internet is active, and check whether other apps are connected. You may also try restarting the app or your device. Make sure also that you have the latest version of the app. If the problem persists for up to a week, kindly email $SUPPORT_EMAIL to notify us. Remember to mention $appName in your email message.")
-    BulletWithBoldLead("A single station not playing", "If the station was previously playing and now has stopped while other stations are still playing, try connecting again later or restarting the app. If the problem persists for up to a month it means the station may be out of commission, kindly email $SUPPORT_EMAIL to notify us. Remember to mention $appName in your email message.")
-    BulletWithBoldLead("Request a new station", "If a station you want is not already in the stations list, we may be able to add it in the next version of the app. Contact us via email at $SUPPORT_EMAIL to make a request for the new station. Remember to mention $appName in your email message.")
-    BulletWithBoldLead("Ads sound too loud", "You can turn off the sound in an advert by tapping the loudspeaker icon in any of the corners of the advert.")
-    BulletWithBoldLead("Is it possible to turn off ads?", "Unfortunately at this time there is no way to turn off the adverts in the app because that is how we get the funding to continue providing the app to you for free. In the future we may consider adding an option to remove ads but it would have to be a paid option with a small monthly/yearly subscription. If you would like such an option kindly email $SUPPORT_EMAIL to indicate your interest and let us know how much you would be willing to pay for such a service. If we get enough interest we will implement the feature. Remember to mention $appName in your email message.")
+    SectionTitle(strings.troubleshooting)
+    strings.troubleshootingItems.forEach { (lead, text) ->
+        BulletWithBoldLead(lead, text.format(SUPPORT_EMAIL, appName))
+    }
 }
 
 @Composable
-private fun AdvertizeContent(appName: String) {
-    Paragraph("To place your advert, contact us by sending an email to $SUPPORT_EMAIL.")
-    Paragraph("Kindly make sure you mention $appName in your email message.")
+private fun AdvertizeContent(appName: String, strings: Strings) {
+    Paragraph(strings.advertText.format(SUPPORT_EMAIL))
+    Paragraph(strings.advertMentionText.format(appName))
 }
 
 @Composable
-private fun PrivacyPolicyContent(appName: String) {
-    Paragraph("This Privacy Policy explains how $appName handles information when you use the app. By using $appName, you agree to the practices described below.")
-    PolicySection("Information we collect", "The app is designed for radio streaming and does not require you to create an account. We may store your app preferences on your device, including favorite stations, selected theme, background-play preference, and playback-related settings. These preferences help the app work consistently for you.")
-    PolicySection("Radio streaming", "When you play a station, the audio stream is provided by the station or its streaming provider. Those providers may receive standard technical information such as your IP address, device type, app or browser user agent, playback request time, and connection diagnostics needed to deliver the stream.")
-    PolicySection("Advertising", "$appName is supported by adverts. Advertising partners, including Google AdMob where enabled, may collect or receive device identifiers, approximate location, ad interaction data, and other technical information to deliver, limit, measure, and improve adverts. These partners may use cookies, mobile advertising identifiers, or similar technologies subject to their own privacy policies and your device settings.")
-    PolicySection("Device permissions", "The app uses network access to load station lists, play audio streams, and show adverts. If background playback is enabled, the app may continue audio playback while the app is not in the foreground or while your screen is off. The app does not request access to your contacts, photos, microphone, camera, or precise GPS location for normal radio playback.")
-    PolicySection("How we use information", "Information handled by the app is used to provide radio playback, remember your settings, maintain favorites, troubleshoot technical issues, improve reliability, prevent abuse, and support the free version of the app through advertising.")
-    PolicySection("Data stored on your device", "Favorites and settings are stored locally on your device. You can change these settings inside the app, clear app storage from your device settings, or uninstall the app to remove locally stored app data.")
-    PolicySection("Information you send to us", "If you contact us by email, we will receive the information you choose to include, such as your email address, message content, device details, station requests, advert enquiries, and any screenshots or logs you attach. We use this information to respond to you, provide support, investigate problems, and manage advert requests.")
-    PolicySection("Sharing of information", "We do not sell personal information that you email to us. We may share information when required to operate the app, comply with legal obligations, protect users or the app, respond to support requests, or work with service providers such as advertising, analytics, hosting, and radio streaming partners.")
-    PolicySection("Children's privacy", "$appName is intended for a general audience. We do not knowingly request personal information from children. If you believe a child has sent personal information to us, contact us and we will take reasonable steps to delete it.")
-    PolicySection("Your choices", "You can manage advertising identifiers and ad personalization through your device settings where supported. You can disable background play in Settings, remove favorites in the app, clear local app data, or uninstall the app at any time.")
-    PolicySection("Security and retention", "We use reasonable safeguards appropriate for a radio streaming app, but no app or internet transmission can be guaranteed to be completely secure. Email messages and support records may be retained for as long as needed to respond, maintain records, resolve disputes, and comply with legal obligations.")
-    PolicySection("Changes to this policy", "We may update this Privacy Policy when app features, advertising tools, legal requirements, or operational practices change. Continued use of the app after an update means you accept the updated policy.")
-    PolicySection("Contact", "If you have questions about this Privacy Policy or how $appName handles information, email $SUPPORT_EMAIL and mention $appName in your message.")
+private fun PrivacyPolicyContent(appName: String, strings: Strings) {
+    Paragraph(strings.privacyIntro.format(appName, appName))
+    strings.policySections.forEach { (title, body) ->
+        PolicySection(title, body.format(appName, SUPPORT_EMAIL, appName))
+    }
 }
 
 @Composable
