@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.malawi.radio.data.model.RadioStation
 import com.malawi.radio.ui.ads.HorizontalBannerAd
 import com.malawi.radio.ui.ads.MediumRectangleAd
+import com.malawi.radio.ui.components.EmptyStationsNavigationHint
 import com.malawi.radio.ui.stationlist.StationRow
 
 @Composable
@@ -34,14 +35,19 @@ fun RecentsScreen(
             IconButton(onClick = onSettingsClick) { Icon(Icons.Filled.Settings, contentDescription = "Settings") }
         }
         if (recents.isEmpty()) {
-            Column(
-                modifier = Modifier.fillMaxSize().padding(32.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Icon(Icons.Filled.History, contentDescription = null, modifier = Modifier.size(56.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
-                Spacer(Modifier.height(12.dp))
-                Text("No recently played stations yet. Play a station and it will appear here.", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
+            Box(Modifier.fillMaxSize().padding(horizontal = 16.dp, vertical = 8.dp)) {
+                Column(
+                    modifier = Modifier.align(Alignment.Center).padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Icon(Icons.Filled.History, contentDescription = null, modifier = Modifier.size(56.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Spacer(Modifier.height(12.dp))
+                    Text("No recently played stations yet. Play a station and it will appear here.", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
+                }
+
+                EmptyStationsNavigationHint(
+                    modifier = Modifier.align(Alignment.BottomStart)
+                )
             }
         } else {
             HorizontalBannerAd(Modifier.padding(horizontal = 16.dp, vertical = 2.dp))
