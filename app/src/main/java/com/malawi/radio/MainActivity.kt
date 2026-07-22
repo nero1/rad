@@ -43,6 +43,8 @@ import com.malawi.radio.ui.favorites.FavoritesViewModel
 import com.malawi.radio.ui.nowplaying.NowPlayingScreen
 import com.malawi.radio.ui.nowplaying.NowPlayingViewModel
 import com.malawi.radio.ui.settings.SettingsScreen
+import com.malawi.radio.ui.recents.RecentsScreen
+import com.malawi.radio.ui.recents.RecentsViewModel
 import com.malawi.radio.ui.settings.SettingsViewModel
 import com.malawi.radio.ui.stationlist.StationListScreen
 import com.malawi.radio.ui.stationlist.StationListViewModel
@@ -53,7 +55,7 @@ private const val SCROLL_HINT_PREFS = "scroll_hint_prefs"
 private const val SCROLL_HINT_VERSION_KEY = "version_code"
 private const val SCROLL_HINT_OPEN_COUNT_KEY = "open_count"
 
-private enum class Tab(val label: String) { STATIONS("Stations"), NOW_PLAYING("Player"), FAVORITES("Favorites"), SETTINGS("Settings") }
+private enum class Tab(val label: String) { STATIONS("Stations"), NOW_PLAYING("Player"), FAVORITES("Favorites"), RECENTS("Recents"), SETTINGS("Settings") }
 
 class MainActivity : ComponentActivity() {
     private val factory by lazy { ViewModelFactory(application as MalawiRadioApp) }
@@ -96,6 +98,7 @@ private fun MalawiRadioApp(factory: ViewModelFactory, activity: MainActivity, on
     val nowPlayingVm: NowPlayingViewModel = viewModel(factory = factory)
     val favoritesVm: FavoritesViewModel = viewModel(factory = factory)
     val settingsVm: SettingsViewModel = viewModel(factory = factory)
+    val recentsVm: RecentsViewModel = viewModel(factory = factory)
     val settings by settingsVm.settings.collectAsState(initial = AppSettings())
     val context = androidx.compose.ui.platform.LocalContext.current
 
@@ -105,6 +108,10 @@ private fun MalawiRadioApp(factory: ViewModelFactory, activity: MainActivity, on
         var nextInterstitialAt by remember { mutableLongStateOf(System.currentTimeMillis() + INTERSTITIAL_DELAY_MINUTES * 60_000L) }
         val playerState by nowPlayingVm.playerState.collectAsState()
         var showStationScrollHint by remember { mutableStateOf(activity.shouldShowStationScrollHint()) }
+
+        LaunchedEffect(Unit) {
+            nowPlayingVm.restoreLastStationIfIdle()
+        }
 
         val lifecycleOwner = LocalLifecycleOwner.current
 
@@ -152,10 +159,11 @@ private fun MalawiRadioApp(factory: ViewModelFactory, activity: MainActivity, on
         Scaffold(bottomBar = { BottomArea(playerState, selectedTab, { nowPlayingVm.togglePlayPause() }, { selectTab(Tab.NOW_PLAYING) }, selectTab) }) { padding ->
             Box(Modifier.padding(padding)) {
                 when (selectedTab) {
-                    Tab.STATIONS -> StationListScreen(stationListVm, onStationSelected = { selectTab(Tab.NOW_PLAYING) }, currentTheme = settings.theme, onThemeSelected = settingsVm::setTheme, showScrollHint = showStationScrollHint, onScrollHintShown = { showStationScrollHint = false })
-                    Tab.NOW_PLAYING -> NowPlayingScreen(viewModel = nowPlayingVm)
-                    Tab.FAVORITES -> FavoritesScreen(favoritesVm, onStationSelected = { selectTab(Tab.NOW_PLAYING) })
-                    Tab.SETTINGS -> SettingsScreen(settingsVm, appName = BuildConfig.APP_NAME)
+                    Tab.STATIONS -> StationListScreen(stationListVm, onStationSelected = { selectTab(Tab.NOW_PLAYING) }, showScrollHint = showStationScrollHint, onScrollHintShown = { showStationScrollHint = false })
+                    Tab.NOW_PLAYING -> NowPlayingScreen(viewModel = nowPlayingVm, onThemeSelected = settingsVm::setTheme, onSettingsClick = { selectTab(Tab.SETTINGS) })
+                    Tab.FAVORITES -> FavoritesScreen(favoritesVm, onStationSelected = { selectTab(Tab.NOW_PLAYING) }, onSettingsClick = { selectTab(Tab.SETTINGS) })
+                    Tab.RECENTS -> RecentsScreen(recentsVm, onStationSelected = { selectTab(Tab.NOW_PLAYING) }, onSettingsClick = { selectTab(Tab.SETTINGS) })
+                    Tab.SETTINGS -> SettingsScreen(settingsVm, stationListVm, appName = BuildConfig.APP_NAME)
                 }
             }
         }
@@ -167,7 +175,7 @@ private fun BottomArea(playerState: com.malawi.radio.player.PlayerUiState, selec
     Column {
         if (playerState.currentStation != null && selectedTab != Tab.NOW_PLAYING) MiniPlayerBar(playerState.currentStation!!.name, playerState.currentTitle, playerState.playbackState == PlaybackState.PLAYING, playerState.playbackState == PlaybackState.BUFFERING, BuildConfig.SCROLLING_MARQUEE_ENABLED, onTogglePlay, onMiniClick)
         NavigationBar {
-            listOf(Tab.STATIONS to Icons.Filled.List, Tab.NOW_PLAYING to Icons.Filled.Radio, Tab.FAVORITES to Icons.Filled.Favorite, Tab.SETTINGS to Icons.Filled.Settings).forEach { (tab, icon) ->
+            listOf(Tab.STATIONS to Icons.Filled.List, Tab.NOW_PLAYING to Icons.Filled.Radio, Tab.FAVORITES to Icons.Filled.Favorite, Tab.RECENTS to Icons.Filled.History).forEach { (tab, icon) ->
                 NavigationBarItem(selected = selectedTab == tab, onClick = { onTab(tab) }, icon = { Icon(icon, contentDescription = tab.label) }, label = { Text(tab.label, textAlign = androidx.compose.ui.text.style.TextAlign.Center) })
             }
         }

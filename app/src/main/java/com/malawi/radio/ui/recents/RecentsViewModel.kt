@@ -1,4 +1,4 @@
-package com.malawi.radio.ui.favorites
+package com.malawi.radio.ui.recents
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,18 +9,20 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class FavoritesViewModel(
+class RecentsViewModel(
     private val repository: StationRepository,
     private val playerManager: PlayerManager
 ) : ViewModel() {
 
-    private val _favorites = MutableStateFlow<List<RadioStation>>(emptyList())
-    val favorites: StateFlow<List<RadioStation>> = _favorites
+    private val _recents = MutableStateFlow<List<RadioStation>>(emptyList())
+    val recents: StateFlow<List<RadioStation>> = _recents
+
+    private val _favoriteIds = MutableStateFlow<Set<String>>(emptySet())
+    val favoriteIds: StateFlow<Set<String>> = _favoriteIds
 
     init {
-        viewModelScope.launch {
-            repository.favoriteStations().collect { _favorites.value = it }
-        }
+        viewModelScope.launch { repository.recentStations().collect { _recents.value = it } }
+        viewModelScope.launch { repository.favoriteIds().collect { _favoriteIds.value = it } }
     }
 
     fun playStation(station: RadioStation) {

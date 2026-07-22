@@ -17,7 +17,8 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.TouchApp
-import androidx.compose.material.icons.filled.Palette
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -37,8 +38,6 @@ import com.malawi.radio.BuildConfig
 import com.malawi.radio.data.model.RadioStation
 import com.malawi.radio.ui.ads.HorizontalBannerAd
 import com.malawi.radio.ui.ads.MediumRectangleAd
-import com.malawi.radio.ui.theme.AppThemeOption
-import com.malawi.radio.ui.theme.DefaultAppThemeOption
 import kotlinx.coroutines.delay
 import kotlin.math.roundToInt
 
@@ -46,21 +45,35 @@ import kotlin.math.roundToInt
 fun StationListScreen(
     viewModel: StationListViewModel,
     onStationSelected: (RadioStation) -> Unit,
-    currentTheme: AppThemeOption = DefaultAppThemeOption,
-    onThemeSelected: (AppThemeOption) -> Unit = {},
     showScrollHint: Boolean = false,
     onScrollHintShown: () -> Unit = {}
 ) {
     val state by viewModel.uiState.collectAsState()
 
     Column(modifier = Modifier.fillMaxSize()) {
+        var searchActive by rememberSaveable { mutableStateOf(false) }
+        var searchQuery by rememberSaveable { mutableStateOf("") }
         Row(Modifier.fillMaxWidth().padding(20.dp), verticalAlignment = Alignment.CenterVertically) {
-            Text(BuildConfig.APP_NAME, style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
-            var themeMenu by rememberSaveable { mutableStateOf(false) }
-
-            IconButton(onClick = { themeMenu = true }) { Icon(Icons.Filled.Palette, contentDescription = "Change theme") }
-            DropdownMenu(expanded = themeMenu, onDismissRequest = { themeMenu = false }) {
-                AppThemeOption.entries.forEach { theme -> DropdownMenuItem(text = { Text(theme.label) }, onClick = { onThemeSelected(theme); themeMenu = false }) }
+            if (searchActive) {
+                OutlinedTextField(
+                    value = searchQuery,
+                    onValueChange = { query ->
+                        searchQuery = query
+                        if (query.isEmpty()) searchActive = false
+                    },
+                    modifier = Modifier.weight(1f),
+                    singleLine = true,
+                    placeholder = { Text("Search stations") },
+                    leadingIcon = { Icon(Icons.Filled.Search, contentDescription = null) },
+                    trailingIcon = {
+                        IconButton(onClick = { searchQuery = ""; searchActive = false }) {
+                            Icon(Icons.Filled.Close, contentDescription = "Cancel search")
+                        }
+                    }
+                )
+            } else {
+                Text(BuildConfig.APP_NAME, style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
+                IconButton(onClick = { searchActive = true }) { Icon(Icons.Filled.Search, contentDescription = "Search stations") }
             }
         }
         HorizontalBannerAd(Modifier.padding(horizontal = 16.dp, vertical = 2.dp))
@@ -92,8 +105,11 @@ fun StationListScreen(
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 6.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    items(state.stations.size, key = { state.stations[it].id }) { index ->
-                        val station = state.stations[index]
+                    val shownStations = if (searchQuery.isBlank()) state.stations else state.stations.filter { station ->
+                        listOf(station.name, station.city, station.genre, station.frequency, station.language).any { it.contains(searchQuery, ignoreCase = true) }
+                    }
+                    items(shownStations.size, key = { shownStations[it].id }) { index ->
+                        val station = shownStations[index]
                         StationRow(
                             station = station,
                             isFavorite = station.id in state.favoriteIds,

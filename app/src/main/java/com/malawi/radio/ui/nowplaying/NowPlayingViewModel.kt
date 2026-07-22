@@ -35,6 +35,16 @@ class NowPlayingViewModel(
         }
     }
 
+    fun restoreLastStationIfIdle() {
+        viewModelScope.launch {
+            repository.lastStation().collect { station ->
+                if (station != null && playerState.value.currentStation == null) {
+                    playerManager.restoreStation(station)
+                }
+            }
+        }
+    }
+
     fun togglePlayPause() {
         playerManager.togglePlayPause()
     }

@@ -11,7 +11,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 data class StationListUiState(
+    val allStations: List<RadioStation> = emptyList(),
     val stations: List<RadioStation> = emptyList(),
+    val hiddenStationIds: Set<String> = emptySet(),
     val favoriteIds: Set<String> = emptySet(),
     val isLoading: Boolean = true
 )
@@ -26,8 +28,18 @@ class StationListViewModel(
 
     init {
         viewModelScope.launch {
-            val stations = repository.getAllStations()
-            _uiState.value = _uiState.value.copy(stations = stations, isLoading = false)
+            repository.visibleStations().collect { stations ->
+                _uiState.value = _uiState.value.copy(stations = stations, isLoading = false)
+            }
+        }
+        viewModelScope.launch {
+            val allStations = repository.getAllStations()
+            _uiState.value = _uiState.value.copy(allStations = allStations)
+        }
+        viewModelScope.launch {
+            repository.hiddenStationIds().collect { hiddenIds ->
+                _uiState.value = _uiState.value.copy(hiddenStationIds = hiddenIds)
+            }
         }
         viewModelScope.launch {
             repository.favoriteIds().collect { favIds ->
@@ -38,9 +50,14 @@ class StationListViewModel(
 
     fun playStation(station: RadioStation) {
         playerManager.playStation(station)
+        viewModelScope.launch { repository.recordStationPlayed(station.id) }
     }
 
     fun toggleFavorite(stationId: String) {
         viewModelScope.launch { repository.toggleFavorite(stationId) }
+    }
+
+    fun setStationVisible(stationId: String, visible: Boolean) {
+        viewModelScope.launch { repository.setStationVisible(stationId, visible) }
     }
 }

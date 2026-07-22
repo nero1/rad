@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.Icon
@@ -23,17 +24,16 @@ import com.malawi.radio.ui.ads.MediumRectangleAd
 @Composable
 fun FavoritesScreen(
     viewModel: FavoritesViewModel,
-    onStationSelected: (RadioStation) -> Unit
+    onStationSelected: (RadioStation) -> Unit,
+    onSettingsClick: () -> Unit
 ) {
     val favorites by viewModel.favorites.collectAsState()
 
     Column(modifier = Modifier.fillMaxSize()) {
-        Text(
-            text = "Favorites",
-            style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(20.dp)
-        )
+        Row(Modifier.fillMaxWidth().padding(20.dp), verticalAlignment = Alignment.CenterVertically) {
+            Text("Favorites", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
+            IconButton(onClick = onSettingsClick) { Icon(Icons.Filled.Settings, contentDescription = "Settings") }
+        }
         if (favorites.isEmpty()) {
             Column(
                 modifier = Modifier
