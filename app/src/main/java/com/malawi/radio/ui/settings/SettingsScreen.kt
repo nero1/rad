@@ -70,7 +70,7 @@ private fun ManageStationsList(
         Column(Modifier.fillMaxWidth().padding(16.dp)) {
             Row(Modifier.fillMaxWidth()) {
                 Column(Modifier.weight(1f)) {
-                    Text("Manage Stations List", fontWeight = FontWeight.Bold)
+                    Text("Manage Stations", fontWeight = FontWeight.Bold)
                     Text("Add / Remove Stations", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
                 Button(onClick = { expanded = !expanded }) { Text("Manage") }

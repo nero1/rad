@@ -184,18 +184,21 @@ private fun BottomArea(playerState: com.malawi.radio.player.PlayerUiState, selec
 
 @Composable
 private fun MiniPlayerBar(stationName: String, currentTitle: String?, isPlaying: Boolean, isBuffering: Boolean, scrollingMarqueeEnabled: Boolean, onTogglePlay: () -> Unit, onClick: () -> Unit) {
-    Row(Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.surfaceVariant).clickable { onClick() }.padding(horizontal = 16.dp, vertical = 10.dp), verticalAlignment = Alignment.CenterVertically) {
-        Text(stationName, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.onSurface, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(0.42f))
-        currentTitle?.takeIf { it.isNotBlank() }?.let { title ->
-            Spacer(Modifier.width(12.dp))
-            if (scrollingMarqueeEnabled) {
-                MiniPlayerSongTitle(title = title, modifier = Modifier.weight(0.58f))
-            } else {
-                Spacer(Modifier.weight(0.58f))
+    Column(Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.surfaceVariant)) {
+        HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)
+        Row(Modifier.fillMaxWidth().clickable { onClick() }.padding(horizontal = 16.dp, vertical = 10.dp), verticalAlignment = Alignment.CenterVertically) {
+            Text(stationName, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.onSurface, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(0.42f))
+            currentTitle?.takeIf { it.isNotBlank() }?.let { title ->
+                Spacer(Modifier.width(12.dp))
+                if (scrollingMarqueeEnabled) {
+                    MiniPlayerSongTitle(title = title, modifier = Modifier.weight(0.58f))
+                } else {
+                    Spacer(Modifier.weight(0.58f))
+                }
+                Spacer(Modifier.width(12.dp))
             }
-            Spacer(Modifier.width(12.dp))
+            Box(Modifier.size(48.dp), contentAlignment = Alignment.Center) { if (isBuffering) CircularProgressIndicator(Modifier.size(24.dp), strokeWidth = 2.dp, color = MaterialTheme.colorScheme.primary) else IconButton(onClick = onTogglePlay) { Icon(if (isPlaying) Icons.Filled.Pause else Icons.Filled.PlayArrow, "Play/Pause", tint = MaterialTheme.colorScheme.primary) } }
         }
-        Box(Modifier.size(48.dp), contentAlignment = Alignment.Center) { if (isBuffering) CircularProgressIndicator(Modifier.size(24.dp), strokeWidth = 2.dp, color = MaterialTheme.colorScheme.primary) else IconButton(onClick = onTogglePlay) { Icon(if (isPlaying) Icons.Filled.Pause else Icons.Filled.PlayArrow, "Play/Pause", tint = MaterialTheme.colorScheme.primary) } }
     }
 }
 
