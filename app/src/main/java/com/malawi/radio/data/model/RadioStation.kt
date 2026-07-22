@@ -16,7 +16,8 @@ data class RadioStation(
     val language: String = "",
     val streamUrl: String,
     val homepage: String = "",
-    val needsVerification: Boolean = false
+    val needsVerification: Boolean = false,
+    val visible: Boolean = true
 )
 
 @Serializable

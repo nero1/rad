@@ -103,6 +103,12 @@ class PlayerManager(private val context: Context) {
         }
     }
 
+    fun restoreStation(station: RadioStation) {
+        if (_uiState.value.currentStation == null) {
+            _uiState.value = _uiState.value.copy(currentStation = station, playbackState = PlaybackState.PAUSED, errorMessage = null, currentTitle = null)
+        }
+    }
+
     fun playStation(station: RadioStation, isReconnect: Boolean = false) {
         if (!isReconnect) {
             reconnectAttempts = 0

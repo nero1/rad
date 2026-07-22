@@ -10,7 +10,8 @@
       "language": "English",
       "streamUrl": "https://mediaserviceslive.akamaized.net/hls/live/2038347/triplejqld/masterhq.m3u8",
       "homepage": "https://www.abc.net.au/triplej/",
-      "needsVerification": false
+      "needsVerification": false,
+      "visible": false
     },
     {
       "id": "6cccdf66-4ad0-4861-8e09-3f87eda759b6",
@@ -21,7 +22,8 @@
       "language": "English",
       "streamUrl": "https://mediaserviceslive.akamaized.net/hls/live/2038304/localbrisbane/masterhq.m3u8",
       "homepage": "https://www.abc.net.au/brisbane",
-      "needsVerification": false
+      "needsVerification": false,
+      "visible": false
     },
     {
       "id": "a44e9b2b-ed6f-4245-862e-bc701da97fdb",
@@ -32,7 +34,8 @@
       "language": "English",
       "streamUrl": "https://systrum.net:8443/SSR2",
       "homepage": "https://www.systrum.net/",
-      "needsVerification": false
+      "needsVerification": false,
+      "visible": true
     },
     {
       "id": "cf370c23-26c6-48cf-9b51-6561ba3e5408",
@@ -43,7 +46,8 @@
       "language": "English",
       "streamUrl": "https://audio-edge-vqwx4.yyz.g.radiomast.io/2416c895-f32d-4faa-90a6-b2cf9212488d",
       "homepage": "https://readingradio.org.au/",
-      "needsVerification": false
+      "needsVerification": false,
+      "visible": true
     },
     {
       "id": "37e6772a-5ab7-429d-84bc-fedc606cc8c4",
@@ -54,7 +58,8 @@
       "language": "English",
       "streamUrl": "https://systrum.net:8443/SSR1",
       "homepage": "https://www.systrum.net/",
-      "needsVerification": false
+      "needsVerification": false,
+      "visible": true
     },
     {
       "id": "5e82f3fe-4277-4e43-91b7-2fc3000c3254",
@@ -65,7 +70,8 @@
       "language": "",
       "streamUrl": "http://playerservices.streamtheworld.com/api/livestream-redirect/IPS_RIVER949AAC.aac",
       "homepage": "https://www.iheart.com/",
-      "needsVerification": false
+      "needsVerification": false,
+      "visible": true
     },
     {
       "id": "3f1bb8bc-1a9e-43db-a685-d9bd076d632d",
@@ -76,7 +82,8 @@
       "language": "English",
       "streamUrl": "http://playerservices.streamtheworld.com/api/livestream-redirect/GOL_HOTTOMATO.mp3",
       "homepage": "https://www.mygc.com.au/1029-hot-tomato/",
-      "needsVerification": false
+      "needsVerification": false,
+      "visible": true
     },
     {
       "id": "cbd211e4-d49c-41d3-9539-3a262e298e24",
@@ -87,7 +94,8 @@
       "language": "English",
       "streamUrl": "https://mediaserviceslive.akamaized.net/hls/live/2038251/localcapricornia/masterhq.m3u8",
       "homepage": "https://www.abc.net.au/capricornia",
-      "needsVerification": false
+      "needsVerification": false,
+      "visible": true
     },
     {
       "id": "fe756a53-5e93-4d0f-a78c-ee593d6baa6b",
@@ -98,7 +106,8 @@
       "language": "English",
       "streamUrl": "https://mediaserviceslive.akamaized.net/hls/live/2038355/localmtisa/masterhq.m3u8",
       "homepage": "https://www.abc.net.au/northwest",
-      "needsVerification": false
+      "needsVerification": false,
+      "visible": true
     },
     {
       "id": "e237dbb0-8814-4ed9-9139-105ead401e1b",
@@ -109,7 +118,8 @@
       "language": "English",
       "streamUrl": "https://mediaserviceslive.akamaized.net/hls/live/2038331/locallongreach/masterhq.m3u8",
       "homepage": "https://www.abc.net.au/westqld",
-      "needsVerification": false
+      "needsVerification": false,
+      "visible": true
     },
     {
       "id": "9623bb6e-0601-11e8-ae97-52543be04c81",
@@ -120,7 +130,8 @@
       "language": "English",
       "streamUrl": "http://live-radio01.mediahubaustralia.com/4GLDW/aac/",
       "homepage": "http://www.abc.net.au/goldcoast/",
-      "needsVerification": false
+      "needsVerification": false,
+      "visible": true
     },
     {
       "id": "b03ffb8a-28f0-4636-8525-be68f086fd4c",
@@ -131,7 +142,8 @@
       "language": "English",
       "streamUrl": "https://live-radio01.mediahubaustralia.com/4FMW/aac/",
       "homepage": "https://www.abc.net.au/listenlive/classic",
-      "needsVerification": false
+      "needsVerification": false,
+      "visible": true
     },
     {
       "id": "8138702f-3520-472c-b2c1-46005fdaddb0",
@@ -142,7 +154,8 @@
       "language": "English",
       "streamUrl": "http://playerservices.streamtheworld.com/api/livestream-redirect/CAI_STAR1027.mp3",
       "homepage": "https://www.star1027.com.au/",
-      "needsVerification": false
+      "needsVerification": false,
+      "visible": true
     },
     {
       "id": "9615e9c5-0601-11e8-ae97-52543be04c81",
@@ -153,7 +166,8 @@
       "language": "English",
       "streamUrl": "http://live-radio01.mediahubaustralia.com/4LRW/mp3/",
       "homepage": "http://www.abc.net.au/brisbane/",
-      "needsVerification": false
+      "needsVerification": false,
+      "visible": true
     },
     {
       "id": "0568bbf2-276b-42d9-b2a4-7bbaa59a851c",
@@ -164,7 +178,8 @@
       "language": "",
       "streamUrl": "https://playerservices.streamtheworld.com/api/livestream-redirect/BUN_4BUAAC_SC",
       "homepage": "https://www.4bu.com.au/",
-      "needsVerification": false
+      "needsVerification": false,
+      "visible": true
     },
     {
       "id": "960a2859-0601-11e8-ae97-52543be04c81",
@@ -175,7 +190,8 @@
       "language": "",
       "streamUrl": "http://streaming.novaentertainment.com.au/nova1069",
       "homepage": "http://www.nova1069.com.au/",
-      "needsVerification": false
+      "needsVerification": false,
+      "visible": true
     },
     {
       "id": "f400ee71-90bf-44fa-a49c-5ab5211da52b",
@@ -186,7 +202,8 @@
       "language": "English",
       "streamUrl": "https://wz4liw.scahw.com.au/live/4too_128.stream/playlist.m3u8",
       "homepage": "https://www.triplem.com.au/townsville",
-      "needsVerification": false
+      "needsVerification": false,
+      "visible": true
     },
     {
       "id": "1cf68d54-ff37-44cb-b202-099df5108654",
@@ -197,7 +214,8 @@
       "language": "English",
       "streamUrl": "https://onlineradiobox.com/json/au/bighits/play?platform=web",
       "homepage": "https://www.bighitsradio.com.au/BHR/bhr.html",
-      "needsVerification": false
+      "needsVerification": false,
+      "visible": true
     },
     {
       "id": "9eb607d7-d1ea-4ed1-a50c-f18e4366db25",
@@ -208,7 +226,8 @@
       "language": "English",
       "streamUrl": "https://mediaserviceslive.akamaized.net/hls/live/2038337/localcairns/masterhq.m3u8",
       "homepage": "https://www.abc.net.au/farnorth",
-      "needsVerification": false
+      "needsVerification": false,
+      "visible": true
     },
     {
       "id": "99d1d137-0f4a-49cb-906b-96988d57f9d6",
@@ -219,7 +238,8 @@
       "language": "English",
       "streamUrl": "https://s8.yesstreaming.net:17099/RblDD",
       "homepage": "https://rebelfm.com.au/miles/",
-      "needsVerification": false
+      "needsVerification": false,
+      "visible": true
     },
     {
       "id": "a00fbcc2-d8e8-40df-a840-e7716a36882d",
@@ -230,7 +250,8 @@
       "language": "English",
       "streamUrl": "https://s8.yesstreaming.net:17065/BrzCNQ",
       "homepage": "https://thebreeze.com.au/",
-      "needsVerification": false
+      "needsVerification": false,
+      "visible": true
     },
     {
       "id": "e6feeda0-e5d2-415b-8836-84d01d60a389",
@@ -241,7 +262,8 @@
       "language": "English",
       "streamUrl": "https://stream.4rfm.com.au/1",
       "homepage": "https://4rfm.com.au/",
-      "needsVerification": false
+      "needsVerification": false,
+      "visible": true
     },
     {
       "id": "4dcc21ca-7f83-4ce5-a9fb-acb24c583d04",
@@ -252,7 +274,8 @@
       "language": "English",
       "streamUrl": "http://playerservices.streamtheworld.com/api/livestream-redirect/CAI_4CAAAC.aac",
       "homepage": "https://www.4ca.com.au/",
-      "needsVerification": false
+      "needsVerification": false,
+      "visible": true
     },
     {
       "id": "adad3aba-660f-44bf-8579-208722c3980d",
@@ -263,7 +286,8 @@
       "language": "English",
       "streamUrl": "https://stream.4mbs.com.au/mbslight",
       "homepage": "https://www.mbslight.com.au/",
-      "needsVerification": false
+      "needsVerification": false,
+      "visible": true
     },
     {
       "id": "e2e9966f-d753-4601-9a5b-061d22622428",
@@ -274,7 +298,8 @@
       "language": "English",
       "streamUrl": "http://playerservices.streamtheworld.com/api/livestream-redirect/997BRIDGEFM.mp3",
       "homepage": "https://997fm.com.au/",
-      "needsVerification": false
+      "needsVerification": false,
+      "visible": true
     },
     {
       "id": "a3b4947e-7947-40be-b7cf-5770bf73b573",
@@ -285,7 +310,8 @@
       "language": "English",
       "streamUrl": "http://playerservices.streamtheworld.com/api/livestream-redirect/4CBL.mp3",
       "homepage": "https://101fm.com.au/",
-      "needsVerification": false
+      "needsVerification": false,
+      "visible": true
     },
     {
       "id": "467de983-d4cf-4d0b-a69d-5bc2adb2c20d",
@@ -296,7 +322,8 @@
       "language": "English",
       "streamUrl": "https://wz4liw.scahw.com.au/live/4bbb_128.stream/playlist.m3u8?",
       "homepage": "https://www.hit.com.au/brisbane",
-      "needsVerification": false
+      "needsVerification": false,
+      "visible": true
     },
     {
       "id": "ba2bc59e-c141-4054-865f-4be18cf92280",
@@ -307,7 +334,8 @@
       "language": "English",
       "streamUrl": "https://s8.yesstreaming.net:17065/BrzCNQ",
       "homepage": "https://thebreeze.com.au/taroom/",
-      "needsVerification": false
+      "needsVerification": false,
+      "visible": true
     },
     {
       "id": "9622c937-0601-11e8-ae97-52543be04c81",
@@ -318,7 +346,8 @@
       "language": "English",
       "streamUrl": "http://live-radio01.mediahubaustralia.com/4LRW/aac/",
       "homepage": "http://www.abc.net.au/radio/brisbane/",
-      "needsVerification": false
+      "needsVerification": false,
+      "visible": true
     },
     {
       "id": "da3a6aa9-97ba-4b16-b3d8-637aec3e4477",
@@ -329,7 +358,8 @@
       "language": "English",
       "streamUrl": "http://playerservices.streamtheworld.com/api/livestream-redirect/4CBLAAC.aac",
       "homepage": "https://101fm.com.au/",
-      "needsVerification": false
+      "needsVerification": false,
+      "visible": true
     }
   ]
 }
