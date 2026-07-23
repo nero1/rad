@@ -18,6 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.malawi.radio.data.settings.AppSettings
+import com.malawi.radio.ui.stationlist.StationListViewModel
 import com.malawi.radio.ui.ads.HorizontalBannerAd
 import com.malawi.radio.ui.ads.MediumRectangleAd
 import com.malawi.radio.ui.theme.AppThemeOption
@@ -25,8 +26,9 @@ import com.malawi.radio.ui.theme.AppThemeOption
 private const val SUPPORT_EMAIL = "appachi@ng4n.com"
 
 @Composable
-fun SettingsScreen(viewModel: SettingsViewModel, appName: String) {
+fun SettingsScreen(viewModel: SettingsViewModel, stationListViewModel: StationListViewModel, appName: String) {
     val settings by viewModel.settings.collectAsState(initial = AppSettings())
+    val stationState by stationListViewModel.uiState.collectAsState()
     Column(
         Modifier
             .fillMaxSize()
@@ -36,10 +38,15 @@ fun SettingsScreen(viewModel: SettingsViewModel, appName: String) {
     ) {
         Text("Settings", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
         HorizontalBannerAd(Modifier.padding(vertical = 8.dp))
+        ManageStationsList(
+            stations = stationState.allStations,
+            hiddenStationIds = stationState.hiddenStationIds,
+            onVisibilityChanged = stationListViewModel::setStationVisible
+        )
         ThemeSelector(settings.theme, viewModel::setTheme)
         ListItem(
             headlineContent = { Text("Background Play", fontWeight = FontWeight.Bold) },
-            supportingContent = { Text("Keep playing when the screen turns off or you leave the app.") },
+            supportingContent = { Text(if (settings.backgroundPlay) "On" else "Off") },
             trailingContent = { Switch(settings.backgroundPlay, viewModel::setBackgroundPlay) }
         )
         ExpandableSettingsCard("Contact Us") { ContactContent(appName) }
@@ -51,10 +58,43 @@ fun SettingsScreen(viewModel: SettingsViewModel, appName: String) {
     }
 }
 
+
+@Composable
+private fun ManageStationsList(
+    stations: List<com.malawi.radio.data.model.RadioStation>,
+    hiddenStationIds: Set<String>,
+    onVisibilityChanged: (String, Boolean) -> Unit
+) {
+    var expanded by rememberSaveable { mutableStateOf(false) }
+    ElevatedCard(Modifier.fillMaxWidth()) {
+        Column(Modifier.fillMaxWidth().padding(16.dp)) {
+            Row(Modifier.fillMaxWidth()) {
+                Column(Modifier.weight(1f)) {
+                    Text("Manage Stations", fontWeight = FontWeight.Bold)
+                    Text("Add / Remove Stations", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+                Button(onClick = { expanded = !expanded }) { Text("Manage") }
+            }
+            AnimatedVisibility(visible = expanded) {
+                Column(Modifier.padding(top = 12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Text("Uncheck a station to hide it from the list of Stations you see.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    stations.forEach { station ->
+                        Row(Modifier.fillMaxWidth().clickable { onVisibilityChanged(station.id, station.id in hiddenStationIds) }.padding(vertical = 4.dp), verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+                            Checkbox(checked = station.id !in hiddenStationIds, onCheckedChange = { checked -> onVisibilityChanged(station.id, checked) })
+                            Spacer(Modifier.width(8.dp))
+                            Text(station.name, modifier = Modifier.weight(1f))
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 @Composable
 fun ThemeSelector(selected: AppThemeOption, onSelected: (AppThemeOption) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
-    Box(Modifier.fillMaxWidth().padding(bottom = 28.dp)) {
+    Box(Modifier.fillMaxWidth().padding(bottom = 4.dp)) {
         ListItem(
             headlineContent = { Text("Theme", fontWeight = FontWeight.Bold) },
             supportingContent = { Text(selected.label) },

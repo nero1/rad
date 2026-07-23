@@ -1,10 +1,5 @@
 package com.malawi.radio.ui.nowplaying
 
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -18,24 +13,29 @@ import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Radio
 import androidx.compose.material.icons.filled.Bedtime
 import androidx.compose.material.icons.filled.HourglassBottom
-import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.Palette
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.malawi.radio.BuildConfig
 import com.malawi.radio.player.PlaybackState
 import com.malawi.radio.ui.ads.MediumRectangleAd
+import com.malawi.radio.ui.components.EmptyStationsNavigationHint
 import com.malawi.radio.ui.components.MarqueeText
+import com.malawi.radio.ui.theme.AppThemeOption
 
 @Composable
-fun NowPlayingScreen(viewModel: NowPlayingViewModel) {
+fun NowPlayingScreen(
+    viewModel: NowPlayingViewModel,
+    onThemeSelected: (AppThemeOption) -> Unit = {},
+    onSettingsClick: () -> Unit = {}
+) {
     val state by viewModel.playerState.collectAsState()
     val station = state.currentStation
     val sleepRemaining by viewModel.sleepRemaining.collectAsState()
@@ -43,12 +43,25 @@ fun NowPlayingScreen(viewModel: NowPlayingViewModel) {
     var sleepMenu by remember { mutableStateOf(false) }
 
     if (station == null) {
-        Box(
+        Column(Modifier.fillMaxSize()) {
+            Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
+                var themeMenu by remember { mutableStateOf(false) }
+                Box {
+                    IconButton(onClick = { themeMenu = true }) { Icon(Icons.Filled.Palette, contentDescription = "Change theme") }
+                    DropdownMenu(expanded = themeMenu, onDismissRequest = { themeMenu = false }) {
+                        AppThemeOption.entries.forEach { theme -> DropdownMenuItem(text = { Text(theme.label) }, onClick = { onThemeSelected(theme); themeMenu = false }) }
+                    }
+                }
+                Spacer(Modifier.weight(1f))
+                IconButton(onClick = onSettingsClick) { Icon(Icons.Filled.Settings, contentDescription = "Settings") }
+            }
+            Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 16.dp, vertical = 8.dp)
         ) {
             EmptyNowPlayingPrompt()
+        }
         }
         return
     }
@@ -57,11 +70,24 @@ fun NowPlayingScreen(viewModel: NowPlayingViewModel) {
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+            .padding(horizontal = 16.dp)
+            .padding(top = 6.dp, bottom = 20.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-        Spacer(Modifier.height(12.dp))
+        var themeMenu by remember { mutableStateOf(false) }
+        Row(Modifier.fillMaxWidth().padding(top = 8.dp), verticalAlignment = Alignment.CenterVertically) {
+            Box {
+                IconButton(onClick = { themeMenu = true }) { Icon(Icons.Filled.Palette, contentDescription = "Change theme") }
+                DropdownMenu(expanded = themeMenu, onDismissRequest = { themeMenu = false }) {
+                    AppThemeOption.entries.forEach { theme ->
+                        DropdownMenuItem(text = { Text(theme.label) }, onClick = { onThemeSelected(theme); themeMenu = false })
+                    }
+                }
+            }
+            Spacer(Modifier.weight(1f))
+            IconButton(onClick = onSettingsClick) { Icon(Icons.Filled.Settings, contentDescription = "Settings") }
+        }
 
         Box(
             modifier = Modifier
@@ -203,17 +229,6 @@ private fun MarqueeSongTitle(title: String, modifier: Modifier = Modifier) {
 
 @Composable
 private fun EmptyNowPlayingPrompt() {
-    val transition = rememberInfiniteTransition(label = "stations-nav-hint")
-    val offsetY by transition.animateFloat(
-        initialValue = -36f,
-        targetValue = 36f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 400),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "stations-nav-hint-offset"
-    )
-
     Box(Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier.align(Alignment.Center),
@@ -234,21 +249,8 @@ private fun EmptyNowPlayingPrompt() {
             )
         }
 
-        Box(
-            modifier = Modifier
-                .align(Alignment.BottomStart)
-                .fillMaxWidth(0.15f)
-                .padding(bottom = 16.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                imageVector = Icons.Filled.KeyboardArrowDown,
-                contentDescription = "Go to Stations",
-                tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.72f),
-                modifier = Modifier
-                    .graphicsLayer { translationY = offsetY }
-                    .size(48.dp)
-            )
-        }
+        EmptyStationsNavigationHint(
+            modifier = Modifier.align(Alignment.BottomStart)
+        )
     }
 }
