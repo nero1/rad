@@ -67,7 +67,7 @@ fun StationListScreen(
             }
         }
 
-        Row(Modifier.fillMaxWidth().padding(20.dp), verticalAlignment = Alignment.CenterVertically) {
+        Row(Modifier.fillMaxWidth().padding(5.dp), verticalAlignment = Alignment.CenterVertically) {
             if (searchActive) {
                 OutlinedTextField(
                     value = searchQuery,
@@ -88,7 +88,7 @@ fun StationListScreen(
                     }
                 )
             } else {
-                Text(BuildConfig.APP_NAME, style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
+                Text(BuildConfig.APP_NAME, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
                 IconButton(onClick = { searchActive = true }) { Icon(Icons.Filled.Search, contentDescription = "Search stations") }
             }
         }
