@@ -1,7 +1,7 @@
 name: Build APK
 on:
   push:
-    branches: [ main, v2try ]
+    branches: [ mainz, v2try ]
   workflow_dispatch:
     inputs:
       build_type:
