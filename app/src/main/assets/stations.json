@@ -38,6 +38,18 @@
       "visible": true
     },
     {
+      "id": "a44e9b2b-ed6f-4245-862e-bc701da97fdb",
+      "name": "Brila FM",
+      "frequency": "",
+      "city": "",
+      "genre": "Electro / Electronica / Idm",
+      "language": "English",
+      "streamUrl": "radioplayer.link/iframe/playlist.php?stream=https://radio.securenetsystems.net/radio_player_large.cfm?stationCallSign=BRILAMP3&title=BrilaFM&name=Listen.m3u",
+      "homepage": "https://www.systrum.net/",
+      "needsVerification": false,
+      "visible": true
+    },
+    {
       "id": "cf370c23-26c6-48cf-9b51-6561ba3e5408",
       "name": "4RPH Reading Radio",
       "frequency": "",
