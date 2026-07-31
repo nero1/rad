@@ -67,7 +67,7 @@ fun StationListScreen(
             }
         }
 
-        Row(Modifier.fillMaxWidth().padding(5.dp), verticalAlignment = Alignment.CenterVertically) {
+        Row(Modifier.fillMaxWidth().padding(start = 17.dp, top = 5.dp, end = 5.dp, bottom = 1.dp), verticalAlignment = Alignment.CenterVertically) {
             if (searchActive) {
                 OutlinedTextField(
                     value = searchQuery,
@@ -92,7 +92,7 @@ fun StationListScreen(
                 IconButton(onClick = { searchActive = true }) { Icon(Icons.Filled.Search, contentDescription = "Search stations") }
             }
         }
-        HorizontalBannerAd(Modifier.padding(horizontal = 16.dp, vertical = 2.dp))
+        TopHorizontalBannerAd(Modifier.padding(horizontal = 16.dp, vertical = 0.dp))
 
         if (state.isLoading) {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
