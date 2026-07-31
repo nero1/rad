@@ -1,6 +1,7 @@
 package com.malawi.radio.ui.stationlist
 
 import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
@@ -47,12 +48,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.malawi.radio.BuildConfig
 import com.malawi.radio.data.model.RadioStation
@@ -60,7 +60,6 @@ import com.malawi.radio.ui.ads.HorizontalBannerAd
 import com.malawi.radio.ui.ads.MediumRectangleAd
 import com.malawi.radio.ui.ads.TopHorizontalBannerAd
 import kotlinx.coroutines.delay
-import kotlin.math.roundToInt
 
 @Composable
 fun StationListScreen(
@@ -205,9 +204,9 @@ fun StationListScreen(
 @Composable
 private fun ScrollDownHint(modifier: Modifier = Modifier) {
     val transition = rememberInfiniteTransition(label = "scroll-hint")
-    val offsetY by transition.animateFloat(
-        initialValue = 56f,
-        targetValue = -56f,
+    val offsetY by transition.animateDp(
+        initialValue = 56.dp,
+        targetValue = (-56).dp,
         animationSpec = infiniteRepeatable(
             animation = tween(durationMillis = 1400),
             repeatMode = RepeatMode.Restart
@@ -235,8 +234,8 @@ private fun ScrollDownHint(modifier: Modifier = Modifier) {
             contentDescription = "Slide up for more stations",
             tint = MaterialTheme.colorScheme.onBackground.copy(alpha = alpha),
             modifier = Modifier
-                .offset { IntOffset(x = 0, y = offsetY.roundToInt()) }
-                .graphicsLayer { rotationZ = -12f }
+                .offset(y = offsetY)
+                .rotate(-12f)
                 .size(52.dp)
         )
     }
