@@ -7,20 +7,43 @@ import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.TouchApp
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.filled.TouchApp
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -61,23 +84,21 @@ fun StationListScreen(
             }
         }
 
-        // Top bar with title / search
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 17.dp, top = 5.dp, end = 5.dp, bottom = 3.dp),
+                .padding(start = 17.dp, top = 5.dp, end = 6.dp, bottom = 3.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             if (searchActive) {
                 OutlinedTextField(
                     value = searchQuery,
-                    onValueChange = { query ->
+                    onValueChange = { query: String ->
                         searchQuery = query
                         if (query.isEmpty()) searchActive = false
                     },
                     modifier = Modifier
                         .weight(1f)
-                        .padding(end = 1.dp)                // 👈 moves right edge 1 dp left
                         .focusRequester(searchFocusRequester),
                     singleLine = true,
                     placeholder = { Text("Search stations") },
@@ -108,7 +129,6 @@ fun StationListScreen(
                 CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
             }
         } else {
-            // Compute filtered list once, outside LazyColumn
             val shownStations = if (searchQuery.isBlank()) {
                 state.stations
             } else {
@@ -119,19 +139,17 @@ fun StationListScreen(
                         station.genre,
                         station.frequency,
                         station.language
-                    ).any { it.contains(searchQuery, ignoreCase = true) }
+                    ).any { field ->
+                        field.contains(searchQuery, ignoreCase = true)
+                    }
                 }
             }
 
             val listState = rememberLazyListState()
             var isScrollHintVisible by rememberSaveable(showScrollHint) { mutableStateOf(showScrollHint) }
 
-            // Reset scroll to top whenever a search is active and the query changes
-            // (does nothing when searchQuery is blank – preserving the user's scroll position)
             LaunchedEffect(searchQuery) {
-                if (searchQuery.isNotBlank()) {
-                    listState.scrollToItem(0)
-                }
+                listState.scrollToItem(0)
             }
 
             LaunchedEffect(showScrollHint) {
@@ -169,7 +187,7 @@ fun StationListScreen(
                         }
                     }
                     item { MediumRectangleAd(Modifier.padding(horizontal = 12.dp, vertical = 12.dp)) }
-                    item { Spacer(Modifier.height(48.dp)) } // room for mini-player bar
+                    item { Spacer(Modifier.height(48.dp)) }
                 }
 
                 if (isScrollHintVisible) {
