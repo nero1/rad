@@ -86,6 +86,7 @@ fun NowPlayingScreen(
             Box(
                 modifier = Modifier
                     .align(Alignment.TopCenter)
+                    .padding(top = 10.dp)
                     .size(114.dp)
                     .clip(CircleShape)
                     .background(MaterialTheme.colorScheme.primary),
