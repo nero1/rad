@@ -76,32 +76,44 @@ fun NowPlayingScreen(
         verticalArrangement = Arrangement.Top
     ) {
         var themeMenu by remember { mutableStateOf(false) }
-        Row(Modifier.fillMaxWidth().padding(top = 5.dp), verticalAlignment = Alignment.CenterVertically) {
-            Box {
-                IconButton(onClick = { themeMenu = true }) { Icon(Icons.Filled.Palette, contentDescription = "Change theme") }
-                DropdownMenu(expanded = themeMenu, onDismissRequest = { themeMenu = false }) {
-                    AppThemeOption.entries.forEach { theme ->
-                        DropdownMenuItem(text = { Text(theme.label) }, onClick = { onThemeSelected(theme); themeMenu = false })
+
+        // Circle and the theme/settings icon row share the same top edge.
+        // The Box's height is driven by the taller child (the 114dp circle),
+        // and the icon row is overlaid on top of it rather than stacked above it.
+        Box(modifier = Modifier.fillMaxWidth()) {
+            Box(
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .size(114.dp)
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.primary),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Radio,
+                    contentDescription = null,
+                    modifier = Modifier.size(68.dp),
+                    tint = MaterialTheme.colorScheme.onPrimary
+                )
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.TopCenter),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box {
+                    IconButton(onClick = { themeMenu = true }) { Icon(Icons.Filled.Palette, contentDescription = "Change theme") }
+                    DropdownMenu(expanded = themeMenu, onDismissRequest = { themeMenu = false }) {
+                        AppThemeOption.entries.forEach { theme ->
+                            DropdownMenuItem(text = { Text(theme.label) }, onClick = { onThemeSelected(theme); themeMenu = false })
+                        }
                     }
                 }
+                Spacer(Modifier.weight(1f))
+                IconButton(onClick = onSettingsClick) { Icon(Icons.Filled.Settings, contentDescription = "Settings") }
             }
-            Spacer(Modifier.weight(1f))
-            IconButton(onClick = onSettingsClick) { Icon(Icons.Filled.Settings, contentDescription = "Settings") }
-        }
-
-        Box(
-            modifier = Modifier
-                .size(114.dp)
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.primary),
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                imageVector = Icons.Filled.Radio,
-                contentDescription = null,
-                modifier = Modifier.size(68.dp),
-                tint = MaterialTheme.colorScheme.onPrimary
-            )
         }
 
         Spacer(Modifier.height(10.dp))
