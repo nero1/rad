@@ -25,7 +25,7 @@ val INTERSTITIAL_DELAY_MINUTES: Long = BuildConfig.INTERSTITIAL_DELAY_MINUTES
 fun TopHorizontalBannerAd(modifier: Modifier = Modifier, adUnitId: String = DEFAULT_BANNER_AD_UNIT_ID) {
     val context = LocalContext.current
     AndroidView(
-       modifier = modifier.fillMaxWidth().padding(top = 1.dp, bottom = 9.dp).height(50.dp),
+       modifier = modifier.fillMaxWidth().padding(top = 4.dp, bottom = 9.dp).height(50.dp),
         factory = {
             AdView(context).apply {
                 setAdSize(AdSize.BANNER)
