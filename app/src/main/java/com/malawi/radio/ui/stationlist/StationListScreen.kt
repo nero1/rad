@@ -20,23 +20,16 @@ import androidx.compose.material.icons.filled.TouchApp
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.malawi.radio.BuildConfig
 import com.malawi.radio.data.model.RadioStation
@@ -68,7 +61,13 @@ fun StationListScreen(
             }
         }
 
-        Row(Modifier.fillMaxWidth().padding(start = 17.dp, top = 5.dp, end = 5.dp, bottom = 3.dp), verticalAlignment = Alignment.CenterVertically) {
+        // Top bar with title / search
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 17.dp, top = 5.dp, end = 5.dp, bottom = 3.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             if (searchActive) {
                 OutlinedTextField(
                     value = searchQuery,
@@ -78,6 +77,7 @@ fun StationListScreen(
                     },
                     modifier = Modifier
                         .weight(1f)
+                        .padding(end = 1.dp)                // 👈 moves right edge 1 dp left
                         .focusRequester(searchFocusRequester),
                     singleLine = true,
                     placeholder = { Text("Search stations") },
@@ -89,10 +89,18 @@ fun StationListScreen(
                     }
                 )
             } else {
-                Text(BuildConfig.APP_NAME, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
-                IconButton(onClick = { searchActive = true }) { Icon(Icons.Filled.Search, contentDescription = "Search stations") }
+                Text(
+                    BuildConfig.APP_NAME,
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.weight(1f)
+                )
+                IconButton(onClick = { searchActive = true }) {
+                    Icon(Icons.Filled.Search, contentDescription = "Search stations")
+                }
             }
         }
+
         TopHorizontalBannerAd(Modifier.padding(horizontal = 16.dp, vertical = 0.dp))
 
         if (state.isLoading) {
@@ -100,8 +108,31 @@ fun StationListScreen(
                 CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
             }
         } else {
+            // Compute filtered list once, outside LazyColumn
+            val shownStations = if (searchQuery.isBlank()) {
+                state.stations
+            } else {
+                state.stations.filter { station ->
+                    listOf(
+                        station.name,
+                        station.city,
+                        station.genre,
+                        station.frequency,
+                        station.language
+                    ).any { it.contains(searchQuery, ignoreCase = true) }
+                }
+            }
+
             val listState = rememberLazyListState()
             var isScrollHintVisible by rememberSaveable(showScrollHint) { mutableStateOf(showScrollHint) }
+
+            // Reset scroll to top whenever a search is active and the query changes
+            // (does nothing when searchQuery is blank – preserving the user's scroll position)
+            LaunchedEffect(searchQuery) {
+                if (searchQuery.isNotBlank()) {
+                    listState.scrollToItem(0)
+                }
+            }
 
             LaunchedEffect(showScrollHint) {
                 if (showScrollHint) {
@@ -122,9 +153,6 @@ fun StationListScreen(
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 6.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    val shownStations = if (searchQuery.isBlank()) state.stations else state.stations.filter { station ->
-                        listOf(station.name, station.city, station.genre, station.frequency, station.language).any { it.contains(searchQuery, ignoreCase = true) }
-                    }
                     items(shownStations.size, key = { shownStations[it].id }) { index ->
                         val station = shownStations[index]
                         StationRow(
