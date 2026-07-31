@@ -142,7 +142,7 @@ fun NowPlayingScreen(
             )
         }
 
-        Spacer(Modifier.height(4.dp))
+        Spacer(Modifier.height(1.dp))
         MediumRectangleAd(Modifier.padding(horizontal = 8.dp, vertical = 0.dp))
         Spacer(Modifier.height(2.dp))
 
