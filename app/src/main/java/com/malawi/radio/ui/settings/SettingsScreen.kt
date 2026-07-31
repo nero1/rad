@@ -32,7 +32,7 @@ fun SettingsScreen(viewModel: SettingsViewModel, stationListViewModel: StationLi
     val settings by viewModel.settings.collectAsState(initial = AppSettings())
     val stationState by stationListViewModel.uiState.collectAsState()
     Column(modifier = Modifier.fillMaxSize()) {
-        Row(Modifier.fillMaxWidth().padding(start = 17.dp, top = 5.dp, end = 5.dp, bottom = 1.dp), verticalAlignment = Alignment.CenterVertically) {
+        Row(Modifier.fillMaxWidth().padding(start = 17.dp, top = 5.dp, end = 5.dp, bottom = 3.dp), verticalAlignment = Alignment.CenterVertically) {
             Text("Settings", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
         }
         TopHorizontalBannerAd(Modifier.padding(horizontal = 16.dp, vertical = 0.dp))
