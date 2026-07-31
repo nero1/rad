@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -21,6 +22,7 @@ import com.malawi.radio.data.settings.AppSettings
 import com.malawi.radio.ui.stationlist.StationListViewModel
 import com.malawi.radio.ui.ads.HorizontalBannerAd
 import com.malawi.radio.ui.ads.MediumRectangleAd
+import com.malawi.radio.ui.ads.TopHorizontalBannerAd
 import com.malawi.radio.ui.theme.AppThemeOption
 
 private const val SUPPORT_EMAIL = "appachi@ng4n.com"
@@ -29,32 +31,36 @@ private const val SUPPORT_EMAIL = "appachi@ng4n.com"
 fun SettingsScreen(viewModel: SettingsViewModel, stationListViewModel: StationListViewModel, appName: String) {
     val settings by viewModel.settings.collectAsState(initial = AppSettings())
     val stationState by stationListViewModel.uiState.collectAsState()
-    Column(
-        Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(horizontal = 20.dp, vertical = 20.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        Text("Settings", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
-        HorizontalBannerAd(Modifier.padding(vertical = 8.dp))
-        ManageStationsList(
-            stations = stationState.allStations,
-            hiddenStationIds = stationState.hiddenStationIds,
-            onVisibilityChanged = stationListViewModel::setStationVisible
-        )
-        ThemeSelector(settings.theme, viewModel::setTheme)
-        ListItem(
-            headlineContent = { Text("Background Play", fontWeight = FontWeight.Bold) },
-            supportingContent = { Text(if (settings.backgroundPlay) "On" else "Off") },
-            trailingContent = { Switch(settings.backgroundPlay, viewModel::setBackgroundPlay) }
-        )
-        ExpandableSettingsCard("Contact Us") { ContactContent(appName) }
-        ExpandableSettingsCard("Help / FAQs") { HelpContent(appName) }
-        ExpandableSettingsCard("Advertize") { AdvertizeContent(appName) }
-        ExpandableSettingsCard("Privacy Policy") { PrivacyPolicyContent(appName) }
-        MediumRectangleAd(Modifier.padding(horizontal = 12.dp, vertical = 12.dp))
-        Spacer(Modifier.height(48.dp))
+    Column(modifier = Modifier.fillMaxSize()) {
+        Row(Modifier.fillMaxWidth().padding(start = 17.dp, top = 5.dp, end = 5.dp, bottom = 1.dp), verticalAlignment = Alignment.CenterVertically) {
+            Text("Settings", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
+        }
+        TopHorizontalBannerAd(Modifier.padding(horizontal = 16.dp, vertical = 0.dp))
+        Column(
+            Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 16.dp, vertical = 6.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            ManageStationsList(
+                stations = stationState.allStations,
+                hiddenStationIds = stationState.hiddenStationIds,
+                onVisibilityChanged = stationListViewModel::setStationVisible
+            )
+            ThemeSelector(settings.theme, viewModel::setTheme)
+            ListItem(
+                headlineContent = { Text("Background Play", fontWeight = FontWeight.Bold) },
+                supportingContent = { Text(if (settings.backgroundPlay) "On" else "Off") },
+                trailingContent = { Switch(settings.backgroundPlay, viewModel::setBackgroundPlay) }
+            )
+            ExpandableSettingsCard("Contact Us") { ContactContent(appName) }
+            ExpandableSettingsCard("Help / FAQs") { HelpContent(appName) }
+            ExpandableSettingsCard("Advertize") { AdvertizeContent(appName) }
+            ExpandableSettingsCard("Privacy Policy") { PrivacyPolicyContent(appName) }
+            MediumRectangleAd(Modifier.padding(horizontal = 12.dp, vertical = 12.dp))
+            Spacer(Modifier.height(48.dp))
+        }
     }
 }
 
