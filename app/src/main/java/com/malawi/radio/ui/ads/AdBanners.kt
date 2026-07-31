@@ -22,6 +22,22 @@ val DEFAULT_INTERSTITIAL_AD_UNIT_ID: String = BuildConfig.ADMOB_INTERSTITIAL_ID
 val INTERSTITIAL_DELAY_MINUTES: Long = BuildConfig.INTERSTITIAL_DELAY_MINUTES
 
 @Composable
+fun TopHorizontalBannerAd(modifier: Modifier = Modifier, adUnitId: String = DEFAULT_BANNER_AD_UNIT_ID) {
+    val context = LocalContext.current
+    AndroidView(
+       modifier = modifier.fillMaxWidth().padding(top = 1.dp, bottom = 9.dp).height(50.dp),
+        factory = {
+            AdView(context).apply {
+                setAdSize(AdSize.BANNER)
+                this.adUnitId = adUnitId
+                layoutParams = ViewGroup.LayoutParams(AdSize.BANNER.getWidthInPixels(context), ViewGroup.LayoutParams.WRAP_CONTENT)
+                loadAd(AdRequest.Builder().build())
+            }
+        }
+    )
+}
+
+@Composable
 fun HorizontalBannerAd(modifier: Modifier = Modifier, adUnitId: String = DEFAULT_BANNER_AD_UNIT_ID) {
     val context = LocalContext.current
     AndroidView(
