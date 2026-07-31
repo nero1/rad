@@ -1,42 +1,25 @@
 package com.malawi.radio.ui.stationlist
 
 import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.TouchApp
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -45,13 +28,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.malawi.radio.BuildConfig
@@ -60,6 +44,7 @@ import com.malawi.radio.ui.ads.HorizontalBannerAd
 import com.malawi.radio.ui.ads.MediumRectangleAd
 import com.malawi.radio.ui.ads.TopHorizontalBannerAd
 import kotlinx.coroutines.delay
+import kotlin.math.roundToInt
 
 @Composable
 fun StationListScreen(
@@ -83,21 +68,17 @@ fun StationListScreen(
             }
         }
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 17.dp, top = 5.dp, end = 6.dp, bottom = 3.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+        Row(Modifier.fillMaxWidth().padding(start = 17.dp, top = 5.dp, end = 5.dp, bottom = 3.dp), verticalAlignment = Alignment.CenterVertically) {
             if (searchActive) {
                 OutlinedTextField(
                     value = searchQuery,
-                    onValueChange = { query: String ->
+                    onValueChange = { query ->
                         searchQuery = query
                         if (query.isEmpty()) searchActive = false
                     },
                     modifier = Modifier
                         .weight(1f)
+                        .padding(end = 1.dp)
                         .focusRequester(searchFocusRequester),
                     singleLine = true,
                     placeholder = { Text("Search stations") },
@@ -109,18 +90,10 @@ fun StationListScreen(
                     }
                 )
             } else {
-                Text(
-                    BuildConfig.APP_NAME,
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.weight(1f)
-                )
-                IconButton(onClick = { searchActive = true }) {
-                    Icon(Icons.Filled.Search, contentDescription = "Search stations")
-                }
+                Text(BuildConfig.APP_NAME, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
+                IconButton(onClick = { searchActive = true }) { Icon(Icons.Filled.Search, contentDescription = "Search stations") }
             }
         }
-
         TopHorizontalBannerAd(Modifier.padding(horizontal = 16.dp, vertical = 0.dp))
 
         if (state.isLoading) {
@@ -128,28 +101,8 @@ fun StationListScreen(
                 CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
             }
         } else {
-            val shownStations = if (searchQuery.isBlank()) {
-                state.stations
-            } else {
-                state.stations.filter { station ->
-                    listOf(
-                        station.name,
-                        station.city,
-                        station.genre,
-                        station.frequency,
-                        station.language
-                    ).any { field ->
-                        field.contains(searchQuery, ignoreCase = true)
-                    }
-                }
-            }
-
             val listState = rememberLazyListState()
             var isScrollHintVisible by rememberSaveable(showScrollHint) { mutableStateOf(showScrollHint) }
-
-            LaunchedEffect(searchQuery) {
-                listState.scrollToItem(0)
-            }
 
             LaunchedEffect(showScrollHint) {
                 if (showScrollHint) {
@@ -164,12 +117,24 @@ fun StationListScreen(
                 if (listState.isScrollInProgress) isScrollHintVisible = false
             }
 
+            // Reset scroll position whenever the search text changes, so filtered
+            // results always start at the top instead of inheriting whatever
+            // scroll offset the full list happened to be at.
+            LaunchedEffect(searchQuery) {
+                if (searchQuery.isNotEmpty()) {
+                    listState.scrollToItem(0)
+                }
+            }
+
             Box(Modifier.fillMaxSize()) {
                 LazyColumn(
                     state = listState,
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 6.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
+                    val shownStations = if (searchQuery.isBlank()) state.stations else state.stations.filter { station ->
+                        listOf(station.name, station.city, station.genre, station.frequency, station.language).any { it.contains(searchQuery, ignoreCase = true) }
+                    }
                     items(shownStations.size, key = { shownStations[it].id }) { index ->
                         val station = shownStations[index]
                         StationRow(
@@ -186,7 +151,7 @@ fun StationListScreen(
                         }
                     }
                     item { MediumRectangleAd(Modifier.padding(horizontal = 12.dp, vertical = 12.dp)) }
-                    item { Spacer(Modifier.height(48.dp)) }
+                    item { Spacer(Modifier.height(48.dp)) } // room for mini-player bar
                 }
 
                 if (isScrollHintVisible) {
@@ -204,9 +169,9 @@ fun StationListScreen(
 @Composable
 private fun ScrollDownHint(modifier: Modifier = Modifier) {
     val transition = rememberInfiniteTransition(label = "scroll-hint")
-    val offsetY by transition.animateDp(
-        initialValue = 56.dp,
-        targetValue = (-56).dp,
+    val offsetY by transition.animateFloat(
+        initialValue = 56f,
+        targetValue = -56f,
         animationSpec = infiniteRepeatable(
             animation = tween(durationMillis = 1400),
             repeatMode = RepeatMode.Restart
@@ -234,8 +199,8 @@ private fun ScrollDownHint(modifier: Modifier = Modifier) {
             contentDescription = "Slide up for more stations",
             tint = MaterialTheme.colorScheme.onBackground.copy(alpha = alpha),
             modifier = Modifier
-                .offset(y = offsetY)
-                .rotate(-12f)
+                .offset { IntOffset(x = 0, y = offsetY.roundToInt()) }
+                .graphicsLayer { rotationZ = -12f }
                 .size(52.dp)
         )
     }
