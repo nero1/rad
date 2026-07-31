@@ -44,7 +44,7 @@ fun NowPlayingScreen(
 
     if (station == null) {
         Column(Modifier.fillMaxSize()) {
-            Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
+            Row(Modifier.fillMaxWidth().padding(horizontal = 5.dp, vertical = 5.dp), verticalAlignment = Alignment.CenterVertically) {
                 var themeMenu by remember { mutableStateOf(false) }
                 Box {
                     IconButton(onClick = { themeMenu = true }) { Icon(Icons.Filled.Palette, contentDescription = "Change theme") }
@@ -58,7 +58,7 @@ fun NowPlayingScreen(
             Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .padding(horizontal = 5.dp, vertical = 5.dp)
         ) {
             EmptyNowPlayingPrompt()
         }
@@ -70,13 +70,13 @@ fun NowPlayingScreen(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(horizontal = 16.dp)
-            .padding(top = 6.dp, bottom = 20.dp),
+            .padding(horizontal = 5.dp)
+            .padding(top = 5.dp, bottom = 5.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
         var themeMenu by remember { mutableStateOf(false) }
-        Row(Modifier.fillMaxWidth().padding(top = 8.dp), verticalAlignment = Alignment.CenterVertically) {
+        Row(Modifier.fillMaxWidth().padding(top = 5.dp), verticalAlignment = Alignment.CenterVertically) {
             Box {
                 IconButton(onClick = { themeMenu = true }) { Icon(Icons.Filled.Palette, contentDescription = "Change theme") }
                 DropdownMenu(expanded = themeMenu, onDismissRequest = { themeMenu = false }) {
@@ -91,7 +91,7 @@ fun NowPlayingScreen(
 
         Box(
             modifier = Modifier
-                .size(124.dp)
+                .size(114.dp)
                 .clip(CircleShape)
                 .background(MaterialTheme.colorScheme.primary),
             contentAlignment = Alignment.Center
