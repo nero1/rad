@@ -80,6 +80,9 @@ fun NowPlayingScreen(
         // Circle and the theme/settings icon row share the same top edge.
         // The Box's height is driven by the taller child (the 114dp circle),
         // and the icon row is overlaid on top of it rather than stacked above it.
+
+        Spacer(Modifier.height(7.dp))
+                
         Box(modifier = Modifier.fillMaxWidth()) {
             Box(
                 modifier = Modifier
