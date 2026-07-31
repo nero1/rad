@@ -42,6 +42,7 @@ import com.malawi.radio.BuildConfig
 import com.malawi.radio.data.model.RadioStation
 import com.malawi.radio.ui.ads.HorizontalBannerAd
 import com.malawi.radio.ui.ads.MediumRectangleAd
+import com.malawi.radio.ui.ads.TopHorizontalBannerAd
 import kotlinx.coroutines.delay
 import kotlin.math.roundToInt
 
@@ -67,7 +68,7 @@ fun StationListScreen(
             }
         }
 
-        Row(Modifier.fillMaxWidth().padding(5.dp), verticalAlignment = Alignment.CenterVertically) {
+        Row(Modifier.fillMaxWidth().padding(start = 17.dp, top = 5.dp, end = 5.dp, bottom = 3.dp), verticalAlignment = Alignment.CenterVertically) {
             if (searchActive) {
                 OutlinedTextField(
                     value = searchQuery,
@@ -92,7 +93,7 @@ fun StationListScreen(
                 IconButton(onClick = { searchActive = true }) { Icon(Icons.Filled.Search, contentDescription = "Search stations") }
             }
         }
-        HorizontalBannerAd(Modifier.padding(horizontal = 16.dp, vertical = 2.dp))
+        TopHorizontalBannerAd(Modifier.padding(horizontal = 16.dp, vertical = 0.dp))
 
         if (state.isLoading) {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {

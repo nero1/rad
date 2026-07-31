@@ -186,7 +186,7 @@ private fun BottomArea(playerState: com.malawi.radio.player.PlayerUiState, selec
 private fun MiniPlayerBar(stationName: String, currentTitle: String?, isPlaying: Boolean, isBuffering: Boolean, scrollingMarqueeEnabled: Boolean, onTogglePlay: () -> Unit, onClick: () -> Unit) {
     Column(Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.surfaceVariant)) {
         HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)
-        Row(Modifier.fillMaxWidth().clickable { onClick() }.padding(horizontal = 16.dp, vertical = 10.dp), verticalAlignment = Alignment.CenterVertically) {
+        Row(Modifier.fillMaxWidth().clickable { onClick() }.padding(horizontal = 16.dp, vertical = 3.dp), verticalAlignment = Alignment.CenterVertically) {
             Text(stationName, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.onSurface, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(0.42f))
             currentTitle?.takeIf { it.isNotBlank() }?.let { title ->
                 Spacer(Modifier.width(12.dp))

@@ -21,6 +21,7 @@ import com.malawi.radio.data.model.RadioStation
 import com.malawi.radio.ui.stationlist.StationRow
 import com.malawi.radio.ui.ads.HorizontalBannerAd
 import com.malawi.radio.ui.ads.MediumRectangleAd
+import com.malawi.radio.ui.ads.TopHorizontalBannerAd
 
 @Composable
 fun FavoritesScreen(
@@ -29,12 +30,12 @@ fun FavoritesScreen(
     onSettingsClick: () -> Unit
 ) {
     val favorites by viewModel.favorites.collectAsState()
-
     Column(modifier = Modifier.fillMaxSize()) {
-        Row(Modifier.fillMaxWidth().padding(20.dp), verticalAlignment = Alignment.CenterVertically) {
+        Row(Modifier.fillMaxWidth().padding(start = 17.dp, top = 5.dp, end = 5.dp, bottom = 3.dp), verticalAlignment = Alignment.CenterVertically) {
             Text("Favorites", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
             IconButton(onClick = onSettingsClick) { Icon(Icons.Filled.Settings, contentDescription = "Settings") }
         }
+
         if (favorites.isEmpty()) {
             Column(
                 modifier = Modifier
@@ -58,7 +59,7 @@ fun FavoritesScreen(
                 )
             }
         } else {
-            HorizontalBannerAd(Modifier.padding(horizontal = 16.dp, vertical = 2.dp))
+            TopHorizontalBannerAd(Modifier.padding(horizontal = 16.dp, vertical = 0.dp))
             LazyColumn(
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 6.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)

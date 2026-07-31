@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.malawi.radio.data.model.RadioStation
 import com.malawi.radio.ui.ads.HorizontalBannerAd
 import com.malawi.radio.ui.ads.MediumRectangleAd
+import com.malawi.radio.ui.ads.TopHorizontalBannerAd
 import com.malawi.radio.ui.components.EmptyStationsNavigationHint
 import com.malawi.radio.ui.stationlist.StationRow
 
@@ -28,9 +29,8 @@ fun RecentsScreen(
 ) {
     val recents by viewModel.recents.collectAsState()
     val favoriteIds by viewModel.favoriteIds.collectAsState()
-
     Column(modifier = Modifier.fillMaxSize()) {
-        Row(Modifier.fillMaxWidth().padding(20.dp), verticalAlignment = Alignment.CenterVertically) {
+        Row(Modifier.fillMaxWidth().padding(start = 17.dp, top = 5.dp, end = 5.dp, bottom = 3.dp), verticalAlignment = Alignment.CenterVertically) {
             Text("Recently Played", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
             IconButton(onClick = onSettingsClick) { Icon(Icons.Filled.Settings, contentDescription = "Settings") }
         }
@@ -44,13 +44,12 @@ fun RecentsScreen(
                     Spacer(Modifier.height(12.dp))
                     Text("No recently played stations yet. Play a station and it will appear here.", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
                 }
-
                 EmptyStationsNavigationHint(
                     modifier = Modifier.align(Alignment.BottomStart)
                 )
             }
         } else {
-            HorizontalBannerAd(Modifier.padding(horizontal = 16.dp, vertical = 2.dp))
+            TopHorizontalBannerAd(Modifier.padding(horizontal = 16.dp, vertical = 0.dp))
             LazyColumn(contentPadding = PaddingValues(horizontal = 16.dp, vertical = 6.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 items(recents.size, key = { recents[it].id }) { index ->
                     val station = recents[index]
