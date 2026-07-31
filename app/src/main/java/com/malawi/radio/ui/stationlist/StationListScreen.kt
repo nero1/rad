@@ -78,7 +78,7 @@ fun StationListScreen(
                     },
                     modifier = Modifier
                         .weight(1f)
-                        .padding(end = 1.dp)
+                        .padding(end = 5.dp)
                         .focusRequester(searchFocusRequester),
                     singleLine = true,
                     placeholder = { Text("Search stations") },
