@@ -40,8 +40,19 @@ android {
         applicationId = configuredApplicationId
         minSdk = 24
         targetSdk = (System.getenv("ANDROID_TARGET_API") ?: xmanifestValue("android_target_api") ?: "36").toInt()
-        versionCode = (System.getenv("VERSION_CODE") ?: "100").toInt()
-        versionName = System.getenv("VERSION_NAME") ?: xmanifestValue("version_name_start") ?: "1.00"
+
+        // Determine versionCode with precedence: ENV > gradle.properties (project property) > default
+        val configuredVersionCode = (System.getenv("VERSION_CODE")?.toIntOrNull()
+            ?: (project.findProperty("VERSION_CODE") as String?)?.toIntOrNull()
+            ?: 100)
+        versionCode = configuredVersionCode
+
+        // Determine versionName with precedence: ENV > xmanifest.md > gradle.properties (fallback) > default
+        val configuredVersionName = System.getenv("VERSION_NAME")
+            ?: xmanifestValue("version_name_start")
+            ?: (project.findProperty("VERSION_NAME") as String?)
+            ?: "1.00"
+        versionName = configuredVersionName
 
         resValue("string", "app_name", configuredAppName)
         manifestPlaceholders["admobAppId"] = configuredAdMobAppId
