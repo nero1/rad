@@ -1,12 +1,6 @@
 {
-  "_comment": "60 stations total, ranked from most popular (1) to least popular (60). 9 stations use real Nielsen Audio PPM ratings data for the Detroit market (June 2026 Average Quarter Hour share): 97.1 The Ticket, Mix 92.3, Channel 95-5, 105.1 The Bounce, 106.7 WLLZ, WUOM 91.7 Michigan Radio, WRCJ Classical and Jazz. WJR 760 is ranked high as a best guess since it's a heritage station excluded from public Nielsen data due to the Cumulus/Nielsen dispute. The remaining stations use best-guess estimates based on station type, market size, and general radio-industry knowledge, since no public ratings exist for small-market, college, religious, community, or internet-only stations. KDLM Radio is flagged as likely not being a Michigan station at all (it appears to be a Detroit Lakes, Minnesota station).",
+  "_comment": "43 stations total, ranked from most popular (1) to least popular (43). 7 stations use real Nielsen Audio PPM ratings data for the Detroit market (June 2026 Average Quarter Hour share): Mix 92.3, Channel 95-5, 105.1 The Bounce, 106.7 WLLZ, WRCJ Classical and Jazz. WJR 760 is ranked high as a best guess since it's a heritage station excluded from public Nielsen data due to the Cumulus/Nielsen dispute. The remaining stations use best-guess estimates based on station type, market size, and general radio-industry knowledge, since no public ratings exist for small-market, college, religious, community, or internet-only stations. KDLM Radio is flagged as likely not being a Michigan station at all (it appears to be a Detroit Lakes, Minnesota station).",
   "stations": [
-    {
-      "id": "46525b83-48a7-487e-b95a-ee2acf28132b",
-      "name": "97.1 The Ticket",
-      "streamUrl": "https://prod-44-201-174-186.amperwave.net/audacy-wxytfmaac-hlsc.m3u8",
-      "visible": true
-    },
     {
       "id": "960ad71d-0601-11e8-ae97-52543be04c81",
       "name": "760 WJR Detroit, MI",
@@ -44,12 +38,6 @@
       "visible": true
     },
     {
-      "id": "9617c3e9-0601-11e8-ae97-52543be04c81",
-      "name": "WUOM 91.7 \"Michigan Radio\" - Ann Arbor, MI",
-      "streamUrl": "http://18493.live.streamtheworld.com:3690/WUOMFM_SC",
-      "visible": true
-    },
-    {
       "id": "e7c7225b-e797-483b-8535-bcc973e8cde2",
       "name": "WRCJ Classical and Jazz",
       "streamUrl": "https://wrcj.streamguys1.com/live.aac",
@@ -62,21 +50,9 @@
       "visible": true
     },
     {
-      "id": "9641f84c-0601-11e8-ae97-52543be04c81",
-      "name": "WKZO 590 & 106.9 Kalamazoo, MI",
-      "streamUrl": "http://18303.live.streamtheworld.com/WKZOAMAAC_SC",
-      "visible": true
-    },
-    {
       "id": "cf0f2e78-cef7-411f-95f8-043b33e375e5",
       "name": "WLAV FM 96.9",
       "streamUrl": "http://15723.live.streamtheworld.com/WLAVFMAAC_SC",
-      "visible": true
-    },
-    {
-      "id": "964a3fa9-0601-11e8-ae97-52543be04c81",
-      "name": "WJXQ 106.1 \"Q 106\" Charlotte, MI",
-      "streamUrl": "http://14843.live.streamtheworld.com:3690/WJXQFMAAC_SC",
       "visible": true
     },
     {
@@ -98,12 +74,6 @@
       "visible": true
     },
     {
-      "id": "9646297a-0601-11e8-ae97-52543be04c81",
-      "name": "WVFM 106.5 Kalamazoo, MI",
-      "streamUrl": "http://18863.live.streamtheworld.com/WVFMFMAAC_SC",
-      "visible": true
-    },
-    {
       "id": "962e113d-0601-11e8-ae97-52543be04c81",
       "name": "WQKL 107.1 Ann Arbor, MI (AAC)",
       "streamUrl": "http://26233.live.streamtheworld.com:3690/WQKLFMAAC_SC",
@@ -116,33 +86,9 @@
       "visible": true
     },
     {
-      "id": "96366984-0601-11e8-ae97-52543be04c81",
-      "name": "WRSR \"The Fox\" 103.9 FM Owosso, MI",
-      "streamUrl": "http://crystalout.surfernetwork.com:8001/WRSR-FM_MP3",
-      "visible": true
-    },
-    {
-      "id": "9625dded-0601-11e8-ae97-52543be04c81",
-      "name": "WCMU 89.5",
-      "streamUrl": "http://22213.live.streamtheworld.com/WCMUFM_SC",
-      "visible": true
-    },
-    {
-      "id": "96257122-0601-11e8-ae97-52543be04c81",
-      "name": "WEMU 89.1 Ypsilanti, MI",
-      "streamUrl": "http://22063.live.streamtheworld.com:3690/WEMUFM_SC",
-      "visible": true
-    },
-    {
       "id": "0c471031-97d6-4c57-ad64-3b1ff8cfe338",
       "name": "Public Radio 90",
       "streamUrl": "https://wnmu.streamguys1.com/wnmu-fm",
-      "visible": true
-    },
-    {
-      "id": "961010af-0601-11e8-ae97-52543be04c81",
-      "name": "WKAR 90.5 East Lansing, MI",
-      "streamUrl": "http://mozart.wkar.msu.edu/wkar-fm-mp3",
       "visible": true
     },
     {
@@ -161,12 +107,6 @@
       "id": "96100ff7-0601-11e8-ae97-52543be04c81",
       "name": "WKAR NewsTalk",
       "streamUrl": "http://mozart.wkar.msu.edu/wkar-am-mp3",
-      "visible": true
-    },
-    {
-      "id": "9625be58-0601-11e8-ae97-52543be04c81",
-      "name": "WCMU-HD2",
-      "streamUrl": "http://26223.live.streamtheworld.com:3690/WCMUHD2_SC",
       "visible": true
     },
     {
@@ -248,12 +188,6 @@
       "visible": true
     },
     {
-      "id": "963014e7-0601-11e8-ae97-52543be04c81",
-      "name": "WPON 1460 Walled Lake, MI",
-      "streamUrl": "http://audio.birach.com:9010/;",
-      "visible": true
-    },
-    {
       "id": "d3b7d4a5-d675-4cd6-9185-fd484952627d",
       "name": "WBLW 88.1 FM - Living Word FM - Gaylord, MI",
       "streamUrl": "http://24.247.22.98:8010/stream",
@@ -266,21 +200,9 @@
       "visible": true
     },
     {
-      "id": "fd19e8c6-6a7c-11ea-b1cf-52543be04c81",
-      "name": "Faith Radio Network",
-      "streamUrl": "http://nwmedia-ktisam.streamguys1.com/ktis-am",
-      "visible": true
-    },
-    {
       "id": "9645770c-0601-11e8-ae97-52543be04c81",
       "name": "WVBI-LP 100.1 Beaver Island, MI",
       "streamUrl": "http://usa12.fastcast4u.com:5316/;stream.mp3",
-      "visible": true
-    },
-    {
-      "id": "a0a4e88b-2cb4-48d6-b3cf-cc5887aa0f0b",
-      "name": "WFCB-LP 100.7 \"Ferndale Radio\" Ferndale, MI",
-      "streamUrl": "https://streaming.live365.com/a74298",
       "visible": true
     },
     {
@@ -296,18 +218,6 @@
       "visible": true
     },
     {
-      "id": "ee9784d1-8c97-4599-926e-3599648cd17a",
-      "name": "WKNRkeener13",
-      "streamUrl": "https://streaming.live365.com/a68809",
-      "visible": true
-    },
-    {
-      "id": "75c1a420-1bd6-4bcf-ab7d-12ade287c6f0",
-      "name": "Detroit Industrial Underground",
-      "streamUrl": "http://138.197.0.4:8000/stream",
-      "visible": true
-    },
-    {
       "id": "ce38da1c-df6f-4330-bb1e-1c8836a30de0",
       "name": "drumbases.pace",
       "streamUrl": "https://radio.drumbase.space/listen/drumbase.space/radio.mp3",
@@ -317,12 +227,6 @@
       "id": "f6c35cd5-1764-11ea-a620-52543be04c81",
       "name": "Krushnation",
       "streamUrl": "http://s2.yesstreaming.net:7183/stream",
-      "visible": true
-    },
-    {
-      "id": "4f2edbb3-4c73-42eb-83e9-bebd89cf7db7",
-      "name": "Deep Space Radio",
-      "streamUrl": "https://das-edge15-live365-dal02.cdnstream.com/a71161",
       "visible": true
     },
     {
@@ -341,12 +245,6 @@
       "id": "aa8fee4f-ed2a-47c5-a12f-3823d9a17e7f",
       "name": "Classic Funk",
       "streamUrl": "https://ample.revma.ihrhls.com/zc6955/40_4ia6j5gnyvgz02/playlist.m3u8",
-      "visible": true
-    },
-    {
-      "id": "7220f449-6ec3-48e8-8734-375e24fc4c06",
-      "name": "DTX Jamz",
-      "streamUrl": "https://stream.zeno.fm/6mhk8kp1098uv",
       "visible": true
     },
     {
