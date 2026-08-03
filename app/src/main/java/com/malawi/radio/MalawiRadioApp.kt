@@ -1,7 +1,6 @@
 package com.malawi.radio
 
 import android.app.Application
-import android.content.ComponentCallbacks2
 import com.malawi.radio.data.local.FavoritesStore
 import com.malawi.radio.data.repository.StationRepository
 import com.malawi.radio.player.PlayerManager
@@ -19,26 +18,26 @@ class MalawiRadioApp : Application() {
 
     lateinit var playerManager: PlayerManager
         private set
-
     lateinit var stationRepository: StationRepository
         private set
-
     lateinit var settingsStore: AppSettingsStore
         private set
 
     override fun onCreate() {
         super.onCreate()
+
         playerManager = PlayerManager(this)
         stationRepository = StationRepository(this, FavoritesStore(this))
         settingsStore = AppSettingsStore(this)
-        AppStorageManager.trimStartupCache(this)
-        MobileAds.initialize(this)
-    }
 
-    override fun onTrimMemory(level: Int) {
-        super.onTrimMemory(level)
-        if (level >= ComponentCallbacks2.TRIM_MEMORY_RUNNING_LOW) {
-            AppStorageManager.trimCache(this)
-        }
+        MobileAds.initialize(this)
+
+        // Off the main thread: this walks cacheDir/codeCacheDir/externalCacheDir
+        // and can involve real disk I/O (and file deletion) if the cache has
+        // grown large since last launch. Running it inline here would add to
+        // cold start time, worst exactly when there's the most cache to trim.
+        Thread {
+            AppStorageManager.trimStartupCache(this@MalawiRadioApp)
+        }.start()
     }
 }
