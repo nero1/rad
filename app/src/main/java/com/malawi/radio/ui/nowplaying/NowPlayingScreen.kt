@@ -86,7 +86,8 @@ fun NowPlayingScreen(
             Box(
                 modifier = Modifier
                     .align(Alignment.TopCenter)
-                    .padding(top = 25.dp)
+                    // The space above the large circle (with the radio inside) near the top
+                    .padding(top = 30.dp)
                     .size(114.dp)
                     .clip(CircleShape)
                     .background(MaterialTheme.colorScheme.primary),
