@@ -9,13 +9,24 @@ import java.io.File
  * WebView/network stacks, image loaders, and media components.
  *
  * Policy: on every app startup, if the cache already exceeds 20 MB, trim it down
- * to 5 MB. No session-time cap is enforced; Android's own process lifecycle
- * management handles memory pressure during a session.
+ * to 5 MB. During active playback, PlayerManager periodically calls trimCache()
+ * to keep the session cap at 100 MB.
  */
 object AppStorageManager {
 
+    private const val SESSION_MAX_CACHE_BYTES = 100L * 1024L * 1024L
     private const val STARTUP_TRIM_THRESHOLD_BYTES = 20L * 1024L * 1024L
     private const val STARTUP_TARGET_CACHE_BYTES = 5L * 1024L * 1024L
+
+    /**
+     * Trims cache down to maxBytes if it currently exceeds it. Called periodically
+     * by PlayerManager during active playback (see CACHE_TRIM_INTERVAL_MS there),
+     * since cache growth in this app is driven by streaming, not by unrelated
+     * system memory pressure.
+     */
+    fun trimCache(context: Context, maxBytes: Long = SESSION_MAX_CACHE_BYTES) {
+        trimDirectories(cacheDirs(context), maxBytes)
+    }
 
     /**
      * Call on app startup, off the main thread. Checks total cache size across
