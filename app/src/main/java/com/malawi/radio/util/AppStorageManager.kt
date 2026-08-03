@@ -7,16 +7,21 @@ import java.io.File
  * Keeps temporary app-managed storage bounded. User data lives in DataStore / shared
  * preferences; this only trims disposable cache folders used by Android, ads,
  * WebView/network stacks, image loaders, and media components.
+ *
+ * Policy: on every app startup, if the cache already exceeds 20 MB, trim it down
+ * to 5 MB. No session-time cap is enforced; Android's own process lifecycle
+ * management handles memory pressure during a session.
  */
 object AppStorageManager {
-    private const val SESSION_MAX_CACHE_BYTES = 100L * 1024L * 1024L
+
     private const val STARTUP_TRIM_THRESHOLD_BYTES = 20L * 1024L * 1024L
     private const val STARTUP_TARGET_CACHE_BYTES = 5L * 1024L * 1024L
 
-    fun trimCache(context: Context, maxBytes: Long = SESSION_MAX_CACHE_BYTES) {
-        trimDirectories(cacheDirs(context), maxBytes)
-    }
-
+    /**
+     * Call on app startup, off the main thread. Checks total cache size across
+     * cacheDir, codeCacheDir, and externalCacheDir, and trims to
+     * STARTUP_TARGET_CACHE_BYTES if it exceeds STARTUP_TRIM_THRESHOLD_BYTES.
+     */
     fun trimStartupCache(context: Context) {
         val cacheDirs = cacheDirs(context)
         if (cacheDirs.totalSizeBytes() > STARTUP_TRIM_THRESHOLD_BYTES) {
@@ -42,8 +47,13 @@ object AppStorageManager {
             }
 
         var totalBytes = files.sumOf { it.sizeBytes }
-        files.sortedBy { it.lastModified }.forEach { cacheFile ->
-            if (totalBytes <= maxBytes) return
+
+        // Oldest files first. Use a plain for/break loop here, not forEach —
+        // `return` inside a forEach lambda is a non-local return and would
+        // exit trimDirectories() entirely, skipping the empty-directory
+        // cleanup below every time trimming actually did something.
+        for (cacheFile in files.sortedBy { it.lastModified }) {
+            if (totalBytes <= maxBytes) break
             if (cacheFile.file.delete()) {
                 totalBytes -= cacheFile.sizeBytes
             }
@@ -65,7 +75,6 @@ object AppStorageManager {
 
     private fun File.deleteEmptyDirectories() {
         if (!exists() || !isDirectory) return
-
         walkBottomUp()
             .filter { it.isDirectory && it != this && it.listFiles().isNullOrEmpty() }
             .forEach { it.delete() }
