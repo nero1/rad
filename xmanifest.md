@@ -4,13 +4,13 @@ Edit this file first when cloning the app for another country, market, or niche.
 
 ## Identity
 - `app_name`: Detroit + Michigan Radio
-- `package_name`: com.malawi.radio
+- `package_name`: com.detroitradiostations.appachi
 - `version_name_start`: 1.0
 - `version_increment`: 0.01 per Play Store build
 - `android_target_api`: 36
 
 ## Theme
-- `default_theme`: dark_mode
+- `default_theme`: blue_skies
 - Available themes: `dark_mode`, `light_mode`, `rose_wind`, `moonlight`, `purple_hibiscus`, `high_contrast`, `blue_skies`, `desert_heat`, `snow`, `green_glory`.
 
 ## Ads
