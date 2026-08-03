@@ -31,7 +31,7 @@ class MalawiRadioApp : Application() {
         playerManager = PlayerManager(this)
         stationRepository = StationRepository(this, FavoritesStore(this))
         settingsStore = AppSettingsStore(this)
-        AppStorageManager.trimCache(this)
+        AppStorageManager.trimStartupCache(this)
         MobileAds.initialize(this)
     }
 

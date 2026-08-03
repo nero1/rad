@@ -9,21 +9,37 @@ import java.io.File
  * WebView/network stacks, image loaders, and media components.
  */
 object AppStorageManager {
-    private const val MAX_CACHE_BYTES = 25L * 1024L * 1024L
+    private const val SESSION_MAX_CACHE_BYTES = 100L * 1024L * 1024L
+    private const val STARTUP_TRIM_THRESHOLD_BYTES = 20L * 1024L * 1024L
+    private const val STARTUP_TARGET_CACHE_BYTES = 5L * 1024L * 1024L
 
-    fun trimCache(context: Context, maxBytes: Long = MAX_CACHE_BYTES) {
-        val cacheDirs = listOfNotNull(context.cacheDir, context.codeCacheDir, context.externalCacheDir)
-            .distinctBy { it.absolutePath }
-        cacheDirs.forEach { trimDirectory(it, maxBytes / cacheDirs.size.coerceAtLeast(1)) }
+    fun trimCache(context: Context, maxBytes: Long = SESSION_MAX_CACHE_BYTES) {
+        trimDirectories(cacheDirs(context), maxBytes)
     }
 
-    private fun trimDirectory(directory: File, maxBytes: Long) {
-        if (!directory.exists() || !directory.isDirectory) return
+    fun trimStartupCache(context: Context) {
+        val cacheDirs = cacheDirs(context)
+        if (cacheDirs.totalSizeBytes() > STARTUP_TRIM_THRESHOLD_BYTES) {
+            trimDirectories(cacheDirs, STARTUP_TARGET_CACHE_BYTES)
+        }
+    }
 
-        val files = directory.walkBottomUp()
-            .filter { it.isFile }
-            .map { CacheFile(it, it.length(), it.lastModified()) }
-            .toList()
+    private fun cacheDirs(context: Context): List<File> =
+        listOfNotNull(context.cacheDir, context.codeCacheDir, context.externalCacheDir)
+            .distinctBy { it.absolutePath }
+
+    private fun trimDirectories(directories: List<File>, maxBytes: Long) {
+        val files = directories
+            .flatMap { directory ->
+                if (!directory.exists() || !directory.isDirectory) {
+                    emptyList()
+                } else {
+                    directory.walkBottomUp()
+                        .filter { it.isFile }
+                        .map { CacheFile(it, it.length(), it.lastModified()) }
+                        .toList()
+                }
+            }
 
         var totalBytes = files.sumOf { it.sizeBytes }
         files.sortedBy { it.lastModified }.forEach { cacheFile ->
@@ -33,8 +49,25 @@ object AppStorageManager {
             }
         }
 
-        directory.walkBottomUp()
-            .filter { it.isDirectory && it != directory && it.listFiles().isNullOrEmpty() }
+        directories.forEach { it.deleteEmptyDirectories() }
+    }
+
+    private fun List<File>.totalSizeBytes(): Long =
+        sumOf { directory ->
+            if (!directory.exists() || !directory.isDirectory) {
+                0L
+            } else {
+                directory.walkBottomUp()
+                    .filter { it.isFile }
+                    .sumOf { it.length() }
+            }
+        }
+
+    private fun File.deleteEmptyDirectories() {
+        if (!exists() || !isDirectory) return
+
+        walkBottomUp()
+            .filter { it.isDirectory && it != this && it.listFiles().isNullOrEmpty() }
             .forEach { it.delete() }
     }
 
