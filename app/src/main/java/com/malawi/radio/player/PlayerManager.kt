@@ -142,6 +142,11 @@ class PlayerManager(private val context: Context) {
     }
 
     fun release() {
+        playGeneration++
+        reconnectJob?.cancel()
+        reconnectJob = null
+        exoPlayer.removeListener(playerListener)
         exoPlayer.release()
+        _uiState.value = PlayerUiState(playbackState = PlaybackState.IDLE)
     }
 }
