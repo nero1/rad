@@ -14,9 +14,9 @@ Edit this file first when cloning the app for another country, market, or niche.
 - Available themes: `dark_mode`, `light_mode`, `rose_wind`, `moonlight`, `purple_hibiscus`, `high_contrast`, `blue_skies`, `desert_heat`, `snow`, `green_glory`.
 
 ## Ads
-- `admob_app_id`: ca-app-pub-3940256099942544~3347511713
-- `admob_banner_id`: ca-app-pub-3940256099942544/6300978111
-- `admob_interstitial_id`: ca-app-pub-3940256099942544/1033173712
+- `admob_app_id`: ca-app-pub-9436977747036475~5440299987
+- `admob_banner_id`: ca-app-pub-9436977747036475/6239210483
+- `admob_interstitial_id`: ca-app-pub-9436977747036475/8011457159
 - `interstitial_delay_mins`: 10
 
 Production IDs should be set with environment variables before release. Missing environment values fall back to the test IDs above.
