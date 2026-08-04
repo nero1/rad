@@ -10,7 +10,7 @@ Edit this file first when cloning the app for another country, market, or niche.
 - `android_target_api`: 36
 
 ## Theme
-- `default_theme`: dark_mode
+- `default_theme`: desert_heat
 - Available themes: `dark_mode`, `light_mode`, `rose_wind`, `moonlight`, `purple_hibiscus`, `high_contrast`, `blue_skies`, `desert_heat`, `snow`, `green_glory`.
 
 ## Ads
