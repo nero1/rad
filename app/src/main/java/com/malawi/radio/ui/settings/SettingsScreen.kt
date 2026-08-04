@@ -144,7 +144,7 @@ private fun HelpContent(appName: String) {
     Bullet("Click any station in the stations list to connect to it and start playing.")
     Bullet("Tap the play button (▶︎) in the Player page to pause playing and tap it again to continue.")
     Bullet("Tap the heart icon (❤️) to add a station to your favorites.")
-    Bullet("Change the color theme of the app from the Settings page or by tapping on the palette icon (🎨) on the top right of the Player page.")
+    Bullet("Change the color theme of the app from the Settings page or by tapping on the palette icon (🎨) on the top left of the Player page.")
     Bullet("Set a sleep timer to automatically turn off the radio after a specific time by clicking the moon icon (🌙) on the Player page. When a sleep timer is set, the moon icon changes to an hourglass (⌛). Tap the hourglass for options to cancel or extend the timer.")
     Bullet("Background play enables the radio to keep playing even if you leave the app or when the phone screen is turned off. You can turn this option on or off from the Settings page.")
 
@@ -160,7 +160,7 @@ private fun HelpContent(appName: String) {
 
 @Composable
 private fun AdvertizeContent(appName: String) {
-    Paragraph("To place your advert, contact us by sending an email to $SUPPORT_EMAIL.")
+    Paragraph("To place your advert in this app, contact us by sending an email to $SUPPORT_EMAIL.")
     Paragraph("Kindly make sure you mention $appName in your email message.")
 }
 
