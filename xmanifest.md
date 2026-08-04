@@ -3,8 +3,8 @@
 Edit this file first when cloning the app for another country, market, or niche. Android build-time values can be supplied with environment variables (see `.env.example`); runtime content such as stations still lives in `app/src/main/assets/stations.json`.
 
 ## Identity
-- `app_name`: Detroit + Michigan Radio
-- `package_name`: com.malawi.radio
+- `app_name`: Brisbane + Queensland Radio
+- `package_name`: com.brisbaneqldradio.appachi
 - `version_name_start`: 1.0
 - `version_increment`: 0.01 per Play Store build
 - `android_target_api`: 36
