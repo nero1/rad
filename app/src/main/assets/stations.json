@@ -1,406 +1,280 @@
 {
-  "_readme": "Top 60 most popular terrestrial radio stations in Ontario, Canada, based on Numeris radio ratings and radio-browser.info popularity (votes), as of July 31, 2026. Stream URLs are extracted from the deduplicated dataset; missing stations are marked invisible (none are missing in this list).",
+  "_readme": "Top 60 most popular radio stations in Oregon based on radio-browser.info votes and Nielsen market rankings, as of 2026-07-27. Stream URLs are extracted from the deduplicated data where available; missing stations are marked invisible.",
   "stations": [
     {
-      "id": "44db1e25-6942-11ea-b1cf-52543be04c81",
-      "name": "680 News Toronto",
-      "streamUrl": "https://rogers-hls.leanstream.co/rogers/tor680.stream/playlist.m3u8",
+      "id": "960c55e4-0601-11e8-ae97-52543be04c81",
+      "name": "Whisperings Solo Piano Radio",
+      "streamUrl": "http://pianosolo.streamguys.net/live",
       "visible": true
     },
     {
-      "id": "9620b36f-0601-11e8-ae97-52543be04c81",
-      "name": "CFRB News/Talk 1010 (Toronto, ON)",
-      "streamUrl": "http://22113.live.streamtheworld.com:3690/CFRBAMAAC_SC",
+      "id": "70fb580c-5639-11e9-a4d7-52543be04c81",
+      "name": "Ocean Beach Radio",
+      "streamUrl": "http://ophanim.net:7130/;",
       "visible": true
     },
     {
-      "id": "7afae7e3-8d06-42f5-b59e-a52d6e09e60e",
-      "name": "CBC Radio 1 Toronto",
-      "streamUrl": "https://cbcradiolive.akamaized.net/hls/live/2041036/ES_R1ETR/master.m3u8",
+      "id": "96151623-0601-11e8-ae97-52543be04c81",
+      "name": "KOPB 91.5 Oregon Public Radio",
+      "streamUrl": "http://stream1.opb.org/radio.mp3",
       "visible": true
     },
     {
-      "id": "98bb1771-7f29-46ab-a0b9-54a664b10ae0",
-      "name": "CHFI 98.1-Toronto",
-      "streamUrl": "https://rogers-hls.leanstream.co/rogers/tor981.stream/playlist.m3u8",
+      "id": "24442b77-a85a-4b5a-8b9f-8516ca8c0ada",
+      "name": "American Voice Radio Network (AVRN) 1",
+      "streamUrl": "http://ca9.rcast.net:8040/stream",
       "visible": true
     },
     {
-      "id": "9613ed33-0601-11e8-ae97-52543be04c81",
-      "name": "CILQ 107.1 \"Q107\" Toronto",
-      "streamUrl": "http://live.leanstream.co/CILQFM",
+      "id": "960b5a80-0601-11e8-ae97-52543be04c81",
+      "name": "KBOO 90.7 Portland, OR",
+      "streamUrl": "http://live.kboo.fm:8000/high",
       "visible": true
     },
     {
-      "id": "b7ae58d0-0713-4b85-b3bc-5bf6f59b1040",
-      "name": "CFNY 102.1 \"The Edge\" Toronto, ON (MP3)",
-      "streamUrl": "http://live.leanstream.co/CFNYFM-MP3",
+      "id": "9629c940-0601-11e8-ae97-52543be04c81",
+      "name": "KXRY 91.1 \"X Ray FM\" Portland, OR",
+      "streamUrl": "http://listen.xray.fm:8000/stream",
       "visible": true
     },
     {
-      "id": "960dd1cb-0601-11e8-ae97-52543be04c81",
-      "name": "CHBM \"Boom 97.3\" Toronto, ON",
-      "streamUrl": "http://newcap.leanstream.co/CHBMFM",
+      "id": "9625b91d-0601-11e8-ae97-52543be04c81",
+      "name": "KRVM 91.9 Eugene, OR",
+      "streamUrl": "http://lin2.san.fast-serv.com:6008/stream",
       "visible": true
     },
     {
-      "id": "f7c451d62-d147-4cc8-9a9a-08a82d2db488",
-      "name": "KISS 92.5",
-      "streamUrl": "https://rogers-hls.leanstream.co/rogers/tor925.stream/playlist.m3u8",
+      "id": "336527c2-5ead-4306-9748-6e8d51a1073c",
+      "name": "KMHD Adaptive AAC",
+      "streamUrl": "https://ais-sa3.cdnstream1.com/2442_128.aac/playlist.m3u8",
       "visible": true
     },
     {
-      "id": "c3e23375-63b8-11e9-a622-52543be04c81",
-      "name": "CJCL Sportsnet 590 The Fan",
-      "streamUrl": "https://rogers-hls.leanstream.co/rogers/tor590.stream/playlist.m3u8",
+      "id": "964a3638-0601-11e8-ae97-52543be04c81",
+      "name": "KUMA 92.1 \"Party FM\" Pilot Rock, OR",
+      "streamUrl": "http://27153.live.streamtheworld.com/KUMAFM_SC",
       "visible": true
     },
     {
-      "id": "32a34345-1f08-4302-be61-14450c32c602",
-      "name": "CHUM TSN 1050 Toronto",
-      "streamUrl": "http://26373.live.streamtheworld.com:3690/CHUMAMAAC_SC",
+      "id": "332ff6a2-c592-11e9-8502-52543be04c81",
+      "name": "KPDG TRUE TALK",
+      "streamUrl": "http://17793.live.streamtheworld.com:3690/KPDQFMAAC_SC",
       "visible": true
     },
     {
-      "id": "9621ecae-0601-11e8-ae97-52543be04c81",
-      "name": "CJKX 95.9 \"KX96 New Country FM\" - Ajax, ON",
-      "streamUrl": "http://22073.live.streamtheworld.com:3690/CJKXFMAAC_SC",
+      "id": "a108d5ba-2cf5-11ea-aa0c-52543be04c81",
+      "name": "KLYC 1260 AM",
+      "streamUrl": "https://ais-sa2.cdnstream1.com/2122_64.aac",
       "visible": true
     },
     {
-      "id": "364e1ed5-b415-4633-b6f4-78edb0ff4d1c",
-      "name": "CFMZ 96.3 \"The New Classical FM\"",
-      "streamUrl": "https://live.amperwave.net/direct/mzmedia-cfmzfmmp3-ibc2",
+      "id": "9616501c-0601-11e8-ae97-52543be04c81",
+      "name": "KWVA 88.1 Univ. of Oregon",
+      "streamUrl": "http://kwvaradio.uoregon.edu:8000/;",
       "visible": true
     },
     {
-      "id": "6b5949de-b9ea-4aa1-af15-17dbd30b1b19",
-      "name": "CBC Radio One - Ottawa, ON (MP3 stream)",
-      "streamUrl": "https://29243.live.streamtheworld.com/CBOFM_CBC_SC",
+      "id": "16cb3a22-0361-4478-b56f-3aec877dcdda",
+      "name": "Jesus Radio US",
+      "streamUrl": "https://streaming.radio.co/s1dc8ab02e/listen",
       "visible": true
     },
     {
-      "id": "1776feb1-a73a-47df-8e54-db984f3d5a26",
-      "name": "Ottawa CHEZ 106.1 (CHEZFM)",
-      "streamUrl": "https://rogers-hls.leanstream.co/rogers/ott1061.stream/48k/playlist.m3u8",
+      "id": "9625b84d-0601-11e8-ae97-52543be04c81",
+      "name": "KLCC 89.7 Eugene, OR",
+      "streamUrl": "http://tektite.streamguys1.com:5020/klcc.mp3",
       "visible": true
     },
     {
-      "id": "96215869-0601-11e8-ae97-52543be04c81",
-      "name": "CJOT \"Boom 99.7\" Ottawa, ON",
-      "streamUrl": "http://live.leanstream.co/CJOTFM-MP3",
+      "id": "96442cf9-0601-11e8-ae97-52543be04c81",
+      "name": "KNRQ \"Alternative 103.7\" Eugene, OR",
+      "streamUrl": "http://18813.live.streamtheworld.com/KNRQFM_SC",
       "visible": true
     },
     {
-      "id": "0c8e3629-39c2-4d22-9fcf-bf8353e13584",
-      "name": "Ottawa Hot 89.9 (CIHTFM)",
-      "streamUrl": "https://newcap.leanstream.co/CIHTFM?args=web_01",
+      "id": "28611978-4bc6-429c-a6f0-c11a1a964dd8",
+      "name": "KEPW - Eugene PeaceWorks Radio",
+      "streamUrl": "http://pacificaservice.org:8000/kepw_128",
       "visible": true
     },
     {
-      "id": "d37e53ae-a111-4d22-a43b-05b47e0fd334",
-      "name": "CFRA \"News Talk Radio 580\" Ottawa, ON",
-      "streamUrl": "http://18063.live.streamtheworld.com/CFRAAMAAC_SC",
+      "id": "9624bcd0-0601-11e8-ae97-52543be04c81",
+      "name": "KSRG 88.3 \"Jefferson Public Radio\"",
+      "streamUrl": "http://jpr.streamguys.org/jpr-classics",
       "visible": true
     },
     {
-      "id": "9622018a-0601-11e8-ae97-52543be04c81",
-      "name": "CKQB \"JUMP! 106.9\" Ottawa, ON",
-      "streamUrl": "http://live.leanstream.co/CKQBFM",
+      "id": "9607bfbc-0601-11e8-ae97-52543be04c81",
+      "name": "KXIX 94.1 \"Power 94\" Sunriver, OR",
+      "streamUrl": "http://18253.live.streamtheworld.com/KXIXFM_SC",
       "visible": true
     },
     {
-      "id": "8c5c3b85-e463-4696-937e-0eac7bdb051f",
-      "name": "CJET-FM \"City News 101.1\" Smith Falls, ON",
-      "streamUrl": "https://rogers-hls.leanstream.co/rogers/ott1011.stream/playlist.m3u8",
+      "id": "0a062d5a-5efc-4edf-bcf9-35f56af1f8db",
+      "name": "University Of Oregon - KWAX",
+      "streamUrl": "http://streaming.kwax.com:8000/stream1",
       "visible": true
     },
     {
-      "id": "51d5b4c1-b6d2-4878-8644-6e6fe4ed9326",
-      "name": "CKBY \"92.3 Country\" Smith Falls, ON",
-      "streamUrl": "https://rogers-hls.leanstream.co/rogers/ott923.stream/playlist.m3u8",
+      "id": "962f2251-0601-11e8-ae97-52543be04c81",
+      "name": "KSFL-LP 99.1 \"Portland Radio Project\"",
+      "streamUrl": "http://prpfm.streamon.fm:8000/PRPFM-64k.aac",
       "visible": true
     },
     {
-      "id": "b2bbacb0-97aa-416d-be38-ebf0ff896b49",
-      "name": "CKLK-FM \"88.5 The Lake\" Grimsby, ON",
-      "streamUrl": "https://29243.live.streamtheworld.com/CKLKFMAAC_SC",
+      "id": "9625356b-0601-11e8-ae97-52543be04c81",
+      "name": "KSMF 89.1 \"Jefferson Public Radio\"",
+      "streamUrl": "http://jpr.streamguys.org/jpr-rhythm",
       "visible": true
     },
     {
-      "id": "9621ff29-0601-11e8-ae97-52543be04c81",
-      "name": "CJXY 107.9 \"Y108\" Burlington, ON",
-      "streamUrl": "http://live.leanstream.co/CJXYFM-MP3",
+      "id": "962a7bef-0601-11e8-ae97-52543be04c81",
+      "name": "KKKJ \"Jammin\" 105.5 FM Merrill, OR",
+      "streamUrl": "http://ice9.securenetsystems.net/KKKJ",
       "visible": true
     },
     {
-      "id": "962217bc-0601-11e8-ae97-52543be04c81",
-      "name": "CHKX \"KX-94.7\" Hamilton, ON",
-      "streamUrl": "http://16613.live.streamtheworld.com/CHKXFMAAC_SC",
+      "id": "1de1791a-c367-4e47-a649-be5359aa7fa4",
+      "name": "KFIR 720 AM",
+      "streamUrl": "https://ice10.securenetsystems.net/KFIR",
       "visible": true
     },
     {
-      "id": "9620ea8c-0601-11e8-ae97-52543be04c81",
-      "name": "CKTB News/Talk 610 (St. Catharines, ON)",
-      "streamUrl": "http://27273.live.streamtheworld.com/CKTBAMAAC_SC",
+      "id": "4cacde8b-30b4-467d-9e1c-ff0e36baba6f",
+      "name": "KGAL AM 1580 SmartTalk",
+      "streamUrl": "https://ice8.securenetsystems.net/KGAL",
       "visible": true
     },
     {
-      "id": "961f7f2a-0601-11e8-ae97-52543be04c81",
-      "name": "CING 95.3 \"Fresh Radio\" Hamilton, ON",
-      "streamUrl": "http://live.leanstream.co/CINGFM-MP3",
+      "id": "961c67d6-0601-11e8-ae97-52543be04c81",
+      "name": "KMUN 91.9 \"Coast Community Radio\"",
+      "streamUrl": "http://ice5.securenetsystems.net/KMUN",
       "visible": true
     },
     {
-      "id": "9620f1c0-0601-11e8-ae97-52543be04c81",
-      "name": "CFPL-FM 95.9 \"FM96\" London, ON",
-      "streamUrl": "http://live.leanstream.co/CFPLFM-MP3",
+      "id": "a5ef18ce-9874-11ea-8564-52543be04c81",
+      "name": "KYKN 1430 AM",
+      "streamUrl": "https://ice8.securenetsystems.net/KYKN",
       "visible": true
     },
     {
-      "id": "9620f0fe-0601-11e8-ae97-52543be04c81",
-      "name": "CFPL-AM 980 London, ON",
-      "streamUrl": "http://live.leanstream.co/CFPLAM-MP3",
+      "id": "9642b24b-0601-11e8-ae97-52543be04c81",
+      "name": "KCMB 104.7 Baker City, OR",
+      "streamUrl": "http://27153.live.streamtheworld.com:3690/KCMBFM_SC",
       "visible": true
     },
     {
-      "id": "2c3c7492-79f7-490c-82ed-d07373a78942",
-      "name": "CHST-FM \"Jack 102.3\" London, ON",
-      "streamUrl": "https://rogers-hls.leanstream.co/rogers/lon1023.stream/playlist.m3u8",
+      "id": "484ad7ed-d475-48d1-80e4-a3bb4cd12108",
+      "name": "KSLM 104.3 FM 1220 AM",
+      "streamUrl": "https://kccs-streaming.com:7004/;stream.mp3",
       "visible": true
     },
     {
-      "id": "9621bbde-0601-11e8-ae97-52543be04c81",
-      "name": "CKBT 91.5 \"The Beat\" Kitchener, ON",
-      "streamUrl": "http://live.leanstream.co/CKBTFM-MP3",
+      "id": "9ca588cc-6fc1-42bf-83d1-061f4359c807",
+      "name": "Rense Radio",
+      "streamUrl": "https://cdn.voscast.com/resources/?key=ac09707276d304c1d6d71994d1823ba6&c=wmp",
       "visible": true
     },
     {
-      "id": "2cbe0322-b42d-4547-8879-0d7bdfc886e1",
-      "name": "CJIQ 88.3 Conestoga College - Kitchener, ON",
-      "streamUrl": "https://conestoga.leanstream.co/CJIQFM",
+      "id": "9625b77f-0601-11e8-ae97-52543be04c81",
+      "name": "KSOR 90.1 \"Jefferson Public Radio\"",
+      "streamUrl": "http://jpr.streamguys.org/jpr-news",
       "visible": true
     },
     {
-      "id": "89444c43-7d79-4211-9c4f-11c029739101",
-      "name": "CKGL \"City News 570\" Kitchener, ON",
-      "streamUrl": "https://rogers-hls.leanstream.co/rogers/kit570.stream/playlist.m3u8",
+      "id": "00e3831e-7cf4-4ca8-9724-56d9ff195230",
+      "name": "KEOL Eastern Oregon University",
+      "streamUrl": "http://barix.streamguys.net/barix_hi",
       "visible": true
     },
     {
-      "id": "9621f7bc-0601-11e8-ae97-52543be04c81",
-      "name": "CJDV 107.5 \"Dave Rocks\" Kitchener, ON",
-      "streamUrl": "http://live.leanstream.co/CJDVFM-MP3",
+      "id": "9641fcdb-0601-11e8-ae97-52543be04c81",
+      "name": "KWVN \"Hot 107.7\" Pendleton",
+      "streamUrl": "http://18433.live.streamtheworld.com:3690/KWVNFM_SC",
       "visible": true
     },
     {
-      "id": "96209815-0601-11e8-ae97-52543be04c81",
-      "name": "CJOY 1460 \"Greatest Hits\" Guelph, ON",
-      "streamUrl": "http://live.leanstream.co/CJOYAM",
+      "id": "bb9bfe4e-36ac-4025-9362-e0b7203c11f1",
+      "name": "KMED",
+      "streamUrl": "https://us9.maindigitalstream.com/ssl/KMED",
       "visible": true
     },
     {
-      "id": "9621effa-0601-11e8-ae97-52543be04c81",
-      "name": "CIMJ 106.1 \"Magic 106\" Guelph, ON",
-      "streamUrl": "http://live.leanstream.co/CIMJFM-MP3",
+      "id": "9648daa7-0601-11e8-ae97-52543be04c81",
+      "name": "KWRL 102.3 \"The River\" La Grande, OR",
+      "streamUrl": "http://16643.live.streamtheworld.com/KWRLFM_SC",
       "visible": true
     },
     {
-      "id": "9621c2a8-0601-11e8-ae97-52543be04c81",
-      "name": "CHAY 93.1 \"Fresh Radio\" Barrie, ON",
-      "streamUrl": "http://live.leanstream.co/CHAYFM-MP3",
+      "id": "00cf489b-bdc1-4ff3-8ecb-4cd2a5288820",
+      "name": "KBVR 88.7 FM",
+      "streamUrl": "https://node-10.zeno.fm/9ympbz9nfa0uv",
       "visible": true
     },
     {
-      "id": "0b6889f0-d888-4b99-84f3-6ac906edfd40",
-      "name": "CKMB 107.5 \"KOOL FM\" Barrie, ON",
-      "streamUrl": "https://cob-ais.leanstream.co/CKMBFM",
+      "id": "fc15bd27-e40c-4fb3-961f-2a7dc94d1703",
+      "name": "KOAC 550 AM",
+      "streamUrl": "https://stream5.opb.org/radio_player.mp3",
       "visible": true
     },
     {
-      "id": "9622130c-0601-11e8-ae97-52543be04c81",
-      "name": "CJBQ 800 Belleville, ON",
-      "streamUrl": "http://live.leanstream.co/CJBQAM-MP3",
+      "id": "1494621a-464d-4e03-8e1b-22cc9282a1ac",
+      "name": "KISN Good Guys",
+      "streamUrl": "https://ice6.securenetsystems.net/KISNLP",
       "visible": true
     },
     {
-      "id": "96212c33-0601-11e8-ae97-52543be04c81",
-      "name": "CIGL 97.1 \"MIX 97\" Belleville, ON",
-      "streamUrl": "http://live.leanstream.co/CIGLFM-MP3",
+      "id": "fb2e3737-991f-4804-824f-cbbff4f67739",
+      "name": "KPSU",
+      "streamUrl": "https://streamer.radio.co/scad0cc067/listen",
       "visible": true
     },
     {
-      "id": "9609965b-0601-11e8-ae97-52543be04c81",
-      "name": "CFMK \"Big 96.3\" Kingston, ON",
-      "streamUrl": "http://live.leanstream.co/CFMKFM-MP3",
+      "id": "409af652-646e-45a1-a1e0-a9b31f8d7ef5",
+      "name": "Hope 107.9",
+      "streamUrl": "https://extramilemedia.streamguys1.com/live?lat=44.9413120000&lon=-122.8800000000",
       "visible": true
     },
     {
-      "id": "8217e7a3-7374-4358-ae14-078bd3abfd03",
-      "name": "CIKR \"K-Rock 105.7\" Kingston, ON",
-      "streamUrl": "https://rogers-hls.leanstream.co/rogers/kin1057.stream/playlist.m3u8",
+      "id": "ecd911f5-40a4-4e8f-9942-36101822bb15",
+      "name": "KPOV",
+      "streamUrl": "https://kpov-ice.streamguys1.com/live",
       "visible": true
     },
     {
-      "id": "96220a11-0601-11e8-ae97-52543be04c81",
-      "name": "CKWS 104.3 \"Fresh Radio\" Kingston, ON",
-      "streamUrl": "http://live.leanstream.co/CKWSFM?args=web_01",
+      "id": "50f36889-75f5-4210-8397-b9c8fc874468",
+      "name": "KMGX The X 100.7 FM Bend, OR",
+      "streamUrl": "https://18433.live.streamtheworld.com/KMGXFM_SC",
       "visible": true
     },
     {
-      "id": "96216366-0601-11e8-ae97-52543be04c81",
-      "name": "CJSS \"Boom 101.9\" Cornwall, ON",
-      "streamUrl": "http://live.leanstream.co/CJSSFM-MP3",
+      "id": "c429b2b9-433b-4b8b-ac31-1feeb75e92a4",
+      "name": "KTEC",
+      "streamUrl": "http://kteclive.oit.edu:8000/live.mp3",
       "visible": true
     },
     {
-      "id": "961c0217-0601-11e8-ae97-52543be04c81",
-      "name": "CFLG 104.5 \"Fresh Radio\" Cornwall, ON",
-      "streamUrl": "http://live.leanstream.co/CFLGFM-MP3",
+      "id": "270efcfa-20a7-4d7b-8349-912c7bb32561",
+      "name": "KRXF 92/9",
+      "streamUrl": "https://14623.live.streamtheworld.com/KRXFFM_SC",
       "visible": true
     },
     {
-      "id": "757ffa9e-7711-4b97-a1d0-c0aae630521b",
-      "name": "CHOK 103.9 FM & 1070 AM \"Country CHOK\" Sarnia, ON (AAC Stream)",
-      "streamUrl": "http://live.leanstream.co/CHOKAM",
+      "id": "ac721368-0ba0-4b89-b895-010b4dec5720",
+      "name": "K103",
+      "streamUrl": "https://n01b-e2.revma.ihrhls.com/zc1957",
       "visible": true
     },
     {
-      "id": "9620e1eb-0601-11e8-ae97-52543be04c81",
-      "name": "CFGX 99.9 Sarnia, ON",
-      "streamUrl": "http://live.leanstream.co/CFGXFM",
+      "id": "2b277eb7-de9f-468e-ae52-e4a0bf7e7621",
+      "name": "KLTH",
+      "streamUrl": "http://stream.revma.ihrhls.com/zc4315",
       "visible": true
     },
     {
-      "id": "9621f399-0601-11e8-ae97-52543be04c81",
-      "name": "CFCO \"Country 92.9 & 630\" - Chatham, ON",
-      "streamUrl": "http://live.leanstream.co/CFCOFM",
-      "visible": true
-    },
-    {
-      "id": "962207e4-0601-11e8-ae97-52543be04c81",
-      "name": "CKUE \"Cool 95.1\" Chatham, ON",
-      "streamUrl": "http://live.leanstream.co/CKUEFM",
-      "visible": true
-    },
-    {
-      "id": "962205dd-0601-11e8-ae97-52543be04c81",
-      "name": "CKSY 94.3 Chatham, ON",
-      "streamUrl": "http://live.leanstream.co/CKSYFM",
-      "visible": true
-    },
-    {
-      "id": "96207bd5-0601-11e8-ae97-52543be04c81",
-      "name": "CIBU \"Classic Rock 94.5\" Wingham, ON",
-      "streamUrl": "http://live.leanstream.co/CIBUFM",
-      "visible": true
-    },
-    {
-      "id": "9615c500-0601-11e8-ae97-52543be04c81",
-      "name": "CKNX-AM 920 Wingham, ON",
-      "streamUrl": "http://live.leanstream.co/CKNXAM",
-      "visible": true
-    },
-    {
-      "id": "9622048a-0601-11e8-ae97-52543be04c81",
-      "name": "CKNX-FM 101.7 \"The One\" Wingham, ON",
-      "streamUrl": "http://live.leanstream.co/CKNXFM",
-      "visible": true
-    },
-    {
-      "id": "96220253-0601-11e8-ae97-52543be04c81",
-      "name": "CKCB 95.1 \"The Peak\" Collingwood, ON",
-      "streamUrl": "http://live.leanstream.co/CKCBFM-MP3",
-      "visible": true
-    },
-    {
-      "id": "9621c60c-0601-11e8-ae97-52543be04c81",
-      "name": "CHGB 97.7 \"The Beach\" Wasaga Beach, ON",
-      "streamUrl": "http://bayshore.leanstream.co/CHGBFM",
-      "visible": true
-    },
-    {
-      "id": "9621ac27-0601-11e8-ae97-52543be04c81",
-      "name": "CKPR 91.5 Thunder Bay, ON",
-      "streamUrl": "http://ckpr.streamon.fm/stream/CKPR-32k.aac",
-      "visible": true
-    },
-    {
-      "id": "9621034d-0601-11e8-ae97-52543be04c81",
-      "name": "CJSD 94.3 \"Rock 94\" Thunder Bay, ON",
-      "streamUrl": "http://cjsd.streamon.fm/stream/CJSD-32k.aac",
-      "visible": true
-    },
-    {
-      "id": "f31b8dba-6992-47ed-8b71-33d5a87157cb",
-      "name": "CJUK-FM \"99.9 The Bay\" Thunder Bay, ON",
-      "streamUrl": "https://ais-sa1.streamon.fm/7237_128k.aac/playlist.m3u8",
-      "visible": true
-    },
-    {
-      "id": "6697d763-6cb3-4ab0-85c6-0e443d21d647",
-      "name": "CFCH \"Country 90.5\" North Bay, ON",
-      "streamUrl": "https://vistaradio.streamb.live/SB00101",
-      "visible": true
-    },
-    {
-      "id": "7dc3b69f-ffa2-4390-8fa4-f6d9a1ed2d9d",
-      "name": "CKFX-FM \"101.9 Rock\" North Bay, ON",
-      "streamUrl": "https://rogers-hls.leanstream.co/rogers/nor1019.stream/playlist.m3u8",
-      "visible": true
-    },
-    {
-      "id": "f23f5e59-daab-433d-b060-5f8ba4d197d2",
-      "name": "CHUR-FM \"KISS 100.5\" North Bay, ON",
-      "streamUrl": "https://rogers-hls.leanstream.co/rogers/nor1005.stream/playlist.m3u8",
-      "visible": true
-    },
-    {
-      "id": "c2b8aa3e-99fe-453b-ad23-81f900205e9d",
-      "name": "CJRQ-FM \"92.7 Rock\" Sudbury, ON",
-      "streamUrl": "https://rogers-hls.leanstream.co/rogers/sud927.stream/playlist.m3u8",
-      "visible": true
-    },
-    {
-      "id": "9621e40f-0601-11e8-ae97-52543be04c81",
-      "name": "CHNO \"Rewind 103.9\" Sudbury, ON",
-      "streamUrl": "http://newcap.leanstream.co/CHNOFM",
-      "visible": true
-    },
-    {
-      "id": "9621dce8-0601-11e8-ae97-52543be04c81",
-      "name": "CIGM \"Hot 93.5\" Sudbury, ON",
-      "streamUrl": "http://newcap.leanstream.co/CIGMFM",
-      "visible": true
-    },
-    {
-      "id": "735c6d75-ae6f-42d4-b300-31efb453dae5",
-      "name": "CJQQ \"92.1 Rock\" Timmins, ON",
-      "streamUrl": "https://rogers-hls.leanstream.co/rogers/tim921.stream/playlist.m3u8",
-      "visible": true
-    },
-    {
-      "id": "a358a078-e925-476b-b900-e53d2db84d34",
-      "name": "CJRL-FM 89.5 \"The Lake\" Kenora, ON",
-      "streamUrl": "https://ais-sa1.streamon.fm/7229_128k.aac/playlist.m3u8",
-      "visible": true
-    },
-    {
-      "id": "c1db2ff3-9911-4154-81e0-56fa44f823cf",
-      "name": "CKDR-FM 92.7 Dryden, ON",
-      "streamUrl": "https://ais-sa1.streamon.fm/7231_128k.aac/playlist.m3u8",
-      "visible": true
-    },
-    {
-      "id": "e32758ed-66e1-11e9-af37-52543be04c81",
-      "name": "CJWA 107.1 \"JJAM FM\" Wawa, ON",
-      "streamUrl": "http://nap.casthost.net:8428/stream?type=.mp3",
-      "visible": true
-    },
-    {
-      "id": "23c77648-c076-49ed-bb40-d4f6aa8a7cbd",
-      "name": "CFOB-FM \"93.1 The Border\" Fort Frances, ON",
-      "streamUrl": "https://ais-sa1.streamon.fm/7235_128k.aac/playlist.m3u8",
+      "id": "242479a9-8ad2-47ef-bad0-0d7de6057fd5",
+      "name": "Kink.FM 101.9",
+      "streamUrl": "https://live.amperwave.net/direct/alphacorporate-kinkfmaac-ibc4",
       "visible": true
     }
   ]
